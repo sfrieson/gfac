@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <% include ./partials/head %>
+    <title>Create an Account | Gramforacause</title>
+</head>
+<body>
+<% if (err.length) { %>
+<div> Errors:
+    <ul>
+        <% err.forEach(error => { %>
+        <li><%= error %></li>
+        <% }); /* end loop */ %>
+    </ul>
+</div>
+<% } /* end if */ %>
+
+<h1>Create an account</h1>
+<form method="POST" action="/create-user">
+    <div class="input-group">
+        <label for="firstname">First name</label>
+        <input name="firstname" type="text" id="firstname" class="form-control" value="<%= responses.firstname %>">
+    </div>
+    <div class="input-group">
+        <label for="lastname">Last name</label>
+        <input name="lastname" type="text" id="lastname" class="form-control" value="<%= responses.lastname %>">
+    </div>
+    <div class="input-group">
+        <label for="email">Email</label>
+        <input name="email" type="email" id="email" class="form-control" value="<%= responses.email %>">
+    </div>
+    <div class="input-group">
+        <label for="password">Password</label>
+        <input name="password" type="password" id="password" class="form-control">
+    </div>
+    <div class="input-group">
+        <label for="confirm">Confirm password</label>
+        <input name="confirm" type="password" id="confirm" class="form-control">
+    </div>
+    <div class="input-group">
+        <label for="userType">Which are you?</label>
+        <select name="userType" id="userType" class="form-control" >
+            <option value="photographer">Photographer</option>
+            <option value="nonprofit">Nonprofit</option>
+        </select>
+    </div>
+    <button class="btn">Submit</button>
+</form>
+</body>
+</html>
