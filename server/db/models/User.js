@@ -40,7 +40,9 @@ const User = Model.define('user',
     phoneType: {
       type: DataType.ENUM('mobile', 'office', 'home')
     },
-
+    hashPassword: {
+      type: DataType.STRING(100)
+    }
   },
   // Options
   // https://github.com/sequelize/sequelize/blob/3e5b8772ef75169685fc96024366bca9958fee63/lib/model.js#L26

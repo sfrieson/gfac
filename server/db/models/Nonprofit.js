@@ -13,7 +13,7 @@ const Nonprofit = Model.define('nonprofit',
     },
     description: {
       type: DataType.TEXT,
-    },
+    }
   },
   // Options
   // https://github.com/sequelize/sequelize/blob/3e5b8772ef75169685fc96024366bca9958fee63/lib/model.js#L26
@@ -23,7 +23,7 @@ const Nonprofit = Model.define('nonprofit',
     // TODO instanceMethods
     // TODO classMethods
     // TODO hooks
-  },
+  }
 );
 
 
