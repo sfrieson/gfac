@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
-
+import { pick } from 'lodash';
 import { auth } from '../config';
-import { Cause, Contact, Photographer, User as UserModel } from '../db/models';
+import { Cause, Contact, Photographer as PhotoModel, User as UserModel } from '../db/models';
 
 const SALT = bcrypt.genSaltSync(auth.salt);
 const hashPassword = (function (password) { return bcrypt.hashSync(password, SALT); });
@@ -16,11 +16,13 @@ const User = {
     });
   },
   create: function (data) {
-    data.hashPassword = hashPassword(data.password);
-    return UserModel.create(data)
+    const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType']);
+    d.hashPassword = hashPassword(data.password);
+
+    return UserModel.create(d)
     .then((user) => {
-      if (user.role === 'photographer') return this.createPhotographer(user);
-      else if (user.role === 'nonprofit') return this.createNonprofit(user);
+      if (user.role === 'photographer') return this.createPhotographer(user, data);
+      else if (user.role === 'nonprofit') return this.createNonprofit(user, data);
     })
     .catch(() => Promise.reject({
       type: 'Account Creation',
@@ -28,8 +30,14 @@ const User = {
       message: 'Account registration failed'
     }));
   },
-  createNonprofit: function (user) { return user; },
-  createPhotographer: function (user ) { return user; },
+  createNonprofit: function (user, data) { return user; },
+  createPhotographer: function (user, data) {
+    const d = pick(Object.assign(data, user), ['instagram', 'cameraPhone', 'cameraDSLR',
+      'cameraFilm', 'cameraOther', 'preferredContactMethod']);
+    d.userId = user.id;
+    // TODO d.causes
+    return PhotoModel.create(d)
+  },
   get: function (query) { return UserModel.findOne({where: query}); },
   validate: function (data) {
     var errors = [];
