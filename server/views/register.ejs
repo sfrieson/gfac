@@ -43,6 +43,19 @@
             <input name="confirm" type="password" id="confirm" class="form-control">
         </div>
         <div class="input-group">
+            <label for="phone">Phone number</label>
+            <input name="phone" type="tel" id="phone" class="form-control">
+        </div>
+        <div class="input-group">
+            <label for="role">Phone Type</label>
+            <div class="input-group">
+                <input type="radio" value="mobile" aria-label="Mobile">Mobile
+            </div>
+            <div class="input-group">
+                <input type="radio" value="office" aria-label="Office">Office
+            </div>
+        </div>
+        <div class="input-group">
             <label for="role">Which are you?</label>
             <select name="role" id="role" class="form-control" >
                 <% var selected = responses.role || 'default'%>
@@ -52,54 +65,9 @@
             </select>
         </div>
 
-        <fieldset id="photographer-more" class=<%= selected === 'photographer' ? '' : 'hidden'%>>
-            Select your favorite causes
-            <div class="checkbox">
-                <% causes.forEach(function (cause) { %>
-                <label>
-                    <input name="causes" type="checkbox" value="<%= cause.name %>" <%= responses.causes && responses
-                    .causes.indexOf(cause.name) > -1 ? 'checked' : ''
-                    %>>
-                    <%= cause.name %>
-                </label>
-                <% }); %>
-            </div>
-            <label for="instagram">Instagram Handle</label>
-            <div class="input-group">
-                <span class="input-group-addon" id="basic-addon1">@</span>
-                <input name="instagram" type="text" id="instagram" class="form-control">
-            </div>
-            How I generally take photos:
-            <div class="checkbox">
-                <label>
-                    <input name="cameraPhone" type="checkbox">Phone
-                </label>
-                <label>
-                    <input name="cameraFilm" type="checkbox">Film
-                </label>
-                <label>
-                    <input name="cameraDSLR" type="checkbox">DSLR
-                </label>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">Other</span>
-                    <input name="cameraOther" type="text" class="form-control">
-                </div>
-            </div>
-            <div class="input-group">
-                <label for="role">Preferred Contact Method</label>
-                <select name="role" id="role" class="form-control" >
-                    <option value="instagram">Instagram Direct Message</option>
-                    <option value="phone">Phone</option>
-                    <option value="email">Email</option>
-                </select>
-            </div>
-        </fieldset>
-        <fieldset id="nonprofit-more" class=<%= selected === 'nonprofit' ? '' : 'hidden'%>>
-            <ul>
-                <li>Create your nonprofit</li>
-                <li>Join a nonprofit</li>
-            </ul>
-        </fieldset>
+        <% include ./partials/register-photographer %>
+        <% include ./partials/register-nonprofit %>
+
         <button class="btn">Submit</button>
     </form>
     <script>

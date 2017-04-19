@@ -16,13 +16,14 @@ const User = {
     });
   },
   create: function (data) {
+    // Whitelist properties necessary for creating User
     const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType']);
     d.hashPassword = hashPassword(data.password);
 
     return UserModel.create(d)
     .then((user) => {
       if (user.role === 'photographer') return this.createPhotographer(user, data);
-      else if (user.role === 'nonprofit') return this.createNonprofit(user, data);
+      if (user.role === 'nonprofit') return this.createNonprofit(user, data);
     })
     .catch(() => Promise.reject({
       type: 'Account Creation',
@@ -32,11 +33,19 @@ const User = {
   },
   createNonprofit: function (user, data) { return user; },
   createPhotographer: function (user, data) {
-    const d = pick(Object.assign(data, user), ['instagram', 'cameraPhone', 'cameraDSLR',
-      'cameraFilm', 'cameraOther', 'preferredContactMethod']);
+    // Whitelist properties necessary for creating Photographer
+    const d = pick(Object.assign(data, user), ['instagram', 'cameraPhone', 'cameraDSLR', 'cameraFilm',
+      'cameraOther', 'preferredContactMethod']);
     d.userId = user.id;
-    // TODO d.causes
+    ['cameraPhone', 'cameraDSLR', 'cameraFilm'].forEach(prop => {
+      if (prop in d) d[prop] = true;
+    });
+
     return PhotoModel.create(d)
+    .then(photographer => {
+      return photographer.setCauses(data.causes)
+      .then(res => Object.assign(user.get(), photographer.get()))
+    });
   },
   get: function (query) { return UserModel.findOne({where: query}); },
   validate: function (data) {

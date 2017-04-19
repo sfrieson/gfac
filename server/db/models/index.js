@@ -25,22 +25,23 @@ import UserProfile from './UserProfile';
 
 
 Availability.belongsTo(Photographer);
-Cause.belongsToMany(Photographer, { through: 'interests' });
-Cause.belongsToMany(Nonprofit, { through: 'focus' });
+Cause.belongsToMany(Photographer, {through: 'interest'});
+Cause.belongsToMany(Nonprofit, {through: 'focus'});
 Contact.belongsTo(Nonprofit);
-// Contact.hasMany(Project, { through: Nonprofit });
+// Contact.hasMany(Project, {through: Nonprofit}); // Not necessary?
 Event.belongsTo(User);
 Event.belongsTo(Project);
 Nonprofit.hasMany(Contact);
 Nonprofit.hasMany(Project);
-Nonprofit.belongsToMany(Cause, { through: 'focus' });
+Nonprofit.belongsToMany(Cause, {through: 'focus'});
 // Photographer.hasMany(Assignment);
-Photographer.belongsToMany(Project, { through: 'assignment' });
+Photographer.belongsToMany(Cause, {through: 'interest'});
+Photographer.belongsToMany(Project, {through: 'assignment'});
 Photographer.hasMany(Availability);
 Project.belongsTo(Nonprofit);
-// Project.belongsToMany(Contact, { through: Nonprofit });
+// Project.belongsToMany(Contact, { through: Nonprofit }); // Not necessary?
 // Project.hasMany(Assignment);
-Project.belongsToMany(Photographer, { through: 'assignment' });
+Project.belongsToMany(Photographer, {through: 'assignment'});
 Project.hasMany(Event);
 Project.hasMany(Review);
 

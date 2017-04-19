@@ -41,6 +41,7 @@ Router.route('/register')
   User.validate(responses)
   .then(() => User.create(responses))
   .then(user => {
+    console.log('returned user:', user);
     req.user = user;
     res.cookie('id_token', jwt.sign({id: user.id, role: user.role}, auth.jwt.secret));
     res.redirect('/');
