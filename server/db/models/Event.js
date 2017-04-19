@@ -2,7 +2,7 @@ import DataType from 'sequelize';
 import Model from '../sequelize';
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
-const EventType = Model.define('eventType',
+const EventType = Model.define('event_type',
   {
     id: {
       type: DataType.INTEGER,

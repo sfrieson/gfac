@@ -1,6 +1,7 @@
 import {
   GraphQLSchema as Schema,
-  GraphQLObjectType as ObjectType
+  GraphQLObjectType as ObjectType,
+  buildSchema
 } from 'graphql';
 
 import me from './queries/me';

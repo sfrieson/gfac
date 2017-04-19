@@ -25,22 +25,22 @@ import UserProfile from './UserProfile';
 
 
 Availability.belongsTo(Photographer);
-Cause.belongsToMany(Photographer, { through: 'Interests' });
-Cause.belongsToMany(Nonprofit, { through: 'Focus' });
+Cause.belongsToMany(Photographer, { through: 'interests' });
+Cause.belongsToMany(Nonprofit, { through: 'focus' });
 Contact.belongsTo(Nonprofit);
 // Contact.hasMany(Project, { through: Nonprofit });
 Event.belongsTo(User);
 Event.belongsTo(Project);
 Nonprofit.hasMany(Contact);
 Nonprofit.hasMany(Project);
-Nonprofit.belongsToMany(Cause, { through: 'Focus' });
+Nonprofit.belongsToMany(Cause, { through: 'focus' });
 // Photographer.hasMany(Assignment);
-Photographer.belongsToMany(Project, { through: 'Assignment' });
+Photographer.belongsToMany(Project, { through: 'assignment' });
 Photographer.hasMany(Availability);
 Project.belongsTo(Nonprofit);
 // Project.belongsToMany(Contact, { through: Nonprofit });
 // Project.hasMany(Assignment);
-Project.belongsToMany(Photographer, { through: 'Assignment' });
+Project.belongsToMany(Photographer, { through: 'assignment' });
 Project.hasMany(Event);
 Project.hasMany(Review);
 
@@ -60,7 +60,16 @@ User.hasOne(UserProfile, {
 });
 
 function sync(...args) {
-  return sequelize.sync(...args);
+  return sequelize.sync(...args)
+  .then(() => {
+    const causes = 'Adults with Special Needs|Education|Seniors|Career Prep|Health & Fitness|Animals &' +
+      ' Environment|Hunger|Children with Special Needs|Disaster Response';
+
+    const causeList = causes.split('|').map(name => ({name}));
+
+    if (args[0].force) return Cause.bulkCreate(causeList);
+    else return Promise.resolve();
+  });
 }
 
 export default { sync };

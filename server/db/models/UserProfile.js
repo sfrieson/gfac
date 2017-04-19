@@ -10,7 +10,7 @@
 import DataType from 'sequelize';
 import Model from '../sequelize';
 
-const UserProfile = Model.define('UserProfile', {
+const UserProfile = Model.define('user_profile', {
 
   userId: {
     type: DataType.UUID,
