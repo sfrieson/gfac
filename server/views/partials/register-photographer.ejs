@@ -1,4 +1,8 @@
-<fieldset id="photographer-more" class=<%= selected === 'photographer' ? '' : 'hidden'%>>
+<fieldset
+    id="photographer-more"
+    class=<%= selected === 'photographer' ? '' : 'hidden'%>
+    aria-hidden=<%= selected === 'photographer' ? 'true' : 'false'%>
+>
     Select your favorite causes (choose up to 5)
     <div class="checkbox">
         <% causes.forEach(function (cause) { %>

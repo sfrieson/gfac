@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 
 import { auth } from '../config';
 import sequelize from '../db/sequelize';
-import { Cause, Contact, Photographer } from '../db/models';
+import { Cause } from '../db/models';
 import User from '../controllers/user';
 
 const Router = express.Router();
@@ -11,7 +11,6 @@ const Router = express.Router();
 Router.route('/login')
 .get((_, res) => res.render('login'))
 .post((req, res) => {
-  // TODO Authenticate User
   console.log(`Attempting Login
   Email:    ${req.body.email}
   Password: ${req.body.password}`);
@@ -53,7 +52,7 @@ Router.route('/register')
 });
 
 // React Router takes over from here
-Router.get('/', (req, res) => {
+Router.get('*', (req, res) => {
   if (!req.user) return res.redirect('/login');
 
   sequelize.authenticate()

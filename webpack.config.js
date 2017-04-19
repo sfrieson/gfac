@@ -1,6 +1,9 @@
 var path = require('path');
 var webpack = require('webpack');
 
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const extractCSS = new ExtractTextPlugin('[name].bundle.css')
+
 var pkg = require('./package.json');
 
 const config = {
@@ -10,7 +13,7 @@ const config = {
   entry: ['babel-polyfill', './client/scripts.js'],
   output: {
     path: path.resolve(__dirname, './build/public'),
-    filename: 'scripts.js'
+    filename: '[name].bundle.js'
     // publicPath: '/assets/', // Still not sure what this is for
     // pathinfo: false, // TODO Add way to decide if this should have verbose path info or not (--verbose)
   }, // end output
@@ -22,7 +25,7 @@ const config = {
         include: [
           path.resolve(__dirname, './client')
         ],
-        query: {
+        options: {
           presets: [
             ['env', {targets: pkg.browserslist}],
             'react'
@@ -31,11 +34,7 @@ const config = {
       }, // end jsx
       {
         test: /\.scss$/,
-        use: [
-          'style-loader',
-          'css-loader',
-          'sass-loader'
-        ]
+        loader: extractCSS.extract(['css-loader','sass-loader'])
       }
     ] // end rules
   }, // end modules
@@ -43,7 +42,8 @@ const config = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': process.argv.includes('-p') || process.argv.includes('--production') ? '"production"' : '"development"',
       'process.env.BROWSER': true
-    })
+    }),
+    extractCSS
     // TODO add Common Chunks
   ],
   resolve: {

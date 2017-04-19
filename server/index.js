@@ -3,6 +3,9 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import expressGraphQL from 'express-graphql';
 import expressJWT from 'express-jwt';
+import webpack from 'webpack';
+import webpackConfig from '../webpack.config';
+import webpackDevMiddleware from 'webpack-dev-middleware';
 
 import mainRouter from './routers/main';
 
@@ -31,6 +34,8 @@ app.use(expressJWT({
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}));
 
+app.use(webpackDevMiddleware(webpack(webpackConfig)))
+
 app.use('/api', expressGraphQL(req => ({
   schema,
   graphiql: __DEV__,
@@ -40,10 +45,7 @@ app.use('/api', expressGraphQL(req => ({
 
 app.use(mainRouter);
 
-// TODO Spruce up 404
-app.get('*', (req, res) => res.sendStatus(404));
-
-models.sync({force: true}).catch(err => console.error(err.stack)).then(() => {
+models.sync({force: false}).catch(err => console.error(err.stack)).then(() => {
   app.listen(port, () => {
     console.log(`Listening on ${port}`);
   });

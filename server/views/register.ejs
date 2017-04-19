@@ -83,9 +83,15 @@
             var el = more[role];
             var hidden = /hidden/.test(el.className);
             if (val === role) {
-              if (hidden) el.className = el.className.replace('hidden', '')
+              if (hidden) {
+                el.setAttribute('aria-hidden', 'false')
+                el.className = el.className.replace('hidden', '')
+              }
             } else {
-              if (!hidden) el.className += 'hidden';
+              if (!hidden) {
+                el.setAttribute('aria-hidden', 'true')
+                el.className += 'hidden';
+              }
             }
           });
         });

@@ -1,6 +1,10 @@
-<fieldset id="nonprofit-more" class=<%= selected === 'nonprofit' ? '' : 'hidden'%>>
-    <ul>
-        <li>Create your nonprofit</li>
-        <li>Join a nonprofit</li>
-    </ul>
+<fieldset
+    id="nonprofit-more"
+    class=<%= selected === 'nonprofit' ? '' : 'hidden'%>
+    aria-hidden=<%= selected === 'nonprofit' ? 'true' : 'false'%>
+>
+    <div class="form-group">
+        <label for="nonprofit">Nonprofit Name</label>
+        <input id="nonprofit" name="nonprofit" type="text" class="form-control">
+    </div>
 </fieldset>
