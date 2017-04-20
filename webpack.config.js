@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const extractCSS = new ExtractTextPlugin('[name].bundle.css')
+const extractCSS = new ExtractTextPlugin('styles.css')
 
 var pkg = require('./package.json');
 
@@ -13,7 +13,7 @@ const config = {
   entry: ['babel-polyfill', './client/scripts.js'],
   output: {
     path: path.resolve(__dirname, './build/public'),
-    filename: '[name].bundle.js'
+    filename: 'scripts.js'
     // publicPath: '/assets/', // Still not sure what this is for
     // pathinfo: false, // TODO Add way to decide if this should have verbose path info or not (--verbose)
   }, // end output
@@ -28,7 +28,8 @@ const config = {
         options: {
           presets: [
             ['env', {targets: pkg.browserslist}],
-            'react'
+            'react',
+            'stage-2'
           ]
         } // end options
       }, // end jsx

@@ -4,7 +4,7 @@
   "description": "The adminitistrative site for Gramforacause",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js --exec babel-node"
+    "start": "nodemon ./index.js --watch ./server --exec babel-node"
   },
   "babel": {
     "presets": [
@@ -42,9 +42,11 @@
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-ga": "^2.2.0",
+    "react-redux": "^5.0.4",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "redux": "^3.6.0",
+    "redux-form": "^6.6.3",
     "sequelize": "^3.30.4",
     "webpack-dev-middleware": "^1.10.1"
   },

@@ -9,4 +9,4 @@ export const auth = {
   // TODO Change the secret
   jwt: {secret: process.env.JWT_SECRET},
   salt: +process.env.SALT
-}
+};
