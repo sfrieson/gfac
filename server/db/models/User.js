@@ -10,16 +10,6 @@ const User = Model.define('user',
       defaultValue: DataType.UUIDV1,
       primaryKey: true,
     },
-    firstname: {
-      type: DataType.STRING(32),
-      allowNull: false,
-      // validate?
-    },
-    lastname: {
-      type: DataType.STRING(32),
-      allowNull: false,
-      // validate?
-    },
     email: {
       type: DataType.STRING(64),
       unique: true,
@@ -29,6 +19,16 @@ const User = Model.define('user',
     emailConfirmed: {
       type: DataType.BOOLEAN,
       defaultValue: false,
+    },
+    firstname: {
+      type: DataType.STRING(32),
+      allowNull: false,
+      // validate?
+    },
+    lastname: {
+      type: DataType.STRING(32),
+      allowNull: false,
+      // validate?
     },
     role: {
       type: DataType.ENUM('admin', 'photographer', 'contact')

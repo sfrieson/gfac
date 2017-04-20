@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import { auth } from '../config';
 import sequelize from '../db/sequelize';
 import { Cause } from '../db/models';
-import User from '../controllers/user';
+import User from '../db/controllers/user';
 
 const Router = express.Router();
 

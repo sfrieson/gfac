@@ -9,13 +9,13 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 
 import mainRouter from './routers/main';
 
-import schema from './db/schema';
+import { schema, root} from './db/queries/schema';
 
 import {port, auth} from './config';
 import models from './db/models';
 
 
-var app = express();
+const app = express();
 
 // TODO change to real code elsewhere
 const __DEV__ = true;
@@ -34,14 +34,14 @@ app.use(expressJWT({
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}));
 
-app.use(webpackDevMiddleware(webpack(webpackConfig)))
+app.use(webpackDevMiddleware(webpack(webpackConfig)));
 
-app.use('/api', expressGraphQL(req => ({
+app.use('/api', expressGraphQL({
   schema,
   graphiql: __DEV__,
-  rootValue: {request: req},
+  rootValue: root,
   pretty: __DEV__
-})));
+}));
 
 app.use(mainRouter);
 
