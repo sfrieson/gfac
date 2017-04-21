@@ -1,16 +1,24 @@
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { Provider } from 'react-redux';
+
+import store from './store/index';
 import Home from './home';
 import Account from './account';
-
-const history = createBrowserHistory();
+import Header from './header';
 
 export default (
-  <Router history={history}>
-    <div>
-      <Route path="/" component={Home} />
-      <Route path="/account" component={Account} />
-    </div>
-  </Router>
+  <Provider store={store}>
+    <Router>
+      <div className="container-fluid">
+        <div className="row">
+          <Route path="/" component={Header} />
+          <div className="col-sm-12 col-md-9">
+            <Route path="/" component={Home} />
+            <Route path="/account" component={Account} />
+          </div>
+        </div>
+      </div>
+    </Router>
+  </Provider>
 );

@@ -24,17 +24,17 @@ app.set('views', './server/views');
 app.set('view engine', 'ejs');
 
 app.use(express.static('./build/public'));
+app.use(webpackDevMiddleware(webpack(webpackConfig)));
+
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
 app.use(expressJWT({
   secret: auth.jwt.secret,
   credentialsRequired: false,
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}));
 
-app.use(webpackDevMiddleware(webpack(webpackConfig)));
 
 app.use('/api', expressGraphQL({
   schema,
