@@ -1,5 +1,5 @@
 export default (queryString) => {
-  fetch('/api', {
+  return fetch('/api', {
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',
