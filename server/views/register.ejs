@@ -61,25 +61,25 @@
                 <% var selected = responses.role || 'default'%>
                 <option disabled <%= selected === 'default' ? 'selected' : ''%>>Select one...</option>
                 <option value="photographer" <%= selected === 'photographer' ? 'selected' : ''%>>Photographer</option>
-                <option value="nonprofit" <%= selected === 'nonprofit' ? 'selected' : ''%>>Nonprofit</option>
+                <option value="contact" <%= selected === 'contact' ? 'selected' : ''%>>Nonprofit Contact</option>
             </select>
         </div>
 
         <% include ./partials/register-photographer %>
-        <% include ./partials/register-nonprofit %>
+        <% include ./partials/register-contact %>
 
         <button class="btn">Submit</button>
     </form>
     <script>
         var more = {
           photographer: document.getElementById('photographer-more'),
-          nonprofit: document.getElementById('nonprofit-more')
+          contact: document.getElementById('contact-more')
         }
         var role = document.getElementById('role');
         role.addEventListener('change', function (e) {
             var val = e.target.value;
 
-          ['photographer', 'nonprofit'].forEach(function (role) {
+          ['photographer', 'contact'].forEach(function (role) {
             var el = more[role];
             var hidden = /hidden/.test(el.className);
             if (val === role) {

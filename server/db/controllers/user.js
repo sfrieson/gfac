@@ -44,10 +44,33 @@ const User = {
     return PhotoModel.create(d)
     .then(photographer => {
       return photographer.setCauses(data.causes)
-      .then(res => Object.assign(user.get(), photographer.get()))
+      .then(res => ({...user.get(), ...photographer.get()}))
     });
   },
-  get: function (query) { return UserModel.findOne({where: query}); },
+  get: function (query) {
+    return UserModel.findOne({where: query}).then(this.joinType.bind(this));
+  },
+  joinType: function (user) {
+    if (user.role === 'photographer') return this.joinPhotographer(user);
+    else return user.get();
+  },
+  joinPhotographer: function (user) {
+    return PhotoModel.findOne({
+      query: {id: user.id},
+      include: [{model: Cause}]
+    }).then(photographer => ({
+      ...user.get(),
+      ...photographer.get()
+    }));
+  },
+  joinContact: function (user) {
+    return Contact.findOne({
+      query: {id: user.id}
+    }).then(contact => ({
+      ...user.get(),
+      ...contact.get()
+    }));
+  },
   validate: function (data) {
     const errors = [];
 

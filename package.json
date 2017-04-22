@@ -16,7 +16,8 @@
           }
         }
       ],
-      "react"
+      "react",
+      "stage-2"
     ]
   },
   "author": "Steven Frieson",
@@ -63,6 +64,7 @@
     "deep-freeze": "^0.0.1",
     "expect": "^1.20.2",
     "extract-text-webpack-plugin": "^2.1.0",
+    "mocha": "^3.2.0",
     "node-sass": "^4.5.2",
     "nodemon": "^1.11.0",
     "redux-logger": "^3.0.1",

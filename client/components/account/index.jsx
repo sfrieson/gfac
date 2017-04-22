@@ -17,21 +17,12 @@ class Account extends Component {
         <pre>
           {JSON.stringify(me, null, 2)}
         </pre>
-        <form>
-          {this.renderInputs(me)}
-        </form>
+        <AccountForm user={me} />
       </div>
     );
   }
 
-  renderInputs(me) {
-    console.log('in the input renderer', Object.keys(me))
-    return Object.keys(me).map(key => {
-      let value = me[key];
 
-      return <Input key={key} value={value} name={key} label={key} />
-    });
-  }
 
 }
 function stateToProps ({ me }) {
@@ -40,3 +31,49 @@ function stateToProps ({ me }) {
 
 
 export default connect(stateToProps)(Account);
+
+
+class AccountForm extends Component {
+  render() {
+    const { user } = this.props;
+
+    return (
+      <form>
+        {this.renderInputs(this.makeFieldInfos(user))}
+      </form>
+    )
+  }
+  makeFieldInfos(user) {
+    return Object.keys(user).map(key => {
+      let value = user[key];
+      return {
+        key,
+        value,
+        name: key,
+        label: this.mapNameToLabel(key)
+      };
+    });
+  }
+
+  renderInputs(infos) {
+    return infos.map(info => <Input key={info.name} {...info} />);
+  }
+
+  mapNameToLabel(name) {
+    // Standard fields
+    if (name === 'firstname') return 'First Name';
+    if (name === 'lastname') return 'Last Name';
+    if (name === 'phone') return 'Phone Number';
+    if (name === 'phoneType') return 'Phone Type';
+    if (name === 'role') return 'Role';
+
+    // Photographer fields
+
+
+    // Nonprofit Contact fields
+
+
+    // default
+    return name;
+  }
+}
