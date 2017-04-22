@@ -45,7 +45,9 @@ app.use('/api', expressGraphQL({
 
 app.use(mainRouter);
 
-models.sync({force: false}).catch(err => console.error(err.stack)).then(() => {
+models.sync({force: false})
+.catch(err => console.error(err.stack))
+.then(() => {
   app.listen(port, () => {
     console.log(`Listening on ${port}`);
   });

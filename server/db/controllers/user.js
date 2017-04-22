@@ -23,7 +23,7 @@ const User = {
     return UserModel.create(d)
     .then((user) => {
       if (user.role === 'photographer') return this.createPhotographer(user, data);
-      if (user.role === 'nonprofit') return this.createNonprofit(user, data);
+      if (user.role === 'nonprofit') return this.createContact(user, data);
     })
     .catch(() => Promise.reject({
       type: 'Account Creation',
@@ -31,7 +31,7 @@ const User = {
       message: 'Account registration failed'
     }));
   },
-  createNonprofit: function (user, data) { return user; },
+  createContact: function (user, data) { return user; },
   createPhotographer: function (user, data) {
     // Whitelist properties necessary for creating Photographer
     const d = pick(Object.assign(data, user), ['instagram', 'cameraPhone', 'cameraDSLR', 'cameraFilm',
@@ -47,12 +47,20 @@ const User = {
       .then(res => ({...user.get(), ...photographer.get()}))
     });
   },
-  get: function (query) {
-    return UserModel.findOne({where: query}).then(this.joinType.bind(this));
+  get: function (query, join = true) {
+    return UserModel.findOne({where: query}).then(user => {
+      if (join && user.role === 'photographer') return this.joinPhotographer(user);
+      if (join && user.role === 'contact') return this.joinContact(user);
+      return user.get();
+    });
   },
-  joinType: function (user) {
-    if (user.role === 'photographer') return this.joinPhotographer(user);
-    else return user.get();
+  joinContact: function (user) {
+    return Contact.findOne({
+      query: {id: user.id}
+    }).then(contact => ({
+      ...user.get(),
+      ...contact.get()
+    }));
   },
   joinPhotographer: function (user) {
     return PhotoModel.findOne({
@@ -63,13 +71,10 @@ const User = {
       ...photographer.get()
     }));
   },
-  joinContact: function (user) {
-    return Contact.findOne({
-      query: {id: user.id}
-    }).then(contact => ({
-      ...user.get(),
-      ...contact.get()
-    }));
+  update: function (query, updates) {
+    return UserModel.findOne({where: query})
+    .then(user => user.update(updates))
+    .then(user => user.get());
   },
   validate: function (data) {
     const errors = [];

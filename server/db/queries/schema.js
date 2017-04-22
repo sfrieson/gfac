@@ -5,9 +5,11 @@ import { User as UserModel, Photographer as PhotoModel } from '../models'
 export const root = {
   getMe: (_, req) => UserController.get({id: req.user.id}),
   getUser: (query) => UserController.get(query),
-  User: (query) => UserController.get(query)
+  User: (query) => UserController.get(query),
+  updateMe: (args, req) => UserController.update({id: req.user.id}, args.updates)
 };
 root.getMePhotographer = root.getMe;
+root.getMeContact = root.getMe;
 
 export const schema = buildSchema(`
   type Admin {
@@ -62,10 +64,24 @@ export const schema = buildSchema(`
     role: String
   }
   
+  input UserInput {
+    email: String
+    firstname: String
+    lastname: String
+    phone: String
+    phoneType: String
+    role: String
+  }
+  
   type Query {
     getMeContact: Contact
     getMePhotographer: Photographer 
     getMe: User
     getUser(id: String, email: String): User
   }
+  
+  type Mutation {
+    updateMe(updates: UserInput): User
+  }
+  
 `);
