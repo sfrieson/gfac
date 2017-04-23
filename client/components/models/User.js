@@ -17,7 +17,28 @@ const User = {
         }`
       ).then(({ data }) => data.getMe)
     )
+  },
+  updateMe: (updates) => {
+    ajaxDispatch('UPDATE_ME',
+      api(`mutation {
+        updateMe(updates: ${objToGQLQueryString(updates)}) {
+          firstname
+          lastname
+        }
+      }`).then(({ data }) => data.updateMe)
+    )
   }
 };
 
 export default User;
+
+
+function objToGQLQueryString (obj = {}) {
+  return '{' +
+    Object.keys(obj)
+    .reduce((query, key) => {
+      return query + `,${key}:"${obj[key]}"`
+    }, '')
+    .slice(1) +
+    '}';
+}

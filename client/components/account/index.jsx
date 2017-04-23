@@ -10,39 +10,49 @@ class Account extends Component {
     User.getMe();
   }
   render () {
-    var { me } = this.props;
     return (
       <div>
-        This is what your account looks like.
-        <pre>
-          {JSON.stringify(me, null, 2)}
-        </pre>
-        <AccountForm user={me} />
+        <AccountForm/>
       </div>
     );
   }
-
-
-
-}
-function stateToProps ({ me }) {
-  return {me};
 }
 
 
-export default connect(stateToProps)(Account);
+export default Account;
 
 
-class AccountForm extends Component {
+class AccountFormComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
   render() {
-    const { user } = this.props;
+    const user =  {...this.props.me, ...this.props.accountForm};
 
     return (
-      <form>
+      <form onSubmit={this.onSubmit}>
         {this.renderInputs(this.makeFieldInfos(user))}
+        <button className="btn">Update</button>
       </form>
     )
   }
+  onChange({ target }) {
+    const { dispatch } = this.props;
+    const change = {};
+    change[target.name] = target.value;
+
+    dispatch({
+      type: 'ACCOUNT_FORM_CHANGE',
+      change
+    });
+  }
+  onSubmit(e) {
+    e.preventDefault();
+    User.updateMe(this.props.accountForm);
+  }
+
   makeFieldInfos(user) {
     return Object.keys(user).map(key => {
       let value = user[key];
@@ -50,7 +60,8 @@ class AccountForm extends Component {
         key,
         value,
         name: key,
-        label: this.mapNameToLabel(key)
+        label: this.mapNameToLabel(key),
+        onChange: this.onChange
       };
     });
   }
@@ -77,3 +88,9 @@ class AccountForm extends Component {
     return name;
   }
 }
+
+function stateToProps ({ me, accountForm }) {
+  return {me, accountForm};
+}
+
+const AccountForm = connect(stateToProps)(AccountFormComponent);
