@@ -22,10 +22,9 @@ const User = {
     ajaxDispatch('UPDATE_ME',
       api(`mutation {
         updateMe(updates: ${objToGQLQueryString(updates)}) {
-          firstname
-          lastname
+          email
         }
-      }`).then(({ data }) => data.updateMe)
+      }`).then(() => updates) // only return the updated info
     )
   }
 };
