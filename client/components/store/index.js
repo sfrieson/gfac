@@ -15,15 +15,6 @@ const accountForm = function (state = {}, action) {
   }
 }
 
-const clickCount = function(state = 0, action) {
-  switch (action.type) {
-    case 'CLICK':
-      return state + 1;
-    default:
-      return state;
-  }
-}
-
 const fetches = function (state = {}, action) {
   if (!/^FETCH_/.test(action.type)) return state;
   switch (action.type) {
@@ -52,7 +43,7 @@ const me = function (state = {}, action) {
 
 
 
-const mainReducer = combineReducers({clickCount, fetches, me, accountForm});
+const mainReducer = combineReducers({fetches, me, accountForm});
 
 const middleware = applyMiddleware(logger);
 const store = createStore(mainReducer, middleware);

@@ -8,27 +8,18 @@ class Home extends Component {
     User.getMe();
   }
   render() {
-    const { clickCount, me } = this.props;
+    const { me } = this.props;
 
     return (
       <div>
-        <h1 onClick={this.props.onClick}>Rendering React just for you, {me.firstname ? me.firstname : 'my dear'}!</h1>
-        <p>{clickCount} click{clickCount === 1 ? '' : 's'}.</p>
+        <h1>Rendering React just for you, {me.firstname ? me.firstname : 'my dear'}!</h1>
       </div>
     );
   }
 }
-function stateToProps ({ clickCount, me }) {
-  return {clickCount, me};
-}
-function dispatchToProps (dispatch) {
-  return {
-    onClick: () => {
-      dispatch({
-        type: 'CLICK'
-      })
-    }
-  };
+function stateToProps ({ me }) {
+  return {me};
 }
 
-export default connect(stateToProps, dispatchToProps)(Home);
+
+export default connect(stateToProps)(Home);
