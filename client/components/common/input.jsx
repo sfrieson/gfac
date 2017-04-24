@@ -12,10 +12,8 @@ export default function Input (props) {
   } = props;
 
   if (inputType) {
-    if (inputType === 'radio') return <Radio {...props} options={[
-      {buttonValue: 'mobile', label: 'Mobile'},
-      {buttonValue: 'office', label: 'Office'}
-    ]} />
+    if (inputType === 'radio') return <Radio {...props} />
+    if (inputType === 'select') return <Select {...props} />
   }
 
   return (
@@ -27,7 +25,7 @@ export default function Input (props) {
 };
 
 Input.propTypes = {
-  inputType: PT.oneOf(['radio', 'checkbox']),
+  inputType: PT.oneOf(['checkbox', 'radio', 'select']),
   onChange: PT.func,
   name: PT.string.isRequired,
   type: PT.string,
@@ -46,6 +44,7 @@ function Radio ({
   name,
   value
 }) {
+  const checked = value;
   return (
     <div className="input-group">
       <label htmlFor="role">{label}</label>
@@ -54,13 +53,38 @@ function Radio ({
   );
 
   function renderButtons (buttons) {
-    return buttons.map(({ buttonValue, label }) => (
-      <div key={buttonValue} className="radio">
+    return buttons.map(({ value, label }) => (
+      <div key={value} className="radio">
         <label>
-          <input type="radio" name={name} value={buttonValue} checked={buttonValue === value} onChange={onChange} />
+          <input type="radio" name={name} value={value} checked={value === checked} onChange={onChange} />
           {label}
         </label>
       </div>
     ));
+  }
+}
+
+function Select ({
+  options,
+  onChange,
+  label,
+  name,
+  value
+}) {
+  return (
+    <div className="input-group">
+      <label htmlFor={name}>{label}</label>
+      <select name={name} id={name} className="form-control" value={value} onChange={onChange}>
+        {renderOptions(options)}
+      </select>
+    </div>
+  );
+
+  function renderOptions (opts) {
+    return opts.map(({ label, value}) => {
+      return (
+        <option key={value} value={value}>{label}</option>
+      );
+    })
   }
 }

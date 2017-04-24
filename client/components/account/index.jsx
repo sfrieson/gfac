@@ -38,23 +38,34 @@ class AccountFormComponent extends Component {
 
   makeFieldInfos(user) {
     return Object.keys(user).map(key => {
-      const value = user[key];
-      return {
+      const info = {
         key,
-        value,
-        name: key,
         label: this.mapNameToLabel(key),
-        onChange: this.onChange
+        name: key,
+        onChange: this.onChange,
+        value: user[key]
       };
+
+      if (key === 'phoneType') {
+        info.inputType = 'radio';
+        info.options = [
+          {value: 'mobile', label: 'Mobile'},
+          {value: 'office', label: 'Office'}
+        ];
+      } else if (key === 'role') {
+        info.inputType = 'select';
+        info.options = [
+          {value: 'photographer', label: 'Photographer'},
+          {value: 'contact', label: 'Nonprofit Contact'}
+        ];
+      }
+
+      return info;
     });
   }
 
   renderInputs(infos) {
-    return infos.map(info => {
-
-      const extra = info.name === 'phoneType' ? {inputType: 'radio'} : {}
-      return <Input key={info.name} {...info} {...extra} />
-    });
+    return infos.map(info => <Input key={info.name} {...info} />);
   }
 
   mapNameToLabel(name) {
