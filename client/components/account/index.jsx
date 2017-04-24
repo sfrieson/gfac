@@ -21,7 +21,6 @@ class Account extends Component {
 
 export default Account;
 
-
 class AccountFormComponent extends Component {
   constructor(props) {
     super(props);
@@ -67,7 +66,10 @@ class AccountFormComponent extends Component {
   }
 
   renderInputs(infos) {
-    return infos.map(info => <Input key={info.name} {...info} />);
+    return infos.map(info => {
+
+      return <Input key={info.name} {...info} />
+    });
   }
 
   mapNameToLabel(name) {
