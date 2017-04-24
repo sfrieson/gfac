@@ -4,22 +4,6 @@ import { Input } from '../common';
 
 import User from '../models/User';
 
-class Account extends Component {
-  constructor(props) {
-    super(props);
-    User.getMe();
-  }
-  render () {
-    return (
-      <div>
-        <AccountForm/>
-      </div>
-    );
-  }
-}
-
-
-export default Account;
 
 class AccountFormComponent extends Component {
   constructor(props) {
@@ -54,7 +38,7 @@ class AccountFormComponent extends Component {
 
   makeFieldInfos(user) {
     return Object.keys(user).map(key => {
-      let value = user[key];
+      const value = user[key];
       return {
         key,
         value,
@@ -68,7 +52,8 @@ class AccountFormComponent extends Component {
   renderInputs(infos) {
     return infos.map(info => {
 
-      return <Input key={info.name} {...info} />
+      const extra = info.name === 'phoneType' ? {inputType: 'radio'} : {}
+      return <Input key={info.name} {...info} {...extra} />
     });
   }
 
@@ -96,3 +81,21 @@ function stateToProps ({ me, accountForm }) {
 }
 
 const AccountForm = connect(stateToProps)(AccountFormComponent);
+
+
+
+class Account extends Component {
+  constructor(props) {
+    super(props);
+    User.getMe();
+  }
+  render () {
+    return (
+      <div>
+        <AccountForm />
+      </div>
+    );
+  }
+}
+
+export default Account;
