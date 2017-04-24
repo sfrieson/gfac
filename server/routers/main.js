@@ -24,6 +24,11 @@ Router.route('/login')
   });
 });
 
+Router.get('/logout', (req, res) => {
+  res.clearCookie('id_token');
+  res.redirect('/login');
+});
+
 Router.route('/register')
 .all((req, _, next) => {
   Cause.findAll()
