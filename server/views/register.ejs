@@ -46,15 +46,21 @@
             <label for="phone">Phone number</label>
             <input name="phone" type="text" id="phone" class="form-control">
         </div>
-        <div class="input-group">
-            <label for="phoneType">Phone Type</label>
-            <div class="input-group">
-                <input name="phoneType" type="radio" value="mobile" aria-label="Mobile">Mobile
-            </div>
-            <div class="input-group">
-                <input name="phoneType" type="radio" value="office" aria-label="Office">Office
-            </div>
+
+        <div>Phone Type</div>
+        <div class="radio">
+            <label>
+                <input name="phoneType" type="radio" value="mobile" aria-label="Mobile">
+                Mobile
+            </label>
         </div>
+        <div class="radio">
+            <label>
+                <input name="phoneType" type="radio" value="office" aria-label="Office">
+                Office
+            </label>
+        </div>
+
         <div class="input-group">
             <label for="role">Which are you?</label>
             <select name="role" id="role" class="form-control" >

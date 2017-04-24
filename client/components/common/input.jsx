@@ -39,8 +39,6 @@ Input.defaultProps = {
   type: 'string'
 };
 
-
-
 function Radio ({
   options,
   onChange,
@@ -57,10 +55,11 @@ function Radio ({
 
   function renderButtons (buttons) {
     return buttons.map(({ buttonValue, label }) => (
-      <div key={buttonValue} className="input-group">
-        <input name={name} type="radio" value={buttonValue} aria-label={label}
-               checked={buttonValue === value} onChange={onChange} />
-        {label}
+      <div key={buttonValue} className="radio">
+        <label>
+          <input type="radio" name={name} value={buttonValue} checked={buttonValue === value} onChange={onChange} />
+          {label}
+        </label>
       </div>
     ));
   }
