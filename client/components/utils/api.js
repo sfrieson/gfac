@@ -1,4 +1,8 @@
-export default (queryString) => {
+export default (queryString, variables) => {
+  const query = {query: queryString};
+  if (variables !== undefined) {
+    query.variables = variables;
+  }
   return fetch('/api', {
     credentials: 'same-origin',
     headers: {
@@ -6,8 +10,6 @@ export default (queryString) => {
       'Content-Type': 'application/json'
     },
     method: 'POST',
-    body: JSON.stringify({
-      query: queryString
-    })
+    body: JSON.stringify(query)
   }).then(res => res.json())
 }

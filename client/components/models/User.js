@@ -3,9 +3,8 @@ import api from '../utils/api';
 
 const User = {
   getMe: () => {
-
     ajaxDispatch('ME',
-      api(`{
+      api(`query GetMe {
           getMe {
             email
             firstname
@@ -14,30 +13,98 @@ const User = {
             phoneType
             role
           }
+          getMePhotographer {
+            instagram
+            cameraPhone
+            cameraFilm
+            cameraDSLR
+            cameraOther
+            preferredContactMethod
+            causes {
+              id 
+              name
+            }
+          }
+          getMeContact {
+            phoneSecondary
+            phoneSecondaryType
+          }
         }`
-      ).then(({ data }) => data.getMe)
+      ).then(({ data }) => {
+        let me = {...data.getMe};
+        if (me.role === 'photographer') me = {...me, ...data.getMePhotographer};
+        if (me.role === 'contact') me = {...me, ...data.getMeContact};
+
+        return me;
+      })
     )
   },
   updateMe: (updates) => {
+    let call = {query: '', variables: {}};
+
+    call = contactUpdates(call, updates);
+    call = photographerUpdates(call, updates);
+    call = userUpdates(call, updates);
+
+
     ajaxDispatch('UPDATE_ME',
-      api(`mutation {
-        updateMe(updates: ${objToGQLQueryString(updates)}) {
-          email
-        }
-      }`).then(() => updates) // only return the updated info
+      api(`mutation UpdateUser(
+        $userUpdates: UserInput,
+        $photographerUpdates: PhotographerInput,
+        $contactUpdates: ContactInput
+      ) {
+        ${call.query}
+      }`, {...call.variables}).then(() => updates) // only return the updated info
     )
   }
 };
 
 export default User;
 
+import { pick } from 'lodash';
+function userUpdates (call, updates) {
+  const mutation = 'updateMe(updates: $userUpdates) { id }';
+  const variables = pick(updates, ['email', 'firstname', 'lastname', 'phone', 'phoneType', 'role']);
+  if (Object.keys(variables).length) {
+    call.variables = {...call.variables, userUpdates: variables};
+    call.query += mutation;
+  }
 
-function objToGQLQueryString (obj = {}) {
-  return '{' +
-    Object.keys(obj)
-    .reduce((query, key) => {
-      return query + `,${key}:"${obj[key]}"`
-    }, '')
-    .slice(1) +
-    '}';
+  return call;
+}
+
+function photographerUpdates (call, updates) {
+  const mutation = 'updateMe(updates: $photographerUpdates) { userId }';
+  const variables = pick(updates, [
+    'instagram',
+    'cameraPhone',
+    'cameraFilm',
+    'cameraDSLR',
+    'cameraOther',
+    'preferredContactMethod',
+    'causes'
+  ]);
+
+  if (Object.keys(variables).length) {
+    call.variables = {...call.variables, photographerUpdates: variables};
+    call.query += mutation;
+  }
+
+  return call;
+}
+
+function contactUpdates (call, updates) {
+  const mutation = 'updateMe(updates: $contactUpdates) { userId }';
+  const variables = pick(updates, ['phoneSecondary', 'phoneSecondaryType']);
+
+  if (Object.keys(variables).length) {
+    call.variables = {...call.variables, ...variables};
+    call.query += mutation;
+  }
+  if (Object.keys(variables).length) {
+    call.variables = {...call.variables, contactUpdates: variables};
+    call.query += mutation;
+  }
+
+  return call;
 }

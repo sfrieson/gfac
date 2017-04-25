@@ -49,12 +49,12 @@ const User = {
   },
   get: function (query, join = true) {
     return UserModel.findOne({where: query}).then(user => {
-      if (join && user.role === 'photographer') return this.joinPhotographer(user);
-      if (join && user.role === 'contact') return this.joinContact(user);
+      if (join && user.role === 'photographer') return this.getPhotographer(user);
+      if (join && user.role === 'contact') return this.getContact(user);
       return user.get();
     });
   },
-  joinContact: function (user) {
+  getContact: function (user) { // user can be Instance or object like {id: 12345}
     return Contact.findOne({
       query: {id: user.id}
     }).then(contact => ({
@@ -62,7 +62,7 @@ const User = {
       ...contact.get()
     }));
   },
-  joinPhotographer: function (user) {
+  getPhotographer: function (user) { // user can be Instance or object like {id: 12345}
     return PhotoModel.findOne({
       query: {id: user.id},
       include: [{model: Cause}]

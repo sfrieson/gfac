@@ -1,9 +1,19 @@
 import { buildSchema } from 'graphql';
 import UserController from '../controllers/user';
-import { User as UserModel, Photographer as PhotoModel } from '../models'
+import { Contact as ContactModel, User as UserModel, Photographer as PhotoModel } from '../models'
 
 export const root = {
   getMe: (_, req) => UserController.get({id: req.user.id}),
+  getMeContact: (_ , req) => {
+    if (req.user.role === 'contact') {
+      ContactModel.get({id: req.user.id}).then(contact => contact.get())
+    } else return Promise.resolve({});
+  },
+  getMePhotographer: (_ , req) => {
+    if (req.user.role === 'photographer') {
+      PhotoModel.get({id: req.user.id}).then(photographer => photographer.get())
+    } else return Promise.resolve({});
+  },
   getUser: (query) => UserController.get(query),
   User: (query) => UserController.get(query),
   updateMe: (args, req) => UserController.update({id: req.user.id}, args.updates)
@@ -11,7 +21,22 @@ export const root = {
 root.getMePhotographer = root.getMe;
 root.getMeContact = root.getMe;
 
-export const schema = buildSchema(`
+const queries = `
+  type Query {
+    getMeContact: Contact
+    getMePhotographer: Photographer 
+    getMe: User
+    getUser(id: String, email: String): User
+  }
+`;
+
+const mutations = `
+  type Mutation {
+    updateMe(updates: UserInput): User
+  }
+`;
+
+const types = `
   type Admin {
     id: String
     email: String
@@ -26,24 +51,13 @@ export const schema = buildSchema(`
     name: String!
     id: Int!
   }
+  
   type Contact {
-    id: String
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
+    phoneSecondary: String
+    phoneSecondaryType: String
   }
   
   type Photographer {
-    id: String
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
     instagram: String
     cameraPhone: Boolean
     cameraFilm: Boolean
@@ -63,7 +77,9 @@ export const schema = buildSchema(`
     phoneType: String
     role: String
   }
-  
+`;
+
+const inputs = `
   input UserInput {
     email: String
     firstname: String
@@ -73,15 +89,20 @@ export const schema = buildSchema(`
     role: String
   }
   
-  type Query {
-    getMeContact: Contact
-    getMePhotographer: Photographer 
-    getMe: User
-    getUser(id: String, email: String): User
+  input ContactInput {
+    phoneSecondary: String
+    phoneSecondaryType: String
   }
   
-  type Mutation {
-    updateMe(updates: UserInput): User
+  input PhotographerInput {
+    instagram: String
+    cameraPhone: Boolean
+    cameraFilm: Boolean
+    cameraDSLR: Boolean
+    cameraOther: String
+    preferredContactMethod: String
+    causes: [Int]
   }
-  
-`);
+`;
+
+export const schema = buildSchema(types + inputs + queries + mutations);
