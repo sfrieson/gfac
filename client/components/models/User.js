@@ -22,7 +22,6 @@ const User = {
             preferredContactMethod
             causes {
               id 
-              name
             }
           }
           getMeContact {
@@ -32,7 +31,7 @@ const User = {
         }`
       ).then(({ data }) => {
         let me = {...data.getMe};
-        if (me.role === 'photographer') me = {...me, ...data.getMePhotographer};
+        if (me.role === 'photographer') me = {...me, ...data.getMePhotographer, causes: data.getMePhotographer.causes.map(({id}) => id)};
         if (me.role === 'contact') me = {...me, ...data.getMeContact};
 
         return me;

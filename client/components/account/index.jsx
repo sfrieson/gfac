@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Input } from '../common';
 
 import User from '../models/User';
+import fields from '../../../fields.json';
 
 
 class AccountFormComponent extends Component {
@@ -40,8 +41,7 @@ class AccountFormComponent extends Component {
     return Object.keys(user).map(key => {
       const info = {
         key,
-        label: this.mapNameToLabel(key),
-        name: key,
+        ...fields.all[key],
         onChange: this.onChange,
         value: user[key]
       };
@@ -88,6 +88,7 @@ class AccountFormComponent extends Component {
 }
 
 function stateToProps ({ me, accountForm }) {
+
   return {me, accountForm};
 }
 

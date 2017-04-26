@@ -1,0 +1,120 @@
+{
+  "user": [
+    "email",
+    "firstname",
+    "lastname",
+    "phone",
+    "phoneType",
+    "role"
+  ],
+  "photographer": [
+    "instagram",
+    "cameraType",
+    "cameraOther",
+    "preferredContactMethod",
+    "causes"
+  ],
+  "contact": [
+    "phoneSecondary",
+    "phoneSecondaryType"
+  ],
+  "all": {
+    "cameraOther": {
+      "label": "Other",
+      "name": "cameraOther",
+      "type": "text"
+    },
+    "cameraType": {
+      "label": "Camera",
+      "type": "checkboxes",
+      "options": [
+        {"label": "Film", "name": "cameraFilm"},
+        {"label": "Phone", "name": "cameraPhone"},
+        {"label": "DSLR", "name": "cameraDSLR"}
+      ]
+    },
+    "causes": {
+      "label": "Causes you're interested in (pick up to 5)",
+      "name": "causes",
+      "type": "checkboxes",
+      "options": [
+        {"value": 1, "label": "Adults with Special Needs"},
+        {"value": 2, "label": "Education"},
+        {"value": 3, "label": "Seniors"},
+        {"value": 4, "label": "Career Prep"},
+        {"value": 5, "label": "Health & Fitness"},
+        {"value": 6, "label": "Animals & Environment"},
+        {"value": 7, "label": "Hunger"},
+        {"value": 8, "label": "Children with Special Needs"},
+        {"value": 9, "label": "Disaster Response"}
+      ]
+    },
+    "email": {
+      "label": "Email",
+      "name": "email",
+      "type": "text"
+    },
+    "firstname": {
+      "label": "First Name",
+      "name": "firstname",
+      "type": "text"
+    },
+    "instagram": {
+      "label": "Last Name",
+      "name": "instagram",
+      "type": "text"
+    },
+    "lastname": {
+      "label": "Last Name",
+      "name": "lastname",
+      "type": "text"
+    },
+    "phone": {
+      "label": "Phone Number",
+      "name": "phone",
+      "type": "tel"
+    },
+    "phoneSecondary": {
+      "label": "Phone Number",
+      "name": "phone",
+      "type": "tel"
+    },
+    "phoneSecondaryType": {
+      "label": "Phone Type",
+      "name": "phoneType",
+      "type": "radio",
+      "options": [
+        {"label": "Mobile", "value": "mobile"},
+        {"label": "Office", "value": "office"}
+      ]
+    },
+    "phoneType": {
+      "label": "Phone Type",
+      "name": "phoneType",
+      "type": "radio",
+      "options": [
+        {"label": "Mobile", "value": "mobile"},
+        {"label": "Office", "value": "office"}
+      ]
+    },
+    "preferredContactMethod": {
+      "label": "Preferred Contact Method",
+      "name": "preferredContactMethod",
+      "type": "select",
+      "options": [
+        {"label": "Phone", "value": "phone"},
+        {"label": "Instagram Direct Message", "value": "instagram"},
+        {"label": "Email", "value": "email"}
+      ]
+    },
+    "role": {
+      "label": "User Type",
+      "name": "role",
+      "type": "select",
+      "options": [
+        {"label": "Storyteller", "value": "photographer"},
+        {"label": "Nonprofit Contact", "value": "contact"}
+      ]
+    }
+  }
+}
