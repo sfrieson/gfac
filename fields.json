@@ -25,22 +25,22 @@
       "type": "text"
     },
     "cameraFilm": {
-      "label": "Camera",
+      "label": "Film",
       "type": "checkbox",
-      "value": "cameraFilm"
+      "name": "cameraFilm"
     },
     "cameraPhone": {
-      "label": "Camera",
+      "label": "Phone",
       "type": "checkbox",
-      "value": "cameraPhone"
+      "name": "cameraPhone"
     },
     "cameraDSLR": {
-      "label": "Camera",
+      "label": "DSLR",
       "type": "checkbox",
-      "value": "cameraDSLR"
+      "name": "cameraDSLR"
     },
     "cameraType": {
-      "label": "Camera",
+      "label": "Camera Type",
       "type": "checkboxes",
       "options": [
         {"label": "Film", "name": "cameraFilm"},

@@ -23,11 +23,12 @@ export default function Input (props) {
   )
 }
 
+// TODO implement textarea version
 Input.propTypes = {
   type: PT.oneOf(['checkbox', 'checkboxes', 'radio', 'select', 'text', 'tel', 'textarea']),
   onChange: PT.func,
   name: PT.string.isRequired,
-  value: PT.oneOfType([PT.string, PT.number])
+  value: PT.oneOfType([PT.string, PT.number, PT.array, PT.bool])
 }
 
 Input.defaultProps = {
@@ -99,12 +100,23 @@ function Select ({
 // Checkbox Input
 // --------------
 
-function Checkbox ({label, ...props}) {
+// <Input type='checkbox' label='Film' name="cameraFilm" checked={false} onChange={updateFn} />
+
+function Checkbox ({label, onChange, value, ...props}) {
   return (
     <label>
-      <input type='checkbox' {...props} />{label}
+      <input type='checkbox' {...props} onChange={normalizeChange} checked={value} />{label}
     </label>
   )
+
+  function normalizeChange ({ name, target }) {
+    onChange({
+      target: {
+        name: target.name,
+        value: target.checked
+      }
+    })
+  }
 }
 
 // ----------------
