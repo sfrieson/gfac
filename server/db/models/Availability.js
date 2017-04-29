@@ -7,7 +7,7 @@ import Model from '../sequelize'
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 const Availability = Model.define('availability', {
   day: {
-    type: DataType.ENUM('M', 'T', 'W', 'Th', 'F', 'Sa', 'Su'),
+    type: DataType.ENUM('Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'),
     nullAllowed: false
   },
   time: {
