@@ -1,5 +1,5 @@
-import DataType from 'sequelize';
-import Model from '../sequelize';
+import DataType from 'sequelize'
+import Model from '../sequelize'
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 const Cause = Model.define('cause', {
@@ -9,8 +9,8 @@ const Cause = Model.define('cause', {
   //   autoIncrement: true
   // },
   name: {
-    type: DataType.STRING(64),
+    type: DataType.STRING(64)
   }
-});
+})
 
-export default Cause;
+export default Cause

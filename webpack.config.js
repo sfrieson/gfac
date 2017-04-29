@@ -1,10 +1,10 @@
-var path = require('path');
-var webpack = require('webpack');
+var path = require('path')
+var webpack = require('webpack')
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const extractCSS = new ExtractTextPlugin('styles.css')
 
-var pkg = require('./package.json');
+var pkg = require('./package.json')
 
 const config = {
   context: path.resolve(__dirname),
@@ -35,7 +35,7 @@ const config = {
       }, // end jsx
       {
         test: /\.scss$/,
-        loader: extractCSS.extract(['css-loader','sass-loader'])
+        loader: extractCSS.extract(['css-loader', 'sass-loader'])
       }
     ] // end rules
   }, // end modules
@@ -50,6 +50,6 @@ const config = {
   resolve: {
     extensions: ['.js', '.jsx']
   }
-};
+}
 
-module.exports = config;
+module.exports = config

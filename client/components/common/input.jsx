@@ -1,5 +1,5 @@
-import React from 'react';
-import PT from 'prop-types';
+import React from 'react'
+import PT from 'prop-types'
 
 export default function Input (props) {
   const {
@@ -8,7 +8,7 @@ export default function Input (props) {
     name,
     type = 'text',
     value
-  } = props;
+  } = props
 
   if (type === 'radio') return <Radio {...props} />
   if (type === 'select') return <Select {...props} />
@@ -16,25 +16,24 @@ export default function Input (props) {
   if (type === 'checkboxes') return <Checkboxes {...props} />
 
   return (
-    <div className="form-group">
+    <div className='form-group'>
       <label htmlFor={name}>{label}</label>
-      <input className="form-control" name={name} id={name} value={value} onChange={onChange} type={type} />
+      <input className='form-control' name={name} id={name} value={value} onChange={onChange} type={type} />
     </div>
-  );
-};
+  )
+}
 
 Input.propTypes = {
-  type: PT.oneOf(['checkbox', 'checkboxes', 'radio', 'select', 'text', 'tel'/*, 'textarea'*/]),
+  type: PT.oneOf(['checkbox', 'checkboxes', 'radio', 'select', 'text', 'tel', 'textarea']),
   onChange: PT.func,
   name: PT.string.isRequired,
-  type: PT.string,
   value: PT.oneOfType([PT.string, PT.number])
-};
+}
 
 Input.defaultProps = {
   onChange: () => {},
   type: 'string'
-};
+}
 
 // -----------
 // Radio Input
@@ -47,23 +46,23 @@ function Radio ({
   name,
   value
                 }) {
-  const checked = value;
+  const checked = value
   return (
-    <div className="input-group">
-      <label htmlFor="role">{label}</label>
+    <div className='input-group'>
+      <label htmlFor='role'>{label}</label>
       {renderButtons(options)}
     </div>
-  );
+  )
 
   function renderButtons (buttons) {
     return buttons.map(({ value, label }) => (
-      <div key={value} className="radio">
+      <div key={value} className='radio'>
         <label>
-          <input type="radio" name={name} value={value} checked={value === checked} onChange={onChange} />
+          <input type='radio' name={name} value={value} checked={value === checked} onChange={onChange} />
           {label}
         </label>
       </div>
-    ));
+    ))
   }
 }
 
@@ -79,20 +78,20 @@ function Select ({
   value
                  }) {
   return (
-    <div className="input-group">
+    <div className='input-group'>
       <label htmlFor={name}>{label}</label>
-      <select name={name} id={name} className="form-control" value={value} onChange={onChange}>
+      <select name={name} id={name} className='form-control' value={value} onChange={onChange}>
         {renderOptions(options)}
       </select>
     </div>
-  );
+  )
 
   function renderOptions (opts) {
-    return opts.map(({ label, value}) => {
+    return opts.map(({ label, value }) => {
       return (
         <option key={value} value={value}>{label}</option>
-      );
-    });
+      )
+    })
   }
 }
 
@@ -103,9 +102,9 @@ function Select ({
 function Checkbox ({label, ...props}) {
   return (
     <label>
-      <input type="checkbox" {...props} />{label}
+      <input type='checkbox' {...props} />{label}
     </label>
-  );
+  )
 }
 
 // ----------------
@@ -141,24 +140,23 @@ function Checkboxes ({
   name,
   value
                      }) {
-
-  const sameName = name;
-  const values = value;
+  const sameName = name
+  const values = value
   return (
-    <div className="checkbox">
-      {label}
+    <div className='checkbox'>
+      <div style={{fontWeight: 'bold'}}>{label}</div>
       {renderChecks(options)}
     </div>
-  );
+  )
 
   function renderChecks (checks) {
     return checks.map(({label, name, value}) => {
       return <Checkbox key={name || (sameName + value)}
-                       name={name || sameName}
-                       checked={values.indexOf(name || value) > -1}
-                       value={value}
-                       label={label}
-                       onChange={onChange} />;
-    });
+        name={name || sameName}
+        checked={values.indexOf(name || value) > -1}
+        value={value}
+        label={label}
+        onChange={onChange} />
+    })
   }
 }

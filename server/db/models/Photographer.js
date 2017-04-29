@@ -1,7 +1,7 @@
-import DataType from 'sequelize';
-import Model from '../sequelize';
+import DataType from 'sequelize'
+import Model from '../sequelize'
 
-import User from './User';
+import User from './User'
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 const Photographer = Model.define('photographer',
@@ -12,43 +12,43 @@ const Photographer = Model.define('photographer',
       primaryKey: true,
       references: {
         model: User,
-        key: 'id',
-      },
+        key: 'id'
+      }
     },
     instagram: {
       type: DataType.STRING(30),
       allowNull: false,
       validate: {
-        len: [1, 30],
-      },
+        len: [1, 30]
+      }
     },
     cameraPhone: {
       type: DataType.BOOLEAN,
-      defaultValue: false,
+      defaultValue: false
     },
     cameraDSLR: {
       type: DataType.BOOLEAN,
-      defaultValue: false,
+      defaultValue: false
     },
     cameraFilm: {
       type: DataType.BOOLEAN,
-      defaultValue: false,
+      defaultValue: false
     },
     cameraOther: {
-      type: DataType.TEXT,
+      type: DataType.TEXT
     },
     preferredContactMethod: {
-      type: DataType.ENUM('email', 'phone', 'instagram'),
-    },
+      type: DataType.ENUM('email', 'phone', 'instagram')
+    }
   },
   // Options
   // https://github.com/sequelize/sequelize/blob/3e5b8772ef75169685fc96024366bca9958fee63/lib/model.js#L26
   {
-    paranoid: true,
+    paranoid: true
     // TODO instanceMethods
     // TODO classMethods
     // TODO hooks
-  },
-);
+  }
+)
 
-export default Photographer;
+export default Photographer

@@ -1,47 +1,47 @@
-import DataType from 'sequelize';
-import Model from '../sequelize';
+import DataType from 'sequelize'
+import Model from '../sequelize'
 
 // http://docs.sequelizejs.com/en/latRatingest/docs/models-definition/#data-types
 const Project = Model.define('project',
   {
     id: {
       type: DataType.UUID,
-      primaryKey: true,
+      primaryKey: true
     },
     name: {
-      type: DataType.STRING,
+      type: DataType.STRING
     },
     description: {
-      type: DataType.TEXT,
+      type: DataType.TEXT
     },
     date: {
       type: DataType.DATE,
-      allowNull: false,
+      allowNull: false
     },
     dateIsApprox: {
       type: DataType.BOOLEAN,
       allowNull: false,
-      defaultValue: false,
+      defaultValue: false
     },
     location: {
-      type: DataType.STRING(255),
+      type: DataType.STRING(255)
     },
     status: {
-      type: DataType.ENUM('Prospective', 'Planning', 'Past', 'Completed'),
+      type: DataType.ENUM('Prospective', 'Planning', 'Past', 'Completed')
     },
     photoLink: {
-      type: DataType.STRING(255),
-    },
+      type: DataType.STRING(255)
+    }
   },
   // Options
   // https://github.com/sequelize/sequelize/blob/3e5b8772ef75169685fc96024366bca9958fee63/lib/model.js#L26
   {
     indexes: [{ fields: ['id'] }],
-    paranoid: true,
+    paranoid: true
     // TODO instanceMethods
     // TODO classMethods
     // TODO hooks
-  },
-);
+  }
+)
 
-export default Project;
+export default Project

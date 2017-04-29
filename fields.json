@@ -24,6 +24,21 @@
       "name": "cameraOther",
       "type": "text"
     },
+    "cameraFilm": {
+      "label": "Camera",
+      "type": "checkbox",
+      "value": "cameraFilm"
+    },
+    "cameraPhone": {
+      "label": "Camera",
+      "type": "checkbox",
+      "value": "cameraPhone"
+    },
+    "cameraDSLR": {
+      "label": "Camera",
+      "type": "checkbox",
+      "value": "cameraDSLR"
+    },
     "cameraType": {
       "label": "Camera",
       "type": "checkboxes",
@@ -60,7 +75,7 @@
       "type": "text"
     },
     "instagram": {
-      "label": "Last Name",
+      "label": "Instagram Handle",
       "name": "instagram",
       "type": "text"
     },
@@ -75,12 +90,12 @@
       "type": "tel"
     },
     "phoneSecondary": {
-      "label": "Phone Number",
+      "label": "Secondary Phone Number",
       "name": "phone",
       "type": "tel"
     },
     "phoneSecondaryType": {
-      "label": "Phone Type",
+      "label": "Secondary Phone Type",
       "name": "phoneType",
       "type": "radio",
       "options": [

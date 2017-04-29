@@ -1,5 +1,7 @@
-import ajaxDispatch from '../utils/ajax-dispatch';
-import api from '../utils/api';
+import { pick } from 'lodash'
+
+import ajaxDispatch from '../utils/ajax-dispatch'
+import api from '../utils/api'
 
 const User = {
   getMe: () => {
@@ -21,7 +23,7 @@ const User = {
             cameraOther
             preferredContactMethod
             causes {
-              id 
+              id
             }
           }
           getMeContact {
@@ -30,21 +32,20 @@ const User = {
           }
         }`
       ).then(({ data }) => {
-        let me = {...data.getMe};
-        if (me.role === 'photographer') me = {...me, ...data.getMePhotographer, causes: data.getMePhotographer.causes.map(({id}) => id)};
-        if (me.role === 'contact') me = {...me, ...data.getMeContact};
+        let me = {...data.getMe}
+        if (me.role === 'photographer') me = {...me, ...data.getMePhotographer, causes: data.getMePhotographer.causes.map(({id}) => id)}
+        if (me.role === 'contact') me = {...me, ...data.getMeContact}
 
-        return me;
+        return me
       })
     )
   },
   updateMe: (updates) => {
-    let call = {query: '', variables: {}};
+    let call = {query: '', variables: {}}
 
-    call = contactUpdates(call, updates);
-    call = photographerUpdates(call, updates);
-    call = userUpdates(call, updates);
-
+    call = contactUpdates(call, updates)
+    call = photographerUpdates(call, updates)
+    call = userUpdates(call, updates)
 
     ajaxDispatch('UPDATE_ME',
       api(`mutation UpdateUser(
@@ -56,24 +57,23 @@ const User = {
       }`, {...call.variables}).then(() => updates) // only return the updated info
     )
   }
-};
+}
 
-export default User;
+export default User
 
-import { pick } from 'lodash';
 function userUpdates (call, updates) {
-  const mutation = 'updateMe(updates: $userUpdates) { id }';
-  const variables = pick(updates, ['email', 'firstname', 'lastname', 'phone', 'phoneType', 'role']);
+  const mutation = 'updateMe(updates: $userUpdates) { id }'
+  const variables = pick(updates, ['email', 'firstname', 'lastname', 'phone', 'phoneType', 'role'])
   if (Object.keys(variables).length) {
-    call.variables = {...call.variables, userUpdates: variables};
-    call.query += mutation;
+    call.variables = {...call.variables, userUpdates: variables}
+    call.query += mutation
   }
 
-  return call;
+  return call
 }
 
 function photographerUpdates (call, updates) {
-  const mutation = 'updateMe(updates: $photographerUpdates) { userId }';
+  const mutation = 'updateMe(updates: $photographerUpdates) { userId }'
   const variables = pick(updates, [
     'instagram',
     'cameraPhone',
@@ -82,28 +82,28 @@ function photographerUpdates (call, updates) {
     'cameraOther',
     'preferredContactMethod',
     'causes'
-  ]);
+  ])
 
   if (Object.keys(variables).length) {
-    call.variables = {...call.variables, photographerUpdates: variables};
-    call.query += mutation;
+    call.variables = {...call.variables, photographerUpdates: variables}
+    call.query += mutation
   }
 
-  return call;
+  return call
 }
 
 function contactUpdates (call, updates) {
-  const mutation = 'updateMe(updates: $contactUpdates) { userId }';
-  const variables = pick(updates, ['phoneSecondary', 'phoneSecondaryType']);
+  const mutation = 'updateMe(updates: $contactUpdates) { userId }'
+  const variables = pick(updates, ['phoneSecondary', 'phoneSecondaryType'])
 
   if (Object.keys(variables).length) {
-    call.variables = {...call.variables, ...variables};
-    call.query += mutation;
+    call.variables = {...call.variables, ...variables}
+    call.query += mutation
   }
   if (Object.keys(variables).length) {
-    call.variables = {...call.variables, contactUpdates: variables};
-    call.query += mutation;
+    call.variables = {...call.variables, contactUpdates: variables}
+    call.query += mutation
   }
 
-  return call;
+  return call
 }

@@ -1,5 +1,5 @@
-import DataType from 'sequelize';
-import Model from '../sequelize';
+import DataType from 'sequelize'
+import Model from '../sequelize'
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 const EventType = Model.define('event_type',
@@ -9,7 +9,7 @@ const EventType = Model.define('event_type',
       primaryKey: true
     }
   }
-);
+)
 
 const Event = Model.define('event',
   {
@@ -35,8 +35,6 @@ const Event = Model.define('event',
     // TODO classMethods
     // TODO hooks
   }
-);
+)
 
-
-export default Event;
-
+export default Event

@@ -1,6 +1,6 @@
-import DataType from 'sequelize';
-import Model from '../sequelize';
-import User from './User';
+import DataType from 'sequelize'
+import Model from '../sequelize'
+import User from './User'
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 const Contact = Model.define('contact',
@@ -15,7 +15,7 @@ const Contact = Model.define('contact',
       type: DataType.UUID,
       references: {
         model: User,
-        key: 'id',
+        key: 'id'
       }
     }
   },
@@ -27,6 +27,6 @@ const Contact = Model.define('contact',
     // TODO classMethods
     // TODO hooks
   }
-);
+)
 
-export default Contact;
+export default Contact

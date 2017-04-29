@@ -1,32 +1,29 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux';
-import logger from 'redux-logger';
-import expect from 'expect';
-import deepFreeze from 'deep-freeze';
-
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import logger from 'redux-logger'
 
 const accountForm = function (state = {}, action) {
   switch (action.type) {
     case 'ACCOUNT_FORM_CHANGE':
       return {...state, ...action.change}
     case 'FETCH_UPDATE_ME_END':
-      return {};
+      return {}
     default:
-      return state;
+      return state
   }
 }
 
 const fetches = function (state = {}, action) {
-  if (!/^FETCH_/.test(action.type)) return state;
+  if (!/^FETCH_/.test(action.type)) return state
   switch (action.type) {
     case 'FETCH_USER_END':
       return {
         ...state,
         me: action.res
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
 const me = function (state = {}, action) {
   switch (action.type) {
@@ -35,18 +32,16 @@ const me = function (state = {}, action) {
       return {
         ...state,
         ...action.res
-      };
+      }
     default:
-      return state;
+      return state
   }
-};
+}
 
+const mainReducer = combineReducers({fetches, me, accountForm})
 
+const middleware = applyMiddleware(logger)
+const store = createStore(mainReducer, middleware)
 
-const mainReducer = combineReducers({fetches, me, accountForm});
-
-const middleware = applyMiddleware(logger);
-const store = createStore(mainReducer, middleware);
-
-export default store;
-export const dispatch = store.dispatch;
+export default store
+export const dispatch = store.dispatch

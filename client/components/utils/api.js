@@ -1,9 +1,9 @@
 export default (queryString, variables) => {
-  const query = {query: queryString};
+  const query = {query: queryString}
   if (variables !== undefined) {
-    query.variables = variables;
+    query.variables = variables
   }
-  return fetch('/api', {
+  return window.fetch('/api', {
     credentials: 'same-origin',
     headers: {
       'Accept': 'application/json',

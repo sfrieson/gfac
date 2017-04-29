@@ -1,28 +1,28 @@
-import DataType from 'sequelize';
-import Model from '../sequelize';
-import User from './User';
+import DataType from 'sequelize'
+import Model from '../sequelize'
+import User from './User'
 
 const Review = Model.define('review',
   {
     id: {
       type: DataType.UUID,
-      primaryKey: true,
+      primaryKey: true
     },
     rating: {
       type: DataType.INTEGER,
-      allowNull: false,
+      allowNull: false
     },
     review: {
-      type: DataType.TEXT,
+      type: DataType.TEXT
     },
     userID: {
       type: DataType.UUID,
       references: {
         model: User,
-        key: 'id',
-      },
-    },
-  },
-);
+        key: 'id'
+      }
+    }
+  }
+)
 
-export default Review;
+export default Review

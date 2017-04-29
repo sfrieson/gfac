@@ -1,58 +1,55 @@
-import bcrypt from 'bcryptjs';
-import { pick } from 'lodash';
-import { auth } from '../../config';
-import { Cause, Contact, Photographer as PhotoModel, User as UserModel } from '../models';
+import bcrypt from 'bcryptjs'
+import { pick } from 'lodash'
+import { auth } from '../../config'
+import { Cause, Contact, Photographer as PhotoModel, User as UserModel } from '../models'
+import { ValidationError } from '../../errors'
 
-const SALT = bcrypt.genSaltSync(auth.salt);
-const hashPassword = (function (password) { return bcrypt.hashSync(password, SALT); });
+const SALT = bcrypt.genSaltSync(auth.salt)
+const hashPassword = function (password) { return bcrypt.hashSync(password, SALT) }
 
 const User = {
   checkPassword: function (email, password) {
     return this.get({email})
     .then(user => {
-      if (!user) throw new Error ('Incorrect user or password.');
-      if (bcrypt.compareSync(password, user.hashPassword)) return user;
-      else throw new Error('Incorrect user or password.');
-    });
+      if (!user) throw new Error('Incorrect user or password.')
+      if (bcrypt.compareSync(password, user.hashPassword)) return user
+      else throw new Error('Incorrect user or password.')
+    })
   },
   create: function (data) {
     // Whitelist properties necessary for creating User
-    const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType']);
-    d.hashPassword = hashPassword(data.password);
+    const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
+    d.hashPassword = hashPassword(data.password)
 
     return UserModel.create(d)
     .then((user) => {
-      if (user.role === 'photographer') return this.createPhotographer(user, data);
-      if (user.role === 'nonprofit') return this.createContact(user, data);
+      if (user.role === 'photographer') return this.createPhotographer(user, data)
+      if (user.role === 'nonprofit') return this.createContact(user, data)
     })
-    .catch(() => Promise.reject({
-      type: 'Account Creation',
-      status: 500,
-      message: 'Account registration failed'
-    }));
+    .catch(() => Promise.reject(new Error('Account Creation')))
   },
-  createContact: function (user, data) { return user; },
+  createContact: function (user, data) { return user },
   createPhotographer: function (user, data) {
     // Whitelist properties necessary for creating Photographer
     const d = pick(Object.assign(data, user), ['instagram', 'cameraPhone', 'cameraDSLR', 'cameraFilm',
-      'cameraOther', 'preferredContactMethod']);
+      'cameraOther', 'preferredContactMethod'])
     d.userId = user.id;
     ['cameraPhone', 'cameraDSLR', 'cameraFilm'].forEach(prop => {
-      if (prop in d) d[prop] = true;
-    });
+      if (prop in d) d[prop] = true
+    })
 
     return PhotoModel.create(d)
     .then(photographer => {
       return photographer.setCauses(data.causes)
       .then(res => ({...user.get(), ...photographer.get()}))
-    });
+    })
   },
   get: function (query, join = true) {
     return UserModel.findOne({where: query}).then(user => {
-      if (join && user.role === 'photographer') return this.getPhotographer(user);
-      if (join && user.role === 'contact') return this.getContact(user);
-      return user.get();
-    });
+      if (join && user.role === 'photographer') return this.getPhotographer(user)
+      if (join && user.role === 'contact') return this.getContact(user)
+      return user.get()
+    })
   },
   getContact: function (user) { // user can be Instance or object like {id: 12345}
     return Contact.findOne({
@@ -60,7 +57,7 @@ const User = {
     }).then(contact => ({
       ...user.get(),
       ...contact.get()
-    }));
+    }))
   },
   getPhotographer: function (user) { // user can be Instance or object like {id: 12345}
     return PhotoModel.findOne({
@@ -69,23 +66,20 @@ const User = {
     }).then(photographer => ({
       ...user.get(),
       ...photographer.get()
-    }));
+    }))
   },
   update: function (query, updates) {
     return UserModel.findOne({where: query})
     .then(user => user.update(updates))
-    .then(user => user.get());
+    .then(user => user.get())
   },
   validate: function (data) {
-    const errors = [];
+    const errors = []
 
-    if (!data.password || data.password !== data.confirm) errors.push('Password does not match.');
-    if (errors.length  === 0) return Promise.resolve(data);
-    else return Promise.reject({
-      type: 'Validation Error',
-      errors: errors
-    });
+    if (!data.password || data.password !== data.confirm) errors.push('Password does not match.')
+    if (errors.length === 0) return Promise.resolve(data)
+    else return Promise.reject(new ValidationError('Account Creation', errors))
   }
-};
+}
 
-export default User;
+export default User
