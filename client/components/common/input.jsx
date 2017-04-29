@@ -102,10 +102,12 @@ function Select ({
 
 // <Input type='checkbox' label='Film' name="cameraFilm" checked={false} onChange={updateFn} />
 
-function Checkbox ({label, onChange, value, ...props}) {
+function Checkbox ({ checked, label, onChange, value, ...props }) {
+  let checkedValue = checked // Coming from Checkboxes
+  if (checkedValue === undefined) checkedValue = value // Made directly with Checkbox
   return (
     <label>
-      <input type='checkbox' {...props} onChange={normalizeChange} checked={value} />{label}
+      <input type='checkbox' {...props} onChange={normalizeChange} checked={checkedValue} />{label}
     </label>
   )
 

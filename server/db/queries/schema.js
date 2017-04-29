@@ -1,22 +1,17 @@
 import { buildSchema } from 'graphql'
-import UserController from '../controllers/user'
-import { Contact as ContactModel, Photographer as PhotoModel } from '../models'
+import {
+  ContactController as Contact,
+  PhotographerController as Photographer,
+  UserController as User
+} from '../controllers'
 
 export const root = {
-  getMe: (_, req) => UserController.get({id: req.user.id}),
-  getMeContact: (_, req) => {
-    if (req.user.role === 'contact') {
-      ContactModel.get({id: req.user.id}).then(contact => contact.get())
-    } else return Promise.resolve({})
-  },
-  getMePhotographer: (_, req) => {
-    if (req.user.role === 'photographer') {
-      PhotoModel.get({id: req.user.id}).then(photographer => photographer.get())
-    } else return Promise.resolve({})
-  },
-  getUser: (query) => UserController.get(query),
-  User: (query) => UserController.get(query),
-  updateMe: (args, req) => UserController.update({id: req.user.id}, args.updates)
+  getMe: (_, req) => User.get({id: req.user.id}),
+  getUser: (query) => User.get(query),
+  User: (query) => User.get(query),
+  updateMe: (args, req) => User.update({id: req.user.id}, args.updates),
+  updatePhotographerMe: (args, req) => Photographer.update({id: req.user.id}, args.updates),
+  updateContactMe: (args, req) => Contact.update({id: req.user.id}, args.updates)
 }
 root.getMePhotographer = root.getMe
 root.getMeContact = root.getMe
@@ -33,6 +28,8 @@ const queries = `
 const mutations = `
   type Mutation {
     updateMe(updates: UserInput): User
+    updatePhotographerMe(updates: PhotographerInput): Photographer
+    updateContactMe(updates: ContactInput): Contact
   }
 `
 
@@ -50,6 +47,7 @@ const types = `
 
   # Causes for Interests and Focuses
   type Cause {
+    userId: String
     name: String!
     id: Int!
   }
@@ -62,6 +60,7 @@ const types = `
 
   # Additional Fields for Storyteller users
   type Photographer {
+    userId: String
     instagram: String
     cameraPhone: Boolean
     cameraFilm: Boolean

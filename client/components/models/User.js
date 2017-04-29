@@ -41,69 +41,46 @@ const User = {
     )
   },
   updateMe: (updates) => {
-    let call = {query: '', variables: {}}
+    const mutationVariables = []
+    const query = []
+    let callVariables = {}
 
-    call = contactUpdates(call, updates)
-    call = photographerUpdates(call, updates)
-    call = userUpdates(call, updates)
+    ;[
+      { // Contact Fields
+        fields: ['phoneSecondary', 'phoneSecondaryType'],
+        mutation: 'updateContactMe(updates: $contactUpdates) { userId }',
+        updateFieldName: 'contactUpdates',
+        variable: '$contactUpdates: ContactInput'
+      },
+      { // Photographer Fields
+        fields: ['instagram', 'cameraPhone', 'cameraFilm', 'cameraDSLR',
+          'cameraOther', 'preferredContactMethod', 'causes'],
+        updateFieldName: 'photographerUpdates',
+        mutation: 'updatePhotographerMe(updates: $photographerUpdates) { userId }',
+        variable: '$photographerUpdates: PhotographerInput'
+      },
+      { // User Fields
+        fields: ['email', 'firstname', 'lastname', 'phone', 'phoneType', 'role'],
+        mutation: 'updateMe(updates: $userUpdates) { id }',
+        updateFieldName: 'userUpdates',
+        variable: '$userUpdates: UserInput'
+      }
+    ].forEach(info => {
+      const changedFields = pick(updates, info.fields)
+      callVariables[info.updateFieldName] = changedFields
+
+      if (Object.keys(changedFields).length) {
+        mutationVariables.push(info.variable)
+        query.push(info.mutation)
+      }
+    })
 
     ajaxDispatch('UPDATE_ME',
-      api(`mutation UpdateUser(
-        $userUpdates: UserInput,
-        $photographerUpdates: PhotographerInput,
-        $contactUpdates: ContactInput
-      ) {
-        ${call.query}
-      }`, {...call.variables}).then(() => updates) // only return the updated info
+      api(`mutation UpdateUser(${mutationVariables.join(', ')}) {
+        ${query.join('\n')}
+      }`, callVariables).then(() => updates) // only return the updated info
     )
   }
 }
 
 export default User
-
-function userUpdates (call, updates) {
-  const mutation = 'updateMe(updates: $userUpdates) { id }'
-  const variables = pick(updates, ['email', 'firstname', 'lastname', 'phone', 'phoneType', 'role'])
-  if (Object.keys(variables).length) {
-    call.variables = {...call.variables, userUpdates: variables}
-    call.query += mutation
-  }
-
-  return call
-}
-
-function photographerUpdates (call, updates) {
-  const mutation = 'updateMe(updates: $photographerUpdates) { userId }'
-  const variables = pick(updates, [
-    'instagram',
-    'cameraPhone',
-    'cameraFilm',
-    'cameraDSLR',
-    'cameraOther',
-    'preferredContactMethod',
-    'causes'
-  ])
-
-  if (Object.keys(variables).length) {
-    call.variables = {...call.variables, photographerUpdates: variables}
-    call.query += mutation
-  }
-
-  return call
-}
-
-function contactUpdates (call, updates) {
-  const mutation = 'updateMe(updates: $contactUpdates) { userId }'
-  const variables = pick(updates, ['phoneSecondary', 'phoneSecondaryType'])
-
-  if (Object.keys(variables).length) {
-    call.variables = {...call.variables, ...variables}
-    call.query += mutation
-  }
-  if (Object.keys(variables).length) {
-    call.variables = {...call.variables, contactUpdates: variables}
-    call.query += mutation
-  }
-
-  return call
-}
