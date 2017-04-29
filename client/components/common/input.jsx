@@ -106,9 +106,11 @@ function Checkbox ({ checked, label, onChange, value, ...props }) {
   let checkedValue = checked // Coming from Checkboxes
   if (checkedValue === undefined) checkedValue = value // Made directly with Checkbox
   return (
-    <label>
-      <input type='checkbox' {...props} onChange={normalizeChange} checked={checkedValue} />{label}
-    </label>
+    <div className='checkbox'>
+      <label>
+        <input type='checkbox' {...props} onChange={normalizeChange} checked={checkedValue} />{label}
+      </label>
+    </div>
   )
 
   function normalizeChange ({ name, target }) {
@@ -165,12 +167,36 @@ function Checkboxes ({
 
   function renderChecks (checks) {
     return checks.map(({label, name, value}) => {
-      return <Checkbox key={name || (sameName + value)}
-        name={name || sameName}
-        checked={values.indexOf(name || value) > -1}
-        value={value}
-        label={label}
-        onChange={onChange} />
+      return (
+        <label key={`${name}_${value}`}>
+          <input name={name || sameName}
+            type='checkbox'
+            onChange={handleChange}
+            checked={values.indexOf(name || value) > -1}
+            value={value}
+          />{label}
+        </label>
+      )
+    })
+  }
+
+  function handleChange ({ target }) {
+    let newCheckboxesValue
+
+    if (target.checked) {
+      newCheckboxesValue = [...values, +target.value] // TODO Make a less number based solution
+    } else {
+      newCheckboxesValue = [
+        ...values.slice(0, values.indexOf(target.name)),
+        ...values.slice(values.indexOf(target.name) + 1)
+      ]
+    }
+
+    onChange({
+      target: {
+        name,
+        value: newCheckboxesValue
+      }
     })
   }
 }
