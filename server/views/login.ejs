@@ -1,33 +1,33 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <% include ./partials/head %>
-    <style>
-        .login__container {
-            margin: 0 auto;
-            width: 200px;
-        }
+  <% include ./partials/head %>
+  <style>
+  .login__container {
+    margin: 0 auto;
+    width: 200px;
+  }
 
-    </style>
+  </style>
 </head>
 <body>
-<h1>Welcome to Gramforacause</h1>
-<div class="login__container">
+  <h1>Welcome to Gramforacause</h1>
+  <div class="login__container">
     <h2>Login!</h2>
     <form action="/login" method="POST">
-        <label for="email">
-            Email:
-            <input type="text" name="email">
-        </label>
-        <label for="password">
-            Password:
-            <input type="password" name="password">
-        </label>
-        <button class="btn">Login</button>
+      <label for="email">
+        Email:
+        <input type="text" name="email">
+      </label>
+      <label for="password">
+        Password:
+        <input type="password" name="password">
+      </label>
+      <button class="btn">Login</button>
     </form>
     <a href="/register" alt="Create an Account">
-        <button class="btn">Create an Account</button>
+      <button class="btn">Create an Account</button>
     </a>
-</div>
+  </div>
 </body>
 </html>

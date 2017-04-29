@@ -1,23 +1,23 @@
 <fieldset
-    id="contact-more"
-    class=<%= selected === 'contact' ? '' : 'hidden'%>
-    aria-hidden=<%= selected === 'contact' ? 'true' : 'false'%>
+id="contact-more"
+class=<%= selected === 'contact' ? '' : 'hidden'%>
+aria-hidden=<%= selected === 'contact' ? 'true' : 'false'%>
 >
-    <div class="form-group">
-        <label for="nonprofit">Nonprofit Name</label>
-        <input id="nonprofit" name="nonprofit" type="text" class="form-control">
-    </div>
-    <div class="input-group">
-        <label for="phoneSecondary">Secondary Phone number</label>
-        <input name="phoneSecondary" type="tel" id="phoneSecondary" class="form-control">
-    </div>
-    <div class="input-group">
-        <label for="phoneSecondaryType">Secondary Phone Type</label>
-        <div class="input-group">
-            <input name="phoneSecondaryType" type="radio" value="mobile" aria-label="Mobile">Mobile
-        </div>
-        <div class="input-group">
-            <input name="phoneSecondaryType" type="radio" value="office" aria-label="Office">Office
-        </div>
-    </div>
+<div class="form-group">
+  <label for="nonprofit">Nonprofit Name</label>
+  <input id="nonprofit" name="nonprofit" type="text" class="form-control">
+</div>
+<div class="input-group">
+  <label for="phoneSecondary">Secondary Phone number</label>
+  <input name="phoneSecondary" type="tel" id="phoneSecondary" class="form-control">
+</div>
+<div class="input-group">
+  <label for="phoneSecondaryType">Secondary Phone Type</label>
+  <div class="input-group">
+    <input name="phoneSecondaryType" type="radio" value="mobile" aria-label="Mobile">Mobile
+  </div>
+  <div class="input-group">
+    <input name="phoneSecondaryType" type="radio" value="office" aria-label="Office">Office
+  </div>
+</div>
 </fieldset>

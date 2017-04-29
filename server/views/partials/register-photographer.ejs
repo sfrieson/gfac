@@ -1,46 +1,46 @@
 <fieldset
-    id="photographer-more"
-    class=<%= selected === 'photographer' ? '' : 'hidden'%>
-    aria-hidden=<%= selected === 'photographer' ? 'true' : 'false'%>
+id="photographer-more"
+class=<%= selected === 'photographer' ? '' : 'hidden'%>
+aria-hidden=<%= selected === 'photographer' ? 'true' : 'false'%>
 >
-    Select your favorite causes (choose up to 5)
-    <div class="checkbox">
-        <% causes.forEach(function (cause) { %>
-        <label>
-            <input name="causes" type="checkbox" value="<%= cause.id %>" <%= responses.causes && responses
-            .causes.indexOf(cause.id) > -1 ? 'checked' : ''
-            %>>
-            <%= cause.name %>
-        </label>
-        <% }); %>
-    </div>
-    <label for="instagram">Instagram Handle</label>
+Select your favorite causes (choose up to 5)
+<div class="checkbox">
+  <% causes.forEach(function (cause) { %>
+    <label>
+      <input name="causes" type="checkbox" value="<%= cause.id %>" <%= responses.causes && responses
+      .causes.indexOf(cause.id) > -1 ? 'checked' : ''
+      %>>
+      <%= cause.name %>
+    </label>
+    <% }); %>
+  </div>
+  <label for="instagram">Instagram Handle</label>
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">@</span>
+    <input name="instagram" type="text" id="instagram" class="form-control">
+  </div>
+  How I generally take photos:
+  <div class="checkbox">
+    <label>
+      <input name="cameraPhone" type="checkbox">Phone
+    </label>
+    <label>
+      <input name="cameraFilm" type="checkbox">Film
+    </label>
+    <label>
+      <input name="cameraDSLR" type="checkbox">DSLR
+    </label>
     <div class="input-group">
-        <span class="input-group-addon" id="basic-addon1">@</span>
-        <input name="instagram" type="text" id="instagram" class="form-control">
+      <span class="input-group-addon" id="basic-addon1">Other</span>
+      <input name="cameraOther" type="text" class="form-control">
     </div>
-    How I generally take photos:
-    <div class="checkbox">
-        <label>
-
-        </label>
-        <label>
-            <input name="cameraFilm" type="checkbox">Film
-        </label>
-        <label>
-            <input name="cameraDSLR" type="checkbox">DSLR
-        </label>
-        <div class="input-group">
-            <span class="input-group-addon" id="basic-addon1">Other</span>
-            <input name="cameraOther" type="text" class="form-control">
-        </div>
-    </div>
-    <div class="input-group">
-        <label for="preferredContactMethod">Preferred Contact Method</label>
-        <select name="preferredContactMethod" id="preferredContactMethod" class="form-control" >
-            <option value="instagram">Instagram Direct Message</option>
-            <option value="phone">Phone</option>
-            <option value="email">Email</option>
-        </select>
-    </div>
+  </div>
+  <div class="input-group">
+    <label for="preferredContactMethod">Preferred Contact Method</label>
+    <select name="preferredContactMethod" id="preferredContactMethod" class="form-control" >
+      <option value="instagram">Instagram Direct Message</option>
+      <option value="phone">Phone</option>
+      <option value="email">Email</option>
+    </select>
+  </div>
 </fieldset>
