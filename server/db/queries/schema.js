@@ -45,12 +45,6 @@ const types = `
     role: String
   }
 
-  # Photographer's availabilities
-  type Availability {
-    day: String!
-    time: String!
-  }
-
   # Causes for Interests and Focuses
   type Cause {
     id: Int!
@@ -73,7 +67,7 @@ const types = `
     cameraOther: String
     preferredContactMethod: String
     causes: [Cause]
-    availabilities: [Availability]
+    availabilities: [String]
   }
 
   # Base fields for all users

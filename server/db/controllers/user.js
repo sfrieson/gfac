@@ -4,7 +4,9 @@ import { auth } from '../../config'
 import { Availability, Contact, Photographer as PhotoModel, User as UserModel } from '../models'
 import { ValidationError } from '../../errors'
 
+const AvailabilityRE = new RegExp('(\\w{2})_(\\w*)')
 const SALT = bcrypt.genSaltSync(auth.salt)
+
 const hashPassword = function (password) { return bcrypt.hashSync(password, SALT) }
 
 const User = {
@@ -38,7 +40,6 @@ const User = {
       if (prop in d) d[prop] = true
     })
 
-    const AvailabilityRE = new RegExp('(\\w{2})_(\\w*)')
     d.availabilities = (typeof data.availability === 'string' ? [data.availability] : data.availability)
     .map((a) => {
       const match = a.match(AvailabilityRE)
@@ -75,10 +76,19 @@ const User = {
       include: [PhotoModel.associations.causes, PhotoModel.associations.availabilities]
     }).then(photographer => ({
       ...user.get(),
-      ...photographer.get()
+      ...photographer.get(),
+      availabilities: photographer.availabilities.map(a => (`${a.day}_${a.time}`))
     }))
   },
   update: function (query, updates) {
+    if ('availabilities' in updates) {
+      updates.availabilities =
+      (typeof updates.availabilities === 'string' ? [updates.availabilities] : updates.availabilities)
+      .map((a) => {
+        const match = a.match(AvailabilityRE)
+        return {day: match[1], time: match[2]}
+      })
+    }
     return UserModel.findOne({where: query})
     .then(user => user.update(updates))
     .then(user => user.get())
