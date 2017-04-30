@@ -12,13 +12,19 @@
     "cameraType",
     "cameraOther",
     "preferredContactMethod",
-    "causes"
+    "causes",
+    "availabilities"
   ],
   "contact": [
     "phoneSecondary",
     "phoneSecondaryType"
   ],
   "all": {
+    "availabilities": {
+      "label": "Availability",
+      "name": "availabilities",
+      "type": "availability"
+    },
     "cameraOther": {
       "label": "Other",
       "name": "cameraOther",

@@ -14,6 +14,7 @@ export default function Input (props) {
   if (type === 'select') return <Select {...props} />
   if (type === 'checkbox') return <Checkbox {...props} />
   if (type === 'checkboxes') return <Checkboxes {...props} />
+  if (type === 'availability') return <Availability {...props} />
 
   return (
     <div className='form-group'>
@@ -25,7 +26,7 @@ export default function Input (props) {
 
 // TODO implement textarea version
 Input.propTypes = {
-  type: PT.oneOf(['checkbox', 'checkboxes', 'radio', 'select', 'text', 'tel', 'textarea']),
+  type: PT.oneOf(['checkbox', 'checkboxes', 'radio', 'select', 'text', 'tel', 'textarea', 'availability']),
   onChange: PT.func,
   name: PT.string.isRequired,
   value: PT.oneOfType([PT.string, PT.number, PT.array, PT.bool])
@@ -201,4 +202,76 @@ function Checkboxes ({
       }
     })
   }
+}
+
+function Availability ({ value, onChange }) {
+  const availabilities = value
+
+  function handleChange ({ target }) {
+    let newAvailabilities
+    let value = target.value
+    if (/^\d*$/.test(value)) value = +value
+
+    if (target.checked) {
+      newAvailabilities = [...availabilities, value]
+    } else {
+      newAvailabilities = [
+        ...availabilities.slice(0, availabilities.indexOf(value)),
+        ...availabilities.slice(availabilities.indexOf(value) + 1)
+      ]
+    }
+
+    onChange({
+      target: {
+        name: 'availabilities',
+        value: newAvailabilities
+      }
+    })
+  }
+
+  const days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']
+  const times = ['morning', 'afternoon', 'evening']
+  const checkboxProps = {type: 'checkbox', name: 'availability', onChange: handleChange}
+  const rows = times.reduce((rows, time) => {
+    rows[time] = days.map(day => {
+      const value = `${day}_${time}`
+      return <td key={value}><input {...checkboxProps} value={value} checked={availabilities.indexOf(value) > -1} /></td>
+    })
+    return rows
+  }, {})
+
+  return (
+    <div>
+      <div style={{fontWeight: 'bold'}}>Availability</div>
+
+      <table className='table table-striped table-cond ensed'>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Morning</td>
+            {rows.morning}
+          </tr>
+          <tr>
+            <td>Afternoon</td>
+            {rows.afternoon}
+          </tr>
+          <tr>
+            <td>Evening</td>
+            {rows.evening}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
 }

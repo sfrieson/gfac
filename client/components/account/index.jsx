@@ -45,19 +45,19 @@ class AccountFormComponent extends Component {
         value: user[key]
       }
 
-      if (key === 'phoneType') {
-        info.inputType = 'radio'
-        info.options = [
-          {value: 'mobile', label: 'Mobile'},
-          {value: 'office', label: 'Office'}
-        ]
-      } else if (key === 'role') {
-        info.inputType = 'select'
-        info.options = [
-          {value: 'photographer', label: 'Photographer'},
-          {value: 'contact', label: 'Nonprofit Contact'}
-        ]
-      }
+      // if (key === 'phoneType') {
+      //   info.inputType = 'radio'
+      //   info.options = [
+      //     {value: 'mobile', label: 'Mobile'},
+      //     {value: 'office', label: 'Office'}
+      //   ]
+      // } else if (key === 'role') {
+      //   info.inputType = 'select'
+      //   info.options = [
+      //     {value: 'photographer', label: 'Photographer'},
+      //     {value: 'contact', label: 'Nonprofit Contact'}
+      //   ]
+      // }
 
       return info
     })

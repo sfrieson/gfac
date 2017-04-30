@@ -25,6 +25,7 @@ const User = {
             causes {
               id
             }
+            availabilities
           }
           getMeContact {
             phoneSecondary
