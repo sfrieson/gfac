@@ -55,7 +55,7 @@ const User = {
       },
       { // Photographer Fields
         fields: ['instagram', 'cameraPhone', 'cameraFilm', 'cameraDSLR',
-          'cameraOther', 'preferredContactMethod', 'causes'],
+          'cameraOther', 'preferredContactMethod', 'causes', 'availabilities'],
         updateFieldName: 'photographerUpdates',
         mutation: 'updatePhotographerMe(updates: $photographerUpdates) { userId }',
         variable: '$photographerUpdates: PhotographerInput'

@@ -81,14 +81,6 @@ const User = {
     }))
   },
   update: function (query, updates) {
-    if ('availabilities' in updates) {
-      updates.availabilities =
-      (typeof updates.availabilities === 'string' ? [updates.availabilities] : updates.availabilities)
-      .map((a) => {
-        const match = a.match(AvailabilityRE)
-        return {day: match[1], time: match[2]}
-      })
-    }
     return UserModel.findOne({where: query})
     .then(user => user.update(updates))
     .then(user => user.get())

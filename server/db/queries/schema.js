@@ -105,6 +105,7 @@ const inputs = `
     cameraOther: String
     preferredContactMethod: String
     causes: [Int]
+    availabilities: [String]
   }
 `
 
