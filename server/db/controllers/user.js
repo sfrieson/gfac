@@ -46,12 +46,14 @@ const User = {
       return {day: match[1], time: match[2]}
     })
 
-    d.causes = typeof data.causes === 'string' ? [data.causes] : data.causes
-    return PhotoModel.create(d, {include: [Availability, Cause]})
-    .then(photographer => ({
-      ...user.get(),
-      ...photographer.get()
-    }))
+    return PhotoModel.create(d, {include: [Availability]})
+    .then(photographer => {
+      return photographer.setCauses(data.causes)
+      .then(() => ({
+        ...user.get(),
+        ...photographer.get()
+      }))
+    })
   },
   get: function (query, join = true) {
     return UserModel.findOne({where: query}).then(user => {

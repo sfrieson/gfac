@@ -1,7 +1,7 @@
-import { Photographer as Model, User as UserModel } from '../models'
+import { Photographer as Model } from '../models'
 
 export default {
-  update: function (id, fields) {
+  update (id, fields) {
     return Model.findOne({query: {userId: id}})
     .then(photographer => photographer.update(fields))
     .then(photographer => {
