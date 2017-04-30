@@ -45,11 +45,16 @@ const types = `
     role: String
   }
 
+  # Photographer's availabilities
+  type Availability {
+    day: String!
+    time: String!
+  }
+
   # Causes for Interests and Focuses
   type Cause {
-    userId: String
-    name: String!
     id: Int!
+    name: String!
   }
 
   # Additional fields for Nonprofit Contact users
@@ -68,6 +73,7 @@ const types = `
     cameraOther: String
     preferredContactMethod: String
     causes: [Cause]
+    availabilities: [Availability]
   }
 
   # Base fields for all users

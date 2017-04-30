@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { pick } from 'lodash'
 import { auth } from '../../config'
-import { Availability, Cause, Contact, Photographer as PhotoModel, User as UserModel } from '../models'
+import { Availability, Contact, Photographer as PhotoModel, User as UserModel } from '../models'
 import { ValidationError } from '../../errors'
 
 const SALT = bcrypt.genSaltSync(auth.salt)
@@ -31,8 +31,7 @@ const User = {
   createContact: function (user, data) { return user },
   createPhotographer: function (user, data) {
     // Whitelist properties necessary for creating Photographer
-    const d = pick(Object.assign(data, user), ['instagram', 'cameraPhone', 'cameraDSLR', 'cameraFilm',
-      'cameraOther', 'preferredContactMethod'])
+    const d = pick(Object.assign(data, user), Object.keys(PhotoModel.attributes))
     d.userId = user.id
 
     ;['cameraPhone', 'cameraDSLR', 'cameraFilm'].forEach(prop => {
@@ -73,7 +72,7 @@ const User = {
   getPhotographer: function (user) { // user can be Instance or object like {id: 12345}
     return PhotoModel.findOne({
       query: {id: user.id},
-      include: [{model: Cause}]
+      include: [PhotoModel.associations.causes, PhotoModel.associations.availabilities]
     }).then(photographer => ({
       ...user.get(),
       ...photographer.get()
