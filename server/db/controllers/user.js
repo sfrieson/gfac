@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { pick } from 'lodash'
 import { auth } from '../../config'
-import { Cause, Contact, Photographer as PhotoModel, User as UserModel } from '../models'
+import { Availability, Cause, Contact, Photographer as PhotoModel, User as UserModel } from '../models'
 import { ValidationError } from '../../errors'
 
 const SALT = bcrypt.genSaltSync(auth.salt)
@@ -33,16 +33,25 @@ const User = {
     // Whitelist properties necessary for creating Photographer
     const d = pick(Object.assign(data, user), ['instagram', 'cameraPhone', 'cameraDSLR', 'cameraFilm',
       'cameraOther', 'preferredContactMethod'])
-    d.userId = user.id;
-    ['cameraPhone', 'cameraDSLR', 'cameraFilm'].forEach(prop => {
+    d.userId = user.id
+
+    ;['cameraPhone', 'cameraDSLR', 'cameraFilm'].forEach(prop => {
       if (prop in d) d[prop] = true
     })
 
-    return PhotoModel.create(d)
-    .then(photographer => {
-      return photographer.setCauses(data.causes)
-      .then(res => ({...user.get(), ...photographer.get()}))
+    const AvailabilityRE = new RegExp('(\\w{2})_(\\w*)')
+    d.availabilities = (typeof data.availability === 'string' ? [data.availability] : data.availability)
+    .map((a) => {
+      const match = a.match(AvailabilityRE)
+      return {day: match[1], time: match[2]}
     })
+
+    d.causes = typeof data.causes === 'string' ? [data.causes] : data.causes
+    return PhotoModel.create(d, {include: [Availability, Cause]})
+    .then(photographer => ({
+      ...user.get(),
+      ...photographer.get()
+    }))
   },
   get: function (query, join = true) {
     return UserModel.findOne({where: query}).then(user => {
