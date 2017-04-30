@@ -182,13 +182,15 @@ function Checkboxes ({
 
   function handleChange ({ target }) {
     let newCheckboxesValue
+    let value = target.value
+    if (/^\d*$/.test(value)) value = +value
 
     if (target.checked) {
-      newCheckboxesValue = [...values, +target.value] // TODO Make a less number based solution
+      newCheckboxesValue = [...values, value]
     } else {
       newCheckboxesValue = [
-        ...values.slice(0, values.indexOf(target.name)),
-        ...values.slice(values.indexOf(target.name) + 1)
+        ...values.slice(0, values.indexOf(value)),
+        ...values.slice(values.indexOf(value) + 1)
       ]
     }
 
