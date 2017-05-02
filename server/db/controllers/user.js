@@ -31,15 +31,25 @@ const User = {
     .catch(() => Promise.reject(new Error('Account Creation')))
   },
   createContact: function (user, data) {
-    const d = pick(Object.assign(data, user), Object.keys(Contact.attributes))
+    let getNonprofit
+    if (data.nonprofit === 'new') {
+      getNonprofit = Nonprofit.create({
+        name: data.nonprofit_name,
+        description: data.nonprofit_description
+      }).then(np => {
+        return np
+      })
+    } else if (data.nonprofit === 'existing') {
+      getNonprofit = Nonprofit.findOne({query: {id: data.nonprofit_accesscode}}) // TODO Should this not use the ID?
+    }
+
+    const d = pick(Object.assign({}, data, user), Object.keys(Contact.attributes))
     d.userId = user.id
 
-    if (data.nonprofit === 'existing') {
-      // TODO implement a way to invite people to an existing np. Static hash?
-      // Add np info to d
-    }
-    console.log('data to create', JSON.stringify(d, null, 2))
-    return Contact.create(d).then(contact => {
+    return getNonprofit.then(np => {
+      d.nonprofitId = np.id
+      return Contact.create(d)
+    }).then(contact => {
       console.log('contact created', JSON.stringify(contact.get(), null, 2))
       return ({...user.get(), ...contact.get()})
     })
@@ -77,7 +87,6 @@ const User = {
     })
   },
   getContact: function (user) { // user can be Instance or object like {id: 12345}
-    console.log('getting Contact. user:', user.get());
     return Contact.findOne({
       query: {id: user.id}
     }).then(contact => ({

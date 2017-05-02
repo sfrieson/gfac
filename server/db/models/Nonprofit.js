@@ -6,10 +6,11 @@ const Nonprofit = Model.define('nonprofit',
   {
     id: {
       type: DataType.UUID,
+      defaultValue: DataType.UUIDV1,
       primaryKey: true
     },
     name: {
-      type: DataType.INTEGER
+      type: DataType.STRING
     },
     description: {
       type: DataType.TEXT
