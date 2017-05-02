@@ -97,12 +97,12 @@
     },
     "phoneSecondary": {
       "label": "Secondary Phone Number",
-      "name": "phone",
+      "name": "phoneSecondary",
       "type": "tel"
     },
     "phoneSecondaryType": {
       "label": "Secondary Phone Type",
-      "name": "phoneType",
+      "name": "phoneSecondaryType",
       "type": "radio",
       "options": [
         {"label": "Mobile", "value": "mobile"},

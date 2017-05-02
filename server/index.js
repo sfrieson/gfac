@@ -43,7 +43,7 @@ app.use('/api', expressGraphQL({
 
 app.use(mainRouter)
 
-models.sync({force: false})
+models.sync({force: true})
 .catch(err => console.error(err.stack))
 .then(() => {
   app.listen(port, () => {

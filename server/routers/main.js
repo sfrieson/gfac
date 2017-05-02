@@ -39,7 +39,7 @@ Router.route('/register')
     next()
   })
 })
-.get((req, res) => res.render('register', {err: [], responses: {}, causes: req.causes}))
+.get((req, res) => {res.render('register', {err: [], responses: {}, causes: req.causes})})
 .post((req, res) => {
   const responses = req.body
   console.log('Response ' + JSON.stringify(responses, null, 2))
@@ -54,7 +54,7 @@ Router.route('/register')
   })
   .catch((err) => {
     if (err instanceof ValidationError) res.render('register', {err: err.errors, responses: responses, causes: req.causes})
-    if (err.message === 'Account Creation') res.status(500).send(err.message)
+    if (err.message === 'Account Creation') res.status(500).send('Error: ' + err.message)
   })
 })
 

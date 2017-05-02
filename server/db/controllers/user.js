@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { pick } from 'lodash'
 import { auth } from '../../config'
-import { Availability, Contact, Photographer as PhotoModel, User as UserModel } from '../models'
+import { Availability, Contact, Nonprofit, Photographer as PhotoModel, User as UserModel } from '../models'
 import { ValidationError } from '../../errors'
 
 const AvailabilityRE = new RegExp('(\\w{2})_(\\w*)')
@@ -26,11 +26,24 @@ const User = {
     return UserModel.create(d)
     .then((user) => {
       if (user.role === 'photographer') return this.createPhotographer(user, data)
-      if (user.role === 'nonprofit') return this.createContact(user, data)
+      if (user.role === 'contact') return this.createContact(user, data)
     })
     .catch(() => Promise.reject(new Error('Account Creation')))
   },
-  createContact: function (user, data) { return user },
+  createContact: function (user, data) {
+    const d = pick(Object.assign(data, user), Object.keys(Contact.attributes))
+    d.userId = user.id
+
+    if (data.nonprofit === 'existing') {
+      // TODO implement a way to invite people to an existing np. Static hash?
+      // Add np info to d
+    }
+    console.log('data to create', JSON.stringify(d, null, 2))
+    return Contact.create(d).then(contact => {
+      console.log('contact created', JSON.stringify(contact.get(), null, 2))
+      return ({...user.get(), ...contact.get()})
+    })
+  },
   createPhotographer: function (user, data) {
     // Whitelist properties necessary for creating Photographer
     const d = pick(Object.assign(data, user), Object.keys(PhotoModel.attributes))
@@ -56,6 +69,7 @@ const User = {
     })
   },
   get: function (query, join = true) {
+    console.log('getting user, query', query)
     return UserModel.findOne({where: query}).then(user => {
       if (join && user.role === 'photographer') return this.getPhotographer(user)
       if (join && user.role === 'contact') return this.getContact(user)
@@ -63,6 +77,7 @@ const User = {
     })
   },
   getContact: function (user) { // user can be Instance or object like {id: 12345}
+    console.log('getting Contact. user:', user.get());
     return Contact.findOne({
       query: {id: user.id}
     }).then(contact => ({

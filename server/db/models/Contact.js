@@ -6,13 +6,14 @@ import User from './User'
 const Contact = Model.define('contact',
   {
     phoneSecondary: {
-      type: DataType.INTEGER
+      type: DataType.STRING(24)
     },
     phoneSecondaryType: {
       type: DataType.ENUM('mobile', 'office', 'home')
     },
     userId: {
       type: DataType.UUID,
+      primaryKey: true,
       references: {
         model: User,
         key: 'id'
