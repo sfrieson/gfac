@@ -66,22 +66,6 @@ class AccountFormComponent extends Component {
   renderInputs (infos) {
     return infos.map(info => <Input key={info.name} {...info} />)
   }
-
-  mapNameToLabel (name) {
-    // Standard fields
-    if (name === 'firstname') return 'First Name'
-    if (name === 'lastname') return 'Last Name'
-    if (name === 'phone') return 'Phone Number'
-    if (name === 'phoneType') return 'Phone Type'
-    if (name === 'role') return 'Role'
-
-    // Photographer fields
-
-    // Nonprofit Contact fields
-
-    // default
-    return name
-  }
 }
 
 function stateToProps ({ me, accountForm }) {

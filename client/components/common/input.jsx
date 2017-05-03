@@ -12,6 +12,7 @@ export default function Input (props) {
 
   if (type === 'radio') return <Radio {...props} />
   if (type === 'select') return <Select {...props} />
+  if (type === 'textarea') return <TextArea {...props} />
   if (type === 'checkbox') return <Checkbox {...props} />
   if (type === 'checkboxes') return <Checkboxes {...props} />
   if (type === 'availability') return <Availability {...props} />
@@ -97,6 +98,18 @@ function Select ({
   }
 }
 
+// --------------
+// TextArea Input
+// --------------
+
+function TextArea ({ label, rows = 3, ...props }) {
+  return (
+    <div className='form-group'>
+      <label htmlFor='nonprofit_description'>{label}</label>
+      <textarea {...props} className='form-control' rows={rows}></textarea>
+    </div>
+  )
+}
 // --------------
 // Checkbox Input
 // --------------
