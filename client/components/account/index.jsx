@@ -38,6 +38,7 @@ class AccountFormComponent extends Component {
 
   makeFieldInfos (user) {
     return Object.keys(user).map(key => {
+      if (key === 'nonprofit') return null
       const info = {
         key,
         ...fields.all[key],
@@ -45,26 +46,15 @@ class AccountFormComponent extends Component {
         value: user[key]
       }
 
-      // if (key === 'phoneType') {
-      //   info.inputType = 'radio'
-      //   info.options = [
-      //     {value: 'mobile', label: 'Mobile'},
-      //     {value: 'office', label: 'Office'}
-      //   ]
-      // } else if (key === 'role') {
-      //   info.inputType = 'select'
-      //   info.options = [
-      //     {value: 'photographer', label: 'Photographer'},
-      //     {value: 'contact', label: 'Nonprofit Contact'}
-      //   ]
-      // }
-
       return info
     })
   }
 
   renderInputs (infos) {
-    return infos.map(info => <Input key={info.name} {...info} />)
+    return infos.map(info => {
+      if (info === null) return info
+      return <Input key={info.name} {...info} />
+    })
   }
 }
 

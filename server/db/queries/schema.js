@@ -56,10 +56,18 @@ const types = `
 
   # Additional fields for Nonprofit Contact users
   type Contact {
+    nonprofit: Nonprofit
     phoneSecondary: String
     phoneSecondaryType: String
   }
 
+  # Fields describing a Nonprofit
+  type Nonprofit {
+    id: String
+    name: String
+    description: String
+  }
+  
   # Additional Fields for Storyteller users
   type Photographer {
     userId: String

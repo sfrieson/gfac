@@ -30,6 +30,11 @@ const User = {
           getMeContact {
             phoneSecondary
             phoneSecondaryType
+            nonprofit {
+              id
+              name
+              description
+            }
           }
         }`
       ).then(({ data }) => {

@@ -30,10 +30,11 @@ export default {
       query: {id}
     }).then(contact => {
       return contact.getNonprofit()
-      .then(np => ({
-        ...np.get(),
-        ...contact.get()
-      }))
+      .then(np => {
+        const c = contact.get()
+        c.nonprofit = np.get()
+        return c
+      })
     })
   },
   update (id, fields) {
