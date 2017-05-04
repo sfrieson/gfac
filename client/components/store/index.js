@@ -39,6 +39,7 @@ const fetches = function (state = {}, action) {
 const me = function (state = {}, action) {
   switch (action.type) {
     case 'FETCH_UPDATE_ME_END':
+    case 'FETCH_CREATE_PROJECT_END':
     case 'FETCH_ME_END':
       return {
         ...state,

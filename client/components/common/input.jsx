@@ -46,7 +46,7 @@ function DateInput ({ label, name, ...props }) {
   return (
     <div className='input-group'>
       <label htmlFor={name}>{label}</label>
-      <input id={`${name}-input`} name={name} {...props} min={getToday()} />
+      <input id={`${name}-input`} className='form-control' name={name} {...props} min={getToday()} />
     </div>
   )
 

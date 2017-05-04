@@ -6,6 +6,7 @@ import {
 } from '../controllers'
 
 export const root = {
+  createProject: (args, req) => {},
   getMe: (_, req) => User.get({id: req.user.id}),
   getUser: (query) => User.get(query),
   User: (query) => User.get(query),

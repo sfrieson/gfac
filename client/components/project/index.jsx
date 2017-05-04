@@ -2,9 +2,10 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { Input } from '../common'
 
-const stateToProps = ({ projectForm }) => ({projectForm})
+const stateToProps = ({ me, projectForm }) => ({me, projectForm})
 
-export default connect(stateToProps)(function ({ projectForm, dispatch }) {
+export default connect(stateToProps)(function ProjectForm ({ me, projectForm, dispatch }) {
+  console.log(me)
   const {
     name = '',
     date = '',
