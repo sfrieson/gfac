@@ -5,14 +5,23 @@ import { Input } from '../common'
 const stateToProps = ({ projectForm }) => ({projectForm})
 
 export default connect(stateToProps)(function ({ projectForm, dispatch }) {
+  const {
+    name = '',
+    date = '',
+    dateIsApprox = false,
+    description = '',
+    location = ''
+  } = projectForm
+
   return (
     <div>
       New Project Form
       <form>
-        <Input label='Name' type='text' name='name' value={projectForm.name} onChange={onChange} />
-        <Input label='Date' type='date' name='date' value={projectForm.date} onChange={onChange} />{/* dateIsApprox */}
-        <Input label='Description' type='textarea' name='description' value={projectForm.description} onChange={onChange} />
-        {/* location */}
+        <Input label='Name' type='text' name='name' value={name} onChange={onChange} />
+        <Input label='Date' type='date' name='date' value={date} onChange={onChange} />
+        <Input label='Date is approximate' type='checkbox' name='dateIsApprox' value={dateIsApprox} onChange={onChange} />
+        <Input label='Description' type='textarea' name='description' value={description} onChange={onChange} />
+        <Input label='Location' type='text' name='location' value={location} onChange={onChange} />
       </form>
     </div>
   )

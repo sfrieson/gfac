@@ -42,25 +42,26 @@ Input.defaultProps = {
 // Date Input
 // ----------
 
-function DateInput ({ label, name, value, ...props }) {
-  const now = new Date()
-  const today = {
-    year: now.getFullYear(),
-    month: now.getMonth() + 1 + '',
-    day: now.getDate() + ''
-  }
-  if (today.month.length === 1) today.month = '0' + today.month
-  if (today.day.length === 1) today.day = '0' + today.day
-
-  const min = `${today.year}-${today.month}-${today.day}`
-  value = value || min
-
+function DateInput ({ label, name, ...props }) {
   return (
     <div className='input-group'>
       <label htmlFor={name}>{label}</label>
-      <input id={`${name}-input`} name={name} {...props} value={value} min={min} />
+      <input id={`${name}-input`} name={name} {...props} min={getToday()} />
     </div>
   )
+
+  function getToday () {
+    const now = new Date()
+    const today = {
+      year: now.getFullYear(),
+      month: now.getMonth() + 1 + '',
+      day: now.getDate() + ''
+    }
+    if (today.month.length === 1) today.month = '0' + today.month
+    if (today.day.length === 1) today.day = '0' + today.day
+
+    return `${today.year}-${today.month}-${today.day}`
+  }
 }
 // -----------
 // Radio Input
