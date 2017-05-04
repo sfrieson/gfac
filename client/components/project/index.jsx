@@ -10,7 +10,9 @@ export default connect(stateToProps)(function ({ projectForm, dispatch }) {
       New Project Form
       <form>
         <Input label='Name' type='text' name='name' value={projectForm.name} onChange={onChange} />
+        <Input label='Date' type='date' name='date' value={projectForm.date} onChange={onChange} />{/* dateIsApprox */}
         <Input label='Description' type='textarea' name='description' value={projectForm.description} onChange={onChange} />
+        {/* location */}
       </form>
     </div>
   )

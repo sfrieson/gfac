@@ -30,6 +30,8 @@ const mutations = `
     updateMe(updates: UserInput): User
     updatePhotographerMe(updates: PhotographerInput): Photographer
     updateContactMe(updates: ContactInput): Contact
+
+    createProject(project: ProjectInput): Project
   }
 `
 
@@ -70,6 +72,18 @@ const types = `
     availabilities: [String]
   }
 
+  # Description of a Nonprofit's project
+  type Project {
+    id: String!
+    name: String!
+    description: String!
+    date: String!
+    dateIsApprox: Boolean!
+    location: String
+    status: String
+    photoLink: String
+  }
+
   # Base fields for all users
   type User {
     id: String
@@ -106,6 +120,14 @@ const inputs = `
     preferredContactMethod: String
     causes: [Int]
     availabilities: [String]
+  }
+
+  input ProjectInput {
+    name: String
+    description: String
+    nonprofitId: String
+    date: String
+    state: String
   }
 `
 

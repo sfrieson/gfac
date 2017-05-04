@@ -10,6 +10,7 @@ export default function Input (props) {
     value
   } = props
 
+  if (type === 'date') return <DateInput {...props} />
   if (type === 'radio') return <Radio {...props} />
   if (type === 'select') return <Select {...props} />
   if (type === 'textarea') return <TextArea {...props} />
@@ -25,9 +26,8 @@ export default function Input (props) {
   )
 }
 
-// TODO implement textarea version
 Input.propTypes = {
-  type: PT.oneOf(['checkbox', 'checkboxes', 'radio', 'select', 'text', 'tel', 'textarea', 'availability']),
+  type: PT.oneOf(['availability', 'checkbox', 'checkboxes', 'date', 'radio', 'select', 'text', 'tel', 'textarea', ]),
   onChange: PT.func,
   name: PT.string.isRequired,
   value: PT.oneOfType([PT.string, PT.number, PT.array, PT.bool])
@@ -38,6 +38,30 @@ Input.defaultProps = {
   type: 'string'
 }
 
+// ----------
+// Date Input
+// ----------
+
+function DateInput ({ label, name, value, ...props }) {
+  const now = new Date()
+  const today = {
+    year: now.getFullYear(),
+    month: now.getMonth() + 1 + '',
+    day: now.getDate() + ''
+  }
+  if (today.month.length === 1) today.month = '0' + today.month
+  if (today.day.length === 1) today.day = '0' + today.day
+
+  const min = `${today.year}-${today.month}-${today.day}`
+  value = value || min
+
+  return (
+    <div className='input-group'>
+      <label htmlFor={name}>{label}</label>
+      <input id={`${name}-input`} name={name} {...props} value={value} min={min} />
+    </div>
+  )
+}
 // -----------
 // Radio Input
 // -----------
@@ -50,6 +74,7 @@ function Radio ({
   value
                 }) {
   const checked = value
+  // TODO check on hardcoded 'role' below
   return (
     <div className='input-group'>
       <label htmlFor='role'>{label}</label>
