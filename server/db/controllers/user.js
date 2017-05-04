@@ -1,10 +1,11 @@
 import bcrypt from 'bcryptjs'
 import { pick } from 'lodash'
 import { auth } from '../../config'
-import { Availability, Contact, Nonprofit, Photographer as PhotoModel, User as UserModel } from '../models'
+import { User as UserModel } from '../models'
+import Photographer from './photographer'
+import Contact from './contact'
 import { ValidationError } from '../../errors'
 
-const AvailabilityRE = new RegExp('(\\w{2})_(\\w*)')
 const SALT = bcrypt.genSaltSync(auth.salt)
 
 const hashPassword = function (password) { return bcrypt.hashSync(password, SALT) }
@@ -31,52 +32,12 @@ const User = {
     .catch(() => Promise.reject(new Error('Account Creation')))
   },
   createContact: function (user, data) {
-    let getNonprofit
-    if (data.nonprofit === 'new') {
-      getNonprofit = Nonprofit.create({
-        name: data.nonprofit_name,
-        description: data.nonprofit_description
-      }).then(np => {
-        return np
-      })
-    } else if (data.nonprofit === 'existing') {
-      getNonprofit = Nonprofit.findOne({query: {id: data.nonprofit_accesscode}}) // TODO Should this not use the ID?
-    }
-
-    const d = pick(Object.assign({}, data, user), Object.keys(Contact.attributes))
-    d.userId = user.id
-
-    return getNonprofit.then(np => {
-      d.nonprofitId = np.id
-      return Contact.create(d)
-    }).then(contact => {
-      console.log('contact created', JSON.stringify(contact.get(), null, 2))
-      return ({...user.get(), ...contact.get()})
-    })
+    return Contact.create(data, user)
+    .then(contact => ({...user.get(), ...contact.get()}))
   },
   createPhotographer: function (user, data) {
-    // Whitelist properties necessary for creating Photographer
-    const d = pick(Object.assign(data, user), Object.keys(PhotoModel.attributes))
-    d.userId = user.id
-
-    ;['cameraPhone', 'cameraDSLR', 'cameraFilm'].forEach(prop => {
-      if (prop in d) d[prop] = true
-    })
-
-    d.availabilities = (typeof data.availability === 'string' ? [data.availability] : data.availability)
-    .map((a) => {
-      const match = a.match(AvailabilityRE)
-      return {day: match[1], time: match[2]}
-    })
-
-    return PhotoModel.create(d, {include: [Availability]})
-    .then(photographer => {
-      return photographer.setCauses(data.causes)
-      .then(() => ({
-        ...user.get(),
-        ...photographer.get()
-      }))
-    })
+    return Photographer.create(data, user)
+    .then(photographer => ({...user.get(), ...photographer}))
   },
   get: function (query, join = true) {
     console.log('getting user, query', query)
@@ -87,21 +48,17 @@ const User = {
     })
   },
   getContact: function (user) { // user can be Instance or object like {id: 12345}
-    return Contact.findOne({
-      query: {id: user.id}
-    }).then(contact => ({
+    return Contact.get(user.id)
+    .then(contact => ({
       ...user.get(),
-      ...contact.get()
+      ...contact
     }))
   },
   getPhotographer: function (user) { // user can be Instance or object like {id: 12345}
-    return PhotoModel.findOne({
-      query: {id: user.id},
-      include: [PhotoModel.associations.causes, PhotoModel.associations.availabilities]
-    }).then(photographer => ({
+    return Photographer.get(user.id)
+    .then(photographer => ({
       ...user.get(),
-      ...photographer.get(),
-      availabilities: photographer.availabilities.map(a => (`${a.day}_${a.time}`))
+      ...photographer
     }))
   },
   update: function (query, updates) {
