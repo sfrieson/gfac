@@ -2,7 +2,7 @@ import { pick } from 'lodash'
 import { Contact as Model, Nonprofit } from '../models'
 
 export default {
-  create (data, user) {
+  create: function (data, user) {
     let getNonprofit
     if (data.nonprofit === 'new') {
       getNonprofit = Nonprofit.create({
@@ -25,7 +25,7 @@ export default {
       return contact.get()
     })
   },
-  get (id) {
+  get: function (id) {
     return Model.findOne({
       query: {id}
     }).then(contact => {
@@ -37,7 +37,7 @@ export default {
       })
     })
   },
-  update (id, fields) {
+  update: function (id, fields) {
     return Model.findOne({query: {userId: id}})
     .then(contact => contact.update(fields))
   }

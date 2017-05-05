@@ -7,7 +7,7 @@ import Home from './home'
 import Account from './account'
 import Project from './project'
 import Header from './header'
-
+import User from './models/User'
 export default (
   <Provider store={store}>
     <Router>
@@ -17,7 +17,7 @@ export default (
           <div className='col-sm-12 col-md-9'>
             <Route path='/' component={Home} />
             <Route path='/account' component={Account} />
-            <Route path='/project' component={Project} />
+            <Route beforeEnter={User.getMe.bind(User)} path='/project' component={Project} />
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ const Project = Model.define('project',
   {
     id: {
       type: DataType.UUID,
+      defaultValue: DataType.UUIDV1,
       primaryKey: true
     },
     name: {

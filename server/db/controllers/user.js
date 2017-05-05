@@ -26,14 +26,18 @@ const User = {
 
     return UserModel.create(d)
     .then((user) => {
+      console.log('user created. now to create extension', user.get())
       if (user.role === 'photographer') return this.createPhotographer(user, data)
       if (user.role === 'contact') return this.createContact(user, data)
     })
-    .catch(() => Promise.reject(new Error('Account Creation')))
+    .catch((err) => {
+      console.log('account creation error', err)
+      return Promise.reject(new Error('Account Creation'))
+    })
   },
   createContact: function (user, data) {
     return Contact.create(data, user)
-    .then(contact => ({...user.get(), ...contact.get()}))
+    .then(contact => ({...user.get(), ...contact}))
   },
   createPhotographer: function (user, data) {
     return Photographer.create(data, user)

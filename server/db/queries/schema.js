@@ -2,11 +2,12 @@ import { buildSchema } from 'graphql'
 import {
   ContactController as Contact,
   PhotographerController as Photographer,
-  UserController as User
+  UserController as User,
+  ProjectController as Project
 } from '../controllers'
 
 export const root = {
-  createProject: (args, req) => {},
+  createProject: (args) => Project.create(args.project).then(p => { console.log(p); return p }),
   getMe: (_, req) => User.get({id: req.user.id}),
   getUser: (query) => User.get(query),
   User: (query) => User.get(query),
@@ -67,7 +68,7 @@ const types = `
     name: String
     description: String
   }
-  
+
   # Additional Fields for Storyteller users
   type Photographer {
     userId: String
@@ -91,6 +92,7 @@ const types = `
     location: String
     status: String
     photoLink: String
+    nonprofitId: String!
   }
 
   # Base fields for all users
@@ -136,7 +138,8 @@ const inputs = `
     description: String
     nonprofitId: String
     date: String
-    state: String
+    dateIsApprox: String
+    location: String
   }
 `
 
