@@ -27,7 +27,7 @@ export default function Input (props) {
 }
 
 Input.propTypes = {
-  type: PT.oneOf(['availability', 'checkbox', 'checkboxes', 'date', 'radio', 'select', 'text', 'tel', 'textarea', ]),
+  type: PT.oneOf(['availability', 'checkbox', 'checkboxes', 'date', 'radio', 'select', 'text', 'tel', 'textarea']),
   onChange: PT.func,
   name: PT.string.isRequired,
   value: PT.oneOfType([PT.string, PT.number, PT.array, PT.bool])
@@ -46,7 +46,7 @@ function DateInput ({ label, name, ...props }) {
   return (
     <div className='input-group'>
       <label htmlFor={name}>{label}</label>
-      <input id={`${name}-input`} className='form-control' name={name} {...props} type="datetime-local" min={getToday()} />
+      <input id={`${name}-input`} className='form-control' name={name} {...props} type='datetime-local' min={getToday()} />
     </div>
   )
 
@@ -95,7 +95,6 @@ function Radio ({
   }
 }
 
-
 // ------------
 // Select Input
 // ------------
@@ -133,7 +132,7 @@ function TextArea ({ label, rows = 3, ...props }) {
   return (
     <div className='form-group'>
       <label htmlFor='nonprofit_description'>{label}</label>
-      <textarea {...props} className='form-control' rows={rows}></textarea>
+      <textarea {...props} className='form-control' rows={rows} />
     </div>
   )
 }

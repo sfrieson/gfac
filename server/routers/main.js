@@ -39,7 +39,7 @@ Router.route('/register')
     next()
   })
 })
-.get((req, res) => {res.render('register', {err: [], responses: {}, causes: req.causes})})
+.get((req, res) => { res.render('register', {err: [], responses: {}, causes: req.causes}) })
 .post((req, res) => {
   const responses = req.body
   console.log('Response ' + JSON.stringify(responses, null, 2))

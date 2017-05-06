@@ -7,7 +7,8 @@ import {
 } from '../controllers'
 
 export const root = {
-  createProject: (args) => Project.create(args.project).then(p => { console.log(p); return p }),
+  createProject: (args) => Project.create(args.project),
+  getProjects: (query) => Project.get(query),
   getMe: (_, req) => User.get({id: req.user.id}),
   getUser: (query) => User.get(query),
   User: (query) => User.get(query),
@@ -24,6 +25,7 @@ const queries = `
     getMePhotographer: Photographer
     getMe: User
     getUser(id: String, email: String): User
+    getProjects(nonprofitId: String): [Project]
   }
 `
 

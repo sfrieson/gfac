@@ -1,5 +1,5 @@
 import { omit } from 'lodash'
-import { Project as Model, Nonprofit } from '../models'
+import { Project as Model } from '../models'
 
 export default {
   create (data) {
@@ -9,8 +9,9 @@ export default {
     .then(project => project.setNonprofit(data.nonprofitId))
     .then(p => { console.log('p?', p.get && p.get()); return p })
   },
-  get (id) {
-
+  get (query) {
+    console.log('photogect#get:query', query)
+    return Model.findAll(query)
   },
   update (id, fields) {
 
