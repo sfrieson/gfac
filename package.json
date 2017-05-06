@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./index.js --watch ./server --exec babel-node"
+    "lint": "standard"
   },
   "babel": {
     "presets": [
@@ -20,6 +21,7 @@
       "stage-2"
     ]
   },
+  "pre-commit": ["lint"]
   "author": "Steven Frieson",
   "license": "MIT",
   "dependencies": {
@@ -67,6 +69,7 @@
     "mocha": "^3.2.0",
     "node-sass": "^4.5.2",
     "nodemon": "^1.11.0",
+    "pre-commit": "^1.2.2",
     "redux-logger": "^3.0.1",
     "sass-loader": "^6.0.3",
     "standard": "^10.0.2",

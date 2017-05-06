@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Project from '../models/Project'
 import { FormattedDate } from '../common'
+import { Link } from 'react-router-dom'
 
 
 const stateToProps = ({ me, projects }) => ({me, projects})
@@ -18,7 +19,7 @@ class ProjectForm extends Component {
 
     return (
       <div>
-        Your Projects:
+        Your Projects ({projects.length}):
         <ul>
           {this.renderProjects(projects)}
         </ul>
@@ -27,9 +28,11 @@ class ProjectForm extends Component {
   }
 
   renderProjects (projects) {
-    return projects.map(({date, name}, i) => (
-      <li key={i}>
-        <FormattedDate raw={date} /> - {name}
+    return projects.map(({date, id, name}, i) => (
+      <li key={id}>
+        <Link to={`/project/${id}`}>
+          <FormattedDate raw={date} /> - {name}
+        </Link>
       </li>
     ))
   }

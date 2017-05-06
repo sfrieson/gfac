@@ -30,6 +30,7 @@ const Project = {
         getProjects (${callArgs}) {
           date
           description
+          id
           name
           location
         }
