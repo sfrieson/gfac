@@ -5,8 +5,9 @@ import api from '../utils/api'
 
 const User = {
   getMe: () => {
-    ajaxDispatch('ME',
-      api(`query GetMe {
+    return new Promise((resolve) => {
+      ajaxDispatch('ME',
+        api(`query GetMe {
           getMe {
             email
             firstname
@@ -41,10 +42,10 @@ const User = {
         let me = {...data.getMe}
         if (me.role === 'photographer') me = {...me, ...data.getMePhotographer, causes: data.getMePhotographer.causes.map(({id}) => id)}
         if (me.role === 'contact') me = {...me, ...data.getMeContact}
-
+        resolve(me)
         return me
-      })
-    )
+      }))
+    })
   },
   updateMe: (updates) => {
     const mutationVariables = []

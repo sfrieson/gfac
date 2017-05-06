@@ -9,9 +9,11 @@ export default {
     .then(project => project.setNonprofit(data.nonprofitId))
     .then(p => { console.log('p?', p.get && p.get()); return p })
   },
-  get (query) {
-    console.log('photogect#get:query', query)
-    return Model.findAll(query)
+  get (args) {
+    const query = {}
+    if ('nonprofitId' in args) query.nonprofitId = args.nonprofitId
+    
+    return Model.findAll({query})
   },
   update (id, fields) {
 

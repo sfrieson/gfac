@@ -23,6 +23,15 @@ const projectForm = function (state = {}, action) {
   }
 }
 
+const projects = function (state = [], action) {
+  switch (action.type) {
+    case 'FETCH_PROJECTS_END':
+      return action.res.data.getProjects
+    default:
+      return state
+  }
+}
+
 const fetches = function (state = {}, action) {
   if (!/^FETCH_/.test(action.type)) return state
   switch (action.type) {
@@ -50,7 +59,7 @@ const me = function (state = {}, action) {
   }
 }
 
-const mainReducer = combineReducers({fetches, me, accountForm, projectForm})
+const mainReducer = combineReducers({fetches, me, accountForm, projectForm, projects})
 
 const middleware = applyMiddleware(logger)
 const store = createStore(mainReducer, middleware)

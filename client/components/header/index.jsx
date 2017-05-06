@@ -10,7 +10,8 @@ export default function Header () {
       <ul className='header'>
         <li><NavLink className='header__link' activeClassName='header__link--active' exact to='/' >Home</NavLink></li>
         <li><NavLink className='header__link' activeClassName='header__link--active' to='/account'>Account</NavLink></li>
-        <li><NavLink className='header__link' activeClassName='header__link--active' to='/project'>New Project</NavLink></li>
+        <li><NavLink className='header__link' activeClassName='header__link--active' to='/project'>Your Projects</NavLink></li>
+        <li><NavLink className='header__link' activeClassName='header__link--active' to='/project/new'>New Project</NavLink></li>
         <li><a href='/logout'>Logout</a></li>
       </ul>
     </div>

@@ -11,6 +11,29 @@ const Project = {
         }`, {update: d}
       )
     )
+  },
+  get: (me) => {
+    const userTypeSpecificQuery = {}
+    let callArgs
+    let queryArgs
+    if (me.role === 'contact') {
+      userTypeSpecificQuery.nonprofitId = me.nonprofit.id
+      queryArgs = '$nonprofitId: String'
+      callArgs = 'nonprofitId: $nonprofitId'
+    } else if (me.role === 'photographer') {
+      userTypeSpecificQuery.photographerUserId = me.id
+      queryArgs = '$photographerUserId: String'
+      callArgs = 'photographerUserId: $photographerUserId'
+    }
+    ajaxDispatch('PROJECTS',
+      api(`query (${queryArgs}){
+        getProjects (${callArgs}) {
+          name
+          description
+          location
+        }
+      }`, userTypeSpecificQuery)
+    )
   }
 }
 
