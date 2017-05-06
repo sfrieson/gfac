@@ -1,8 +1,9 @@
+import NewProject from './newProject'
+
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Project from '../models/Project'
-
-import NewProject from './newProject'
+import { FormattedDate } from '../common'
 
 
 const stateToProps = ({ me, projects }) => ({me, projects})
@@ -19,10 +20,18 @@ class ProjectForm extends Component {
       <div>
         Your Projects:
         <ul>
-          {projects.map((p, i) => <li key={i}>{p.name}</li>)}
+          {this.renderProjects(projects)}
         </ul>
       </div>
     )
+  }
+
+  renderProjects (projects) {
+    return projects.map(({date, name}, i) => (
+      <li key={i}>
+        <FormattedDate raw={date} /> - {name}
+      </li>
+    ))
   }
 }
 

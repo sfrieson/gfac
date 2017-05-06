@@ -12,8 +12,8 @@ export default {
   get (args) {
     const query = {}
     if ('nonprofitId' in args) query.nonprofitId = args.nonprofitId
-    
-    return Model.findAll({query})
+    const order = ['date']
+    return Model.findAll({query, order})
   },
   update (id, fields) {
 
