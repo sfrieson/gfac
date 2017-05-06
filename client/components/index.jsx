@@ -3,10 +3,11 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 
 import store from './store/index'
-import Home from './home'
+import Dashboard from './dashboard'
 import Account from './account'
 import Project, { NewProject } from './project'
 import Header from './header'
+import Nav from './nav'
 import User from './models/User'
 
 class LoaderOrBody extends Component {
@@ -21,13 +22,18 @@ class LoaderOrBody extends Component {
   render () {
     return this.state.loading ? <div>Loading...</div>
     : (
-      <div className='row'>
-        <Route path='/' component={Header} />
-        <div className='col-sm-12 col-md-9'>
-          <Route path='/' component={Home} />
-          <Route path='/account' component={Account} />
-          <Route exact path='/project' component={Project} />
-          <Route exact path='/project/new' component={NewProject} />
+      <div>
+        <Header key='header' />
+        <div className='container-fluid'>
+          <div key='main' className='row'>
+            <Route path='/' component={Nav} />
+            <div className='col-sm-12 col-md-9'>
+              <Route exact path='/' component={Dashboard} />
+              <Route path='/account' component={Account} />
+              <Route exact path='/project' component={Project} />
+              <Route exact path='/project/new' component={NewProject} />
+            </div>
+          </div>
         </div>
       </div>
     )
@@ -38,9 +44,7 @@ const Loader = connect(({ me }) => ({me}))(LoaderOrBody)
 export default (
   <Provider store={store}>
     <Router>
-      <div className='container-fluid'>
         <Route path='*' component={Loader} />
-      </div>
     </Router>
   </Provider>
 )

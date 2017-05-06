@@ -5,8 +5,8 @@ import Model from '../sequelize'
 const Project = Model.define('project',
   {
     id: {
-      type: DataType.UUID,
-      defaultValue: DataType.UUIDV1,
+      type: DataType.INTEGER,
+      defaultValue: DataType.INTEGER,
       primaryKey: true
     },
     name: {

@@ -1,14 +1,6 @@
 .header {
-  &__link {
-    color: blue;
-  }
-  &__link--active {
-    color: black;
-    text-decoration: none;
-    cursor: default;
-    &:focus {
-      color: black;
-      text-decoration: none;
-    }
+  img, h1 {
+    display: inline-block;
+    vertical-align: middle;
   }
 }

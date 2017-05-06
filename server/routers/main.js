@@ -18,11 +18,11 @@ Router.route('/login')
   User.checkPassword(req.body.email, req.body.password)
   .then(user => {
     res.cookie('id_token', jwt.sign({id: user.id, role: user.role}, auth.jwt.secret))
-    res.redirect('/app')
+    res.redirect('/')
   }).catch(err => {
     // TODO Show error to user
     console.log(err)
-    res.redirect('/')
+    res.redirect('/login')
   })
 })
 
