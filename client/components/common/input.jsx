@@ -12,6 +12,7 @@ export default function Input (props) {
 
   if (type === 'date') return <DateInput {...props} />
   if (type === 'radio') return <Radio {...props} />
+  if (type === 'hidden') return <input {...props} />
   if (type === 'select') return <Select {...props} />
   if (type === 'textarea') return <TextArea {...props} />
   if (type === 'checkbox') return <Checkbox {...props} />
@@ -27,7 +28,7 @@ export default function Input (props) {
 }
 
 Input.propTypes = {
-  type: PT.oneOf(['availability', 'checkbox', 'checkboxes', 'date', 'radio', 'select', 'text', 'tel', 'textarea']),
+  type: PT.oneOf(['availability', 'checkbox', 'checkboxes', 'date', 'hidden', 'radio', 'select', 'text', 'tel', 'textarea']),
   onChange: PT.func,
   name: PT.string.isRequired,
   value: PT.oneOfType([PT.string, PT.number, PT.array, PT.bool])

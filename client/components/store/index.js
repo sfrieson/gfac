@@ -12,6 +12,17 @@ const accountForm = function (state = {}, action) {
   }
 }
 
+const nonprofitForm = function (state = {}, action) {
+  switch (action.type) {
+    case 'NONPROFIT_FORM_CHANGE':
+      return {...state, ...action.change}
+    case 'FETCH_NONPROFIT_UPDATE_END':
+      return {}
+    default:
+      return state
+  }
+}
+
 const projectForm = function (state = {}, action) {
   switch (action.type) {
     case 'PROJECT_FORM_CHANGE':
@@ -59,7 +70,7 @@ const me = function (state = {}, action) {
   }
 }
 
-const mainReducer = combineReducers({fetches, me, accountForm, projectForm, projects})
+const mainReducer = combineReducers({fetches, me, accountForm, nonprofitForm, projectForm, projects})
 
 const middleware = applyMiddleware(logger)
 const store = createStore(mainReducer, middleware)

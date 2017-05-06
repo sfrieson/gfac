@@ -1,81 +1,73 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Input } from '../common'
 
-import User from '../models/User'
+import { Nonprofit, User } from '../models'
 import fields from '../../../fields.json'
 
-class AccountFormComponent extends Component {
-  constructor (props) {
-    super(props)
-    this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
-  }
-  render () {
-    const user = {...this.props.me, ...this.props.accountForm}
+export default connect(({ me, accountForm, nonprofitForm }) => ({me, accountForm, nonprofitForm}))(
+  function Account ({ dispatch, me, accountForm, nonprofitForm }) {
+    const accountChange = onChange.bind(null, dispatch, 'ACCOUNT_FORM_CHANGE')
+    const nonprofitChange = onChange.bind(null, dispatch, 'NONPROFIT_FORM_CHANGE')
+    const { nonprofit } = me
+    const accountSubmit = function (e) {
+      e.preventDefault()
+      User.updateMe(accountForm)
+    }
+    const nonprofitSubmit = function (e) {
+      e.preventDefault()
+      Nonprofit.update(nonprofitForm)
+    }
 
-    return (
-      <form onSubmit={this.onSubmit}>
-        {this.renderInputs(this.makeFieldInfos(user))}
-        <button className='btn'>Update</button>
-      </form>
-    )
-  }
-  onChange ({ target }) {
-    const { dispatch } = this.props
-    const change = {}
-    change[target.name] = target.value
-
-    dispatch({
-      type: 'ACCOUNT_FORM_CHANGE',
-      change
-    })
-  }
-  onSubmit (e) {
-    e.preventDefault()
-    User.updateMe(this.props.accountForm)
-  }
-
-  makeFieldInfos (user) {
-    return Object.keys(user).map(key => {
-      if (key === 'nonprofit') return null
-      const info = {
-        key,
-        ...fields.all[key],
-        onChange: this.onChange,
-        value: user[key]
-      }
-
-      return info
-    })
-  }
-
-  renderInputs (infos) {
-    return infos.map(info => {
-      if (info === null) return info
-      return <Input key={info.name} {...info} />
-    })
-  }
-}
-
-function stateToProps ({ me, accountForm }) {
-  return {me, accountForm}
-}
-
-const AccountForm = connect(stateToProps)(AccountFormComponent)
-
-class Account extends Component {
-  constructor (props) {
-    super(props)
-    User.getMe()
-  }
-  render () {
     return (
       <div>
-        <AccountForm />
+        <h2>Account Information</h2>
+        {renderUserForm(me, accountForm, accountChange, accountSubmit)}
+        {nonprofit && <h3>Nonprofit Information</h3>}
+        {nonprofit && renderUserForm(nonprofit, nonprofitForm, nonprofitChange, nonprofitSubmit)}
       </div>
     )
   }
+)
+
+// -------
+// Generic
+// -------
+
+function renderUserForm (base, changes, onChange, onSubmit) {
+  const obj = {...base, ...changes}
+  return (
+    <form onSubmit={onSubmit}>
+      {renderInputs(makeFieldInfos(obj, onChange))}
+      <button className='btn'>Update</button>
+    </form>
+  )
 }
 
-export default Account
+function makeFieldInfos (inputs, onChange) {
+  return Object.keys(inputs).map(key => {
+    if (key === 'nonprofit') return null
+    const info = {
+      key,
+      ...fields.all[key],
+      onChange,
+      value: inputs[key]
+    }
+
+    return info
+  })
+}
+
+function renderInputs (infos) {
+  return infos.map(info => {
+    if (info === null) return info
+    return <Input key={info.name} {...info} />
+  })
+}
+
+function onChange (dispatch, type, { target }) {
+  const change = {}
+  change[target.name] = target.value
+
+  dispatch({type, change})
+}

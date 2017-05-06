@@ -75,6 +75,15 @@
       "name": "email",
       "type": "text"
     },
+    "description": {
+      "label": "Short Description",
+      "name": "description",
+      "type": "textarea"
+    },
+    "id": {
+      "name": "id",
+      "type": "hidden"
+    },
     "firstname": {
       "label": "First Name",
       "name": "firstname",
@@ -88,6 +97,11 @@
     "lastname": {
       "label": "Last Name",
       "name": "lastname",
+      "type": "text"
+    },
+    "name": {
+      "label": "Name",
+      "name": "name",
       "type": "text"
     },
     "phone": {

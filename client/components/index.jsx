@@ -44,7 +44,7 @@ const Loader = connect(({ me }) => ({me}))(LoaderOrBody)
 export default (
   <Provider store={store}>
     <Router>
-        <Route path='*' component={Loader} />
+      <Route path='*' component={Loader} />
     </Router>
   </Provider>
 )
