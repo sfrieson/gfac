@@ -4,8 +4,8 @@
   "description": "The adminitistrative site for Gramforacause",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js --watch ./server --exec babel-node"
-    "lint": "standard"
+    "start": "nodemon ./index.js --watch ./server --exec babel-node",
+    "lint": "standard --fix"
   },
   "babel": {
     "presets": [
@@ -21,7 +21,7 @@
       "stage-2"
     ]
   },
-  "pre-commit": ["lint"]
+  "pre-commit": "lint",
   "author": "Steven Frieson",
   "license": "MIT",
   "dependencies": {

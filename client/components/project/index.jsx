@@ -6,7 +6,6 @@ import Project from '../models/Project'
 import { FormattedDate } from '../common'
 import { Link } from 'react-router-dom'
 
-
 const stateToProps = ({ me, projects }) => ({me, projects})
 
 class ProjectForm extends Component {
