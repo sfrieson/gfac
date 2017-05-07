@@ -1,6 +1,7 @@
 import { buildSchema } from 'graphql'
 import {
   ContactController as Contact,
+  NonprofitController as Nonprofit,
   PhotographerController as Photographer,
   UserController as User,
   ProjectController as Project
@@ -13,6 +14,7 @@ export const root = {
   getUser: (query) => User.get(query),
   User: (query) => User.get(query),
   updateMe: (args, req) => User.update({id: req.user.id}, args.updates),
+  updateNonprofit: ({id, updates}) => Nonprofit.update(id, updates),
   updatePhotographerMe: (args, req) => Photographer.update({id: req.user.id}, args.updates),
   updateContactMe: (args, req) => Contact.update({id: req.user.id}, args.updates)
 }
@@ -31,11 +33,12 @@ const queries = `
 
 const mutations = `
   type Mutation {
-    updateMe(updates: UserInput): User
-    updatePhotographerMe(updates: PhotographerInput): Photographer
-    updateContactMe(updates: ContactInput): Contact
-
     createProject(project: ProjectInput): Project
+
+    updateContactMe(updates: ContactInput): Contact
+    updateMe(updates: UserInput): User
+    updateNonprofit(id: String, updates: NonprofitInput): Nonprofit
+    updatePhotographerMe(updates: PhotographerInput): Photographer
   }
 `
 
@@ -110,15 +113,6 @@ const types = `
 `
 
 const inputs = `
-  input UserInput {
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
-  }
-
   input ContactInput {
     phoneSecondary: String
     phoneSecondaryType: String
@@ -142,6 +136,20 @@ const inputs = `
     date: String
     dateIsApprox: String
     location: String
+  }
+
+  input NonprofitInput{
+    name: String
+    description: String
+  }
+
+  input UserInput {
+    email: String
+    firstname: String
+    lastname: String
+    phone: String
+    phoneType: String
+    role: String
   }
 `
 

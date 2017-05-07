@@ -16,7 +16,7 @@ export default connect(({ me, accountForm, nonprofitForm }) => ({me, accountForm
     }
     const nonprofitSubmit = function (e) {
       e.preventDefault()
-      Nonprofit.update(nonprofitForm)
+      Nonprofit.update(nonprofit.id, nonprofitForm)
     }
 
     return (
