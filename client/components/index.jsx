@@ -5,7 +5,7 @@ import { Provider, connect } from 'react-redux'
 import store from './store/index'
 import Dashboard from './dashboard'
 import Account from './account'
-import Project, { NewProject } from './project'
+import Project, { NewProject, ViewProject } from './project'
 import Header from './header'
 import Nav from './nav'
 import User from './models/User'
@@ -32,6 +32,7 @@ class LoaderOrBody extends Component {
               <Route path='/account' component={Account} />
               <Route exact path='/project' component={Project} />
               <Route exact path='/project/new' component={NewProject} />
+              <Route exact path='/project/:id' component={ViewProject} />
             </div>
           </div>
         </div>

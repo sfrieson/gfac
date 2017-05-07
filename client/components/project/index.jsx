@@ -1,4 +1,5 @@
-import NewProject from './newProject'
+import NewProject from './new'
+import ViewProject from './view'
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -38,4 +39,4 @@ class ProjectForm extends Component {
 }
 
 export default connect(stateToProps)(ProjectForm)
-export { NewProject }
+export { NewProject, ViewProject }
