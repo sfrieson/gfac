@@ -43,25 +43,33 @@ Input.defaultProps = {
 // Date Input
 // ----------
 
-function DateInput ({ label, name, ...props }) {
+function DateInput ({ label, name, value, ...props }) {
   return (
     <div className='input-group'>
       <label htmlFor={name}>{label}</label>
-      <input id={`${name}-input`} className='form-control' name={name} {...props} type='datetime-local' min={getToday()} />
+      <input id={`${name}-input`}
+        className='form-control'
+        name={name} {...props}
+        type='datetime-local'
+        min={getDate()}
+        value={getDate(value)}
+      />
     </div>
   )
 
-  function getToday () {
-    const now = new Date()
-    const today = {
-      year: now.getFullYear(),
-      month: now.getMonth() + 1 + '',
-      day: now.getDate() + ''
+  function getDate (when = Date.now()) {
+    const d = new Date(when)
+    const date = {
+      year: d.toLocaleString('en-US', {year: 'numeric'}),
+      month: d.toLocaleString('en-US', {month: '2-digit'}),
+      day: d.toLocaleString('en-US', {day: '2-digit'}),
+      hour: d.getHours(),
+      minute: d.getMinutes()
     }
-    if (today.month.length === 1) today.month = '0' + today.month
-    if (today.day.length === 1) today.day = '0' + today.day
+    if (date.hour < 10) date.hour = '0' + date.hour
+    if (date.minute < 10) date.minute = '0' + date.minute
 
-    return `${today.year}-${today.month}-${today.day}`
+    return `${date.year}-${date.month}-${date.day}T${date.hour}:${date.minute}`
   }
 }
 // -----------

@@ -2,8 +2,9 @@ import React from 'react'
 import PT from 'prop-types'
 import fields from '../../../fields.json'
 import { Input } from '../common'
-export default function Form ({ base, changes, changeAction, onSubmit }, { dispatch }) {
+export default function Form ({ base, changes, changeAction, onSubmit }, { store }) {
   const obj = {...base, ...changes}
+  const { dispatch } = store
   return (
     <form onSubmit={onSubmit}>
       {renderInputs(makeFieldInfos(obj, onChange.bind(null, dispatch, changeAction)))}

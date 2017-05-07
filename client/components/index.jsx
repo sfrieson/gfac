@@ -31,7 +31,7 @@ class LoaderOrBody extends Component {
               <Route exact path='/' component={Dashboard} />
               <Route path='/account' component={Account} />
               <Route exact path='/project' component={Project} />
-              <Route exact path='/project/new' component={NewProject} />
+              <Route exact path='/project/new' getUserConfirmation component={NewProject} />
               <Route exact path='/project/:id' component={ViewProject} />
             </div>
           </div>

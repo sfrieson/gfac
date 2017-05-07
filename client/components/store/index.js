@@ -34,6 +34,18 @@ const projectForm = function (state = {}, action) {
   }
 }
 
+const projectUpdate = function (state = {}, action) {
+  // TODO change regex to just support digits when Model ID changes
+  const match = action.type.match(/PROJECT_UPDATE_([\d\w-]*)/)
+  if (match) {
+    const id = match[1]
+    const projectState = Object.assign({}, state[id], action.change)
+    const newState = {...state}
+    newState[id] = projectState
+    return newState
+  } else return state
+}
+
 const projects = function (state = [], action) {
   switch (action.type) {
     case 'FETCH_PROJECTS_END':
@@ -42,6 +54,8 @@ const projects = function (state = [], action) {
       return state
   }
 }
+
+
 
 const fetches = function (state = {}, action) {
   if (!/^FETCH_/.test(action.type)) return state
@@ -70,7 +84,7 @@ const me = function (state = {}, action) {
   }
 }
 
-const mainReducer = combineReducers({fetches, me, accountForm, nonprofitForm, projectForm, projects})
+const mainReducer = combineReducers({fetches, me, accountForm, nonprofitForm, projectForm, projectUpdate, projects})
 
 const middleware = applyMiddleware(logger)
 const store = createStore(mainReducer, middleware)

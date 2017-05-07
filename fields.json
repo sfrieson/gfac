@@ -19,6 +19,9 @@
     "phoneSecondary",
     "phoneSecondaryType"
   ],
+  "project": [
+    "name", "description", "date", "dateIsApprox", "location", "photoLink"
+  ],
   "all": {
     "availabilities": {
       "label": "Availability",
@@ -70,6 +73,11 @@
         {"value": 9, "label": "Disaster Response"}
       ]
     },
+    "date": {
+      "label": "Date",
+      "name": "date",
+      "type": "date"
+    },
     "email": {
       "label": "Email",
       "name": "email",
@@ -84,6 +92,11 @@
       "name": "id",
       "type": "hidden"
     },
+    "dateIsApprox": {
+      "label": "Date is approximate?",
+      "name": "dateIsApprox",
+      "type": "checkbox"
+    },
     "firstname": {
       "label": "First Name",
       "name": "firstname",
@@ -97,6 +110,11 @@
     "lastname": {
       "label": "Last Name",
       "name": "lastname",
+      "type": "text"
+    },
+    "location": {
+      "label": "Location",
+      "name": "location",
       "type": "text"
     },
     "name": {
@@ -131,6 +149,11 @@
         {"label": "Mobile", "value": "mobile"},
         {"label": "Office", "value": "office"}
       ]
+    },
+    "photoLink": {
+      "label": "Link to Photo Folder",
+      "name": "photoLink",
+      "type": "text"
     },
     "preferredContactMethod": {
       "label": "Preferred Contact Method",

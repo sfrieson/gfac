@@ -28,11 +28,12 @@ const Project = {
     ajaxDispatch('PROJECTS',
       api(`query (${queryArgs}){
         getProjects (${callArgs}) {
+          name
           date
+          dateIsApprox
+          location
           description
           id
-          name
-          location
         }
       }`, userTypeSpecificQuery)
     )
