@@ -37,7 +37,7 @@ class ProjectView extends Component {
   }
 
   getProject (projects, id) {
-    if (!(id in this._projects)) this._projects[id] = projects.filter((p) => p.id === id)[0]
+    if (!this._projects[id]) this._projects[id] = projects.filter((p) => p.id === id)[0]
     return this._projects[id]
   }
 }

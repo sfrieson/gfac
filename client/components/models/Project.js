@@ -12,22 +12,10 @@ const Project = {
       )
     )
   },
-  get: (me) => {
-    const userTypeSpecificQuery = {}
-    let callArgs
-    let queryArgs
-    if (me.role === 'contact') {
-      userTypeSpecificQuery.nonprofitId = me.nonprofit.id
-      queryArgs = '$nonprofitId: String'
-      callArgs = 'nonprofitId: $nonprofitId'
-    } else if (me.role === 'photographer') {
-      userTypeSpecificQuery.photographerUserId = me.id
-      queryArgs = '$photographerUserId: String'
-      callArgs = 'photographerUserId: $photographerUserId'
-    }
+  get: () => {
     ajaxDispatch('PROJECTS',
-      api(`query (${queryArgs}){
-        getProjects (${callArgs}) {
+      api(`query {
+        getProjects {
           name
           date
           dateIsApprox
@@ -35,7 +23,7 @@ const Project = {
           description
           id
         }
-      }`, userTypeSpecificQuery)
+      }`)
     )
   },
   update: function (id, updates) {

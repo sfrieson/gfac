@@ -6,6 +6,7 @@ import store from './store/index'
 import Dashboard from './dashboard'
 import Account from './account'
 import Project, { NewProject, ViewProject } from './project'
+import { Project as ProjectModel } from './models'
 import Header from './header'
 import Nav from './nav'
 import User from './models/User'
@@ -17,10 +18,15 @@ class LoaderOrBody extends Component {
     User.getMe()
   }
   componentWillReceiveProps ({ me }) {
-    if (!('firstname' in this.props.me) && ('firstname' in me)) this.setState({loading: false})
+    if (!this.state.loading) return
+    if ('firstname' in me) {
+      ProjectModel.get()
+      this.setState({loading: false})
+    }
   }
   render () {
-    return this.state.loading ? <div>Loading...</div>
+    return this.state.loading
+    ? <div>Loading...</div>
     : (
       <div>
         <Header key='header' />

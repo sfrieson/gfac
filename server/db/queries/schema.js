@@ -9,7 +9,7 @@ import {
 
 export const root = {
   createProject: (args) => Project.create(args.project),
-  getProjects: (args) => Project.get(args),
+  getProjects: (args, { user }) => Project.get(args, user),
   getMe: (_, req) => User.get({id: req.user.id}),
   getUser: (query) => User.get(query),
   User: (query) => User.get(query),

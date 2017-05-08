@@ -9,10 +9,12 @@ export default {
     .then(project => project.setNonprofit(data.nonprofitId))
     .then(p => { console.log('p?', p.get && p.get()); return p })
   },
-  get (args) {
-    const query = {}
-    if ('nonprofitId' in args) query.nonprofitId = args.nonprofitId
+  get (args, user) {
     const order = ['date']
+    const query = {}
+    if (user.role === 'contact') query.nonprofitId = user.nonprofitId
+    if (user.role === 'photographer') query.photographerId = user.id
+
     return Model.findAll({query, order})
   },
   update (id, updates) {
