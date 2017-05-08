@@ -21,9 +21,6 @@ const Nonprofit = Model.define('nonprofit',
   {
     indexes: [{ fields: ['id'] }],
     paranoid: true
-    // TODO instanceMethods
-    // TODO classMethods
-    // TODO hooks
   }
 )
 

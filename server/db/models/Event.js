@@ -31,9 +31,6 @@ const Event = Model.define('event',
   {
     indexes: [{ fields: ['id'] }],
     paranoid: true
-    // TODO instanceMethods
-    // TODO classMethods
-    // TODO hooks
   }
 )
 

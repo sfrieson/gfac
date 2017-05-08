@@ -49,9 +49,6 @@ const User = Model.define('user',
   {
     indexes: [{ fields: ['email', 'id'] }],
     paranoid: true
-    // TODO instanceMethods
-    // TODO classMethods
-    // TODO hooks
   }
 )
 

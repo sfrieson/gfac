@@ -34,9 +34,9 @@ const projectForm = function (state = {}, action) {
   }
 }
 
+const ProjectUpdateRE = new RegExp('^PROJECT_UPDATE_(\\d*)')
 const projectUpdate = function (state = {}, action) {
-  // TODO change regex to just support digits when Model ID changes
-  const match = action.type.match(/^PROJECT_UPDATE_([\d\w-]*)/)
+  const match = action.type.match(ProjectUpdateRE)
   if (match) {
     const id = match[1]
     const projectState = Object.assign({}, state[id], action.change)

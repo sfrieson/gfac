@@ -24,9 +24,6 @@ const Contact = Model.define('contact',
   // https://github.com/sequelize/sequelize/blob/3e5b8772ef75169685fc96024366bca9958fee63/lib/model.js#L26
   {
     paranoid: true
-    // TODO instanceMethods
-    // TODO classMethods
-    // TODO hooks
   }
 )
 

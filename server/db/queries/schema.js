@@ -32,7 +32,6 @@ const queries = `
   }
 `
 
-// TODO Change updateProject id to Int when Model changes
 const mutations = `
   type Mutation {
     createProject(project: ProjectInput): Project
@@ -40,7 +39,7 @@ const mutations = `
     updateContactMe(updates: ContactInput): Contact
     updateMe(updates: UserInput): User
     updateNonprofit(id: String, updates: NonprofitInput): Nonprofit
-    updateProject(id: String, updates: ProjectInput): Project
+    updateProject(id: Int, updates: ProjectInput): Project
     updatePhotographerMe(updates: PhotographerInput): Photographer
   }
 `

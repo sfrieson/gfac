@@ -39,9 +39,6 @@ const Project = Model.define('project',
   {
     indexes: [{ fields: ['id'] }],
     paranoid: true
-    // TODO instanceMethods
-    // TODO classMethods
-    // TODO hooks
   }
 )
 
