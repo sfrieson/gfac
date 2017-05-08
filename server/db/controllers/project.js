@@ -15,7 +15,9 @@ export default {
     const order = ['date']
     return Model.findAll({query, order})
   },
-  update (id, fields) {
-
+  update (id, updates) {
+    return Model.findOne({query: {id}})
+    .then(instance => instance.update(updates))
+    .then(instance => instance.get())
   }
 }

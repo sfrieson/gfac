@@ -15,6 +15,7 @@ export const root = {
   User: (query) => User.get(query),
   updateMe: (args, req) => User.update({id: req.user.id}, args.updates),
   updateNonprofit: ({id, updates}) => Nonprofit.update(id, updates),
+  updateProject: ({id, updates}) => Project.update(id, updates),
   updatePhotographerMe: (args, req) => Photographer.update({id: req.user.id}, args.updates),
   updateContactMe: (args, req) => Contact.update({id: req.user.id}, args.updates)
 }
@@ -31,6 +32,7 @@ const queries = `
   }
 `
 
+// TODO Change updateProject id to Int when Model changes
 const mutations = `
   type Mutation {
     createProject(project: ProjectInput): Project
@@ -38,6 +40,7 @@ const mutations = `
     updateContactMe(updates: ContactInput): Contact
     updateMe(updates: UserInput): User
     updateNonprofit(id: String, updates: NonprofitInput): Nonprofit
+    updateProject(id: String, updates: ProjectInput): Project
     updatePhotographerMe(updates: PhotographerInput): Photographer
   }
 `

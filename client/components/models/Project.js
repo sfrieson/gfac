@@ -37,6 +37,20 @@ const Project = {
         }
       }`, userTypeSpecificQuery)
     )
+  },
+  update: function (id, updates) {
+    // TODO change id to Int when Model changes
+    ajaxDispatch('PROJECT_UPDATE',
+      api(`mutation UpdateProject($id: String, $updates: ProjectInput){
+        updateProject (id: $id, updates: $updates) {
+          name
+          date
+          dateIsApprox
+          location
+          description
+        }
+      }`, {id, updates})
+    )
   }
 }
 

@@ -36,7 +36,7 @@ const projectForm = function (state = {}, action) {
 
 const projectUpdate = function (state = {}, action) {
   // TODO change regex to just support digits when Model ID changes
-  const match = action.type.match(/PROJECT_UPDATE_([\d\w-]*)/)
+  const match = action.type.match(/^PROJECT_UPDATE_([\d\w-]*)/)
   if (match) {
     const id = match[1]
     const projectState = Object.assign({}, state[id], action.change)
@@ -54,8 +54,6 @@ const projects = function (state = [], action) {
       return state
   }
 }
-
-
 
 const fetches = function (state = {}, action) {
   if (!/^FETCH_/.test(action.type)) return state
