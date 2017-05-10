@@ -61,15 +61,6 @@ User.hasOne(UserProfile, {
 
 function sync (...args) {
   return sequelize.sync(...args)
-  .then(() => {
-    const causes = 'Adults with Special Needs|Education|Seniors|Career Prep|Health & Fitness|Animals &' +
-      ' Environment|Hunger|Children with Special Needs|Disaster Response'
-
-    const causeList = causes.split('|').map(name => ({name}))
-
-    if (args[0].force) return Cause.bulkCreate(causeList)
-    else return Promise.resolve()
-  })
 }
 
 export default { sync }

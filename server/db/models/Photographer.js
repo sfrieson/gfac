@@ -35,7 +35,11 @@ const Photographer = Model.define('photographer',
       defaultValue: false
     },
     cameraOther: {
-      type: DataType.TEXT
+      type: DataType.STRING(30)
+    },
+    // TODO add Porfolio elsewhere
+    portfolio: {
+      type: DataType.STRING
     },
     preferredContactMethod: {
       type: DataType.ENUM('email', 'phone', 'instagram')

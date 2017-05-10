@@ -11,17 +11,22 @@ import DataType from 'sequelize'
 import Model from '../sequelize'
 
 const UserLogin = Model.define('user_login', {
-
-  name: {
-    type: DataType.STRING(50),
+  email: {
+    type: DataType.STRING(64),
     primaryKey: true
   },
-
-  key: {
-    type: DataType.STRING(100),
-    primaryKey: true
+  userId: {
+    type: DataType.UUID
+  },
+  hashPassword: {
+    type: DataType.STRING(100)
+  },
+  loginAttempts: {
+    type: DataType.INTEGER
+  },
+  lockoutUntil: {
+    type: DataType.INTEGER
   }
-
 })
 
 export default UserLogin

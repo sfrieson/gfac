@@ -42,6 +42,10 @@ const User = Model.define('user',
     },
     hashPassword: {
       type: DataType.STRING(100)
+    },
+    newsletter: {
+      type: DataType.BOOLEAN,
+      default: false
     }
   },
   // Options
