@@ -1,6 +1,15 @@
 .header {
-  img, h1 {
+  &__img, &__title {
     display: inline-block;
     vertical-align: middle;
+  }
+
+  &__{
+    padding: 0;
+  }
+  &__img {
+    box-sizing: border-box;
+    padding: 15px;
+    img { height: 50px; }
   }
 }

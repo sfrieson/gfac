@@ -4,7 +4,7 @@ const AvailabilityRE = new RegExp('(\\w{2})_(\\w*)')
 export default {
   create (data, user) {
     // Whitelist properties necessary for creating Photographer
-    const d = pick(Object.assign(data, user), Object.keys(Model.attributes), {userId: user.id})
+    const d = pick(Object.assign(data, user, {userId: user.id}), Object.keys(Model.attributes))
 
     ;['cameraPhone', 'cameraDSLR', 'cameraFilm'].forEach(prop => {
       if (prop in d) d[prop] = true
