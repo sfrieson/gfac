@@ -4,9 +4,10 @@
   "description": "The adminitistrative site for Gramforacause",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./index.js --watch ./server --exec babel-node",
-    "seed": "babel-node ./seed.js",
-    "lint": "standard --fix"
+    "db": "babel-node ./server/db/tasks.js",
+    "db:seed": "npm run db seed",
+    "lint": "standard --fix",
+    "start": "nodemon ./index.js --watch ./server --exec babel-node"
   },
   "babel": {
     "presets": [
