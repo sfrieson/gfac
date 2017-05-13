@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { Form } from '../common'
-import { Project } from '../models'
+import { Form } from '../../common'
+import { Project } from '../../models'
 
 class ProjectView extends Component {
   constructor (props) {

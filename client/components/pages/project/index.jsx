@@ -3,8 +3,8 @@ import ViewProject from './view'
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Project from '../models/Project'
-import { FormattedDate } from '../common'
+import Project from '../../models/Project'
+import { FormattedDate } from '../../common'
 import { Link } from 'react-router-dom'
 
 const stateToProps = ({ me, projects }) => ({me, projects})

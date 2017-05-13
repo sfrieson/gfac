@@ -1,11 +1,16 @@
 import React, { Component } from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 
 import store from './store/index'
-import Dashboard from './dashboard'
-import Account from './account'
-import Project, { NewProject, ViewProject } from './project'
+import {
+  Account,
+  Dashboard,
+  NewProject,
+  ViewProject,
+  Project,
+  Search
+} from './pages'
 import { Project as ProjectModel } from './models'
 import Header from './header'
 import Nav from './nav'
@@ -34,11 +39,14 @@ class LoaderOrBody extends Component {
           <div key='main' className='row'>
             <Route path='/' component={Nav} />
             <div className='col-sm-12 col-md-9'>
-              <Route exact path='/' component={Dashboard} />
-              <Route path='/account' component={Account} />
-              <Route exact path='/project' component={Project} />
-              <Route exact path='/project/new' getUserConfirmation component={NewProject} />
-              <Route exact path='/project/:id' component={ViewProject} />
+              <Switch>
+                <Route path='/account' component={Account} />
+                <Route path='/project/new' getUserConfirmation component={NewProject} />
+                <Route path='/project/:id' component={ViewProject} />
+                <Route path='/project' component={Project} />
+                <Route path='/search' component={Search} />
+                <Route path='/' component={Dashboard} />
+              </Switch>
             </div>
           </div>
         </div>

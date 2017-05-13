@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Input } from '../common'
-import Project from '../models/Project'
+import { Input } from '../../common'
+import Project from '../../models/Project'
 
 // TODO Set up redirect when form is complete
 // TODO Set up sharing of information with the Projects Store when complete
