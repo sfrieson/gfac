@@ -42,10 +42,10 @@ export default function () {
 
   let columns = '_matches|submitted on|name|newsletter|email|instagram|_causes|_rates|camera|portfolio|citystatecountry|_style|_style notes|_paid amount|followers'.split('|')
 
-  const photographers = parseTsv(fs.readFileSync(path.resolve(__dirname, raw, 'photographers.tsv'), 'utf8'))
+  const photographers = parseTsv(fs.readFileSync(path.resolve(__dirname, raw, 'photographers.tsv'), 'utf8'), 'photographer')
 
   columns = 'nonprofit|contactEmail|newsletter|location|matches'.split('|')
-  const contacts = parseTsv(fs.readFileSync(path.resolve(__dirname, raw, 'contacts.tsv'), 'utf8'))
+  const contacts = parseTsv(fs.readFileSync(path.resolve(__dirname, raw, 'contacts.tsv'), 'utf8'), 'contact')
 
   return models.sync({force: true})
   .then(() => {
@@ -70,7 +70,7 @@ export default function () {
   .then(() => { console.log('\n\n Contacts and Nonprofits created.') })
   .catch(e => { console.log(e); process.exit(1) })
 
-  function parseTsv (file) {
+  function parseTsv (file, role) {
     return file.split('\n') // .slice(0, 10)
     .map(photog => {
       return photog.split('\t')
@@ -78,7 +78,7 @@ export default function () {
         const col = columns[i]
         if (col[0] !== '_') Object.assign(p, parse[col](val))
         return p
-      }, {role: 'photographer'})
+      }, {role: role})
     })
   }
 }

@@ -11,7 +11,7 @@ const queryResolvers = {
   getMe: (_, req) => User.get({id: req.user.id}),
   getProjects: (args, { user }) => Project.get(args, user),
   getUser: (query) => User.get(query),
-  search: (args) => User.search(args),
+  search: (args) => User.search(args.queries),
   user: (query) => User.get(query)
 }
 queryResolvers.getMePhotographer = queryResolvers.getMe
@@ -178,7 +178,10 @@ const inputs = `
   }
 
   input SearchQueries {
-    query: String
+    firstname: String
+    lastname: String
+    instagram: String
+    role: String
   }
 
   input UserInput {

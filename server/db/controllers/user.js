@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { pick } from 'lodash'
 import { auth } from '../../config'
-import { User as Model } from '../models'
+import { User as Model, Photographer as PhotographerModel } from '../models'
 import Photographer from './photographer'
 import Contact from './contact'
 import { ValidationError } from '../../errors'
@@ -86,8 +86,32 @@ const User = {
     }))
   },
   search: function (query) {
-    console.log('search query', JSON.stringify(query, null, 2))
-    return Promise.resolve([{firstname: 'Steven', lastname: 'Frieson', instagram: 'sfrieson'}])
+    const queryKeys = Object.keys(query)
+
+    const userWhere = pick({
+      firstname: {$iLike: `%${query.firstname}%`},
+      lastname: {$iLike: `%${query.lastname}%`},
+      role: query.role
+    }, queryKeys)
+    const userFind = Object.keys(userWhere).length
+    ? Model.findAll({where: userWhere})
+    .then(user => Promise.all(
+      user.map(u => PhotographerModel.findOne({where: {userId: u.id}}).then(p => { console.log(u.id); return {...u.get(), ...p.get()} }))
+    ))
+    : Promise.resolve([])
+
+    const photoWhere = pick({
+      instagram: {$iLike: `%${query.instagram}%`}
+    }, queryKeys)
+    const photoFind = Object.keys(photoWhere).length
+    ? PhotographerModel.findAll({where: photoWhere})
+    .then(photogs => Promise.all(
+      photogs.map(p => Model.findOne({where: {id: p.userId}}).then(u => ({...u.get(), ...p.get()})))
+    ))
+    : Promise.resolve([])
+
+    return Promise.all([userFind, photoFind])
+    .then(([user, photo]) => [...user, ...photo])
   },
   update: function (query, updates) {
     return Model.findOne({where: query})
