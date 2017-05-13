@@ -85,6 +85,10 @@ const User = {
       ...photographer
     }))
   },
+  search: function (query) {
+    console.log('search query', JSON.stringify(query, null, 2))
+    return Promise.resolve([{firstname: 'Steven', lastname: 'Frieson', instagram: 'sfrieson'}])
+  },
   update: function (query, updates) {
     return Model.findOne({where: query})
     .then(user => user.update(updates))

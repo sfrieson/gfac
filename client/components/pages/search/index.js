@@ -21,14 +21,12 @@ export default connect(
   function onSubmit (e) {
     e.preventDefault()
     dispatchAjax('SEARCH', api(`
-      mutation Search ($query: String) {
-        search (query: $query) {
-          firstname
-          lastname
+      mutation Search ($queries: SearchQueries) {
+        search (queries: $queries) {
           instagram
         }
       }
-    `, {search: searchForm}))
+    `, {queries: searchForm}))
   }
 
   function onChange ({ target }) {

@@ -7,37 +7,43 @@ import {
   ProjectController as Project
 } from '../controllers'
 
-export const root = {
-  createProject: (args) => Project.create(args.project),
-  getProjects: (args, { user }) => Project.get(args, user),
+const queryResolvers = {
   getMe: (_, req) => User.get({id: req.user.id}),
+  getProjects: (args, { user }) => Project.get(args, user),
   getUser: (query) => User.get(query),
-  User: (query) => User.get(query),
+  search: (args) => User.search(args),
+  user: (query) => User.get(query)
+}
+queryResolvers.getMePhotographer = queryResolvers.getMe
+queryResolvers.getMeContact = queryResolvers.getMe
+
+const mutationResolvers = {
+  createProject: (args) => Project.create(args.project),
+  updateContactMe: (args, req) => Contact.update({id: req.user.id}, args.updates),
   updateMe: (args, req) => User.update({id: req.user.id}, args.updates),
   updateNonprofit: ({id, updates}) => Nonprofit.update(id, updates),
   updateProject: ({id, updates}) => Project.update(id, updates),
-  updatePhotographerMe: (args, req) => Photographer.update({id: req.user.id}, args.updates),
-  updateContactMe: (args, req) => Contact.update({id: req.user.id}, args.updates)
+  updatePhotographerMe: (args, req) => Photographer.update({id: req.user.id}, args.updates)
 }
-root.getMePhotographer = root.getMe
-root.getMeContact = root.getMe
+
+export const root = {...queryResolvers, ...mutationResolvers}
 
 const queries = `
   type Query {
     getMeContact: Contact
     getMePhotographer: Photographer
     getMe: User
-    getUser(id: String, email: String): User
     getProjects(nonprofitId: String): [Project]
+    getUser(id: String, email: String): AnyUser
+    search(queries: SearchQueries): [Photographer]
   }
 `
 
 const mutations = `
   type Mutation {
     createProject(project: ProjectInput): Project
-
     updateContactMe(updates: ContactInput): Contact
-    updateMe(updates: UserInput): User
+    updateMe(updates: UserInput): AnyUser
     updateNonprofit(id: String, updates: NonprofitInput): Nonprofit
     updateProject(id: Int, updates: ProjectInput): Project
     updatePhotographerMe(updates: PhotographerInput): Photographer
@@ -46,7 +52,7 @@ const mutations = `
 
 const types = `
   # Additional fields for Admin users
-  type Admin {
+  type Admin implements UserInterface {
     id: String
     email: String
     firstname: String
@@ -63,7 +69,14 @@ const types = `
   }
 
   # Additional fields for Nonprofit Contact users
-  type Contact {
+  type Contact implements UserInterface {
+    id: String
+    email: String
+    firstname: String
+    lastname: String
+    phone: String
+    phoneType: String
+    role: String
     nonprofit: Nonprofit
     phoneSecondary: String
     phoneSecondaryType: String
@@ -77,7 +90,14 @@ const types = `
   }
 
   # Additional Fields for Storyteller users
-  type Photographer {
+  type Photographer implements UserInterface {
+    id: String
+    email: String
+    firstname: String
+    lastname: String
+    phone: String
+    phoneType: String
+    role: String
     userId: String
     instagram: String
     cameraPhone: Boolean
@@ -104,6 +124,18 @@ const types = `
 
   # Base fields for all users
   type User {
+    id: String
+    email: String
+    firstname: String
+    lastname: String
+    phone: String
+    phoneType: String
+    role: String
+  }
+
+  union AnyUser = Admin | Contact | Photographer
+
+  interface UserInterface {
     id: String
     email: String
     firstname: String
@@ -140,9 +172,13 @@ const inputs = `
     location: String
   }
 
-  input NonprofitInput{
+  input NonprofitInput {
     name: String
     description: String
+  }
+
+  input SearchQueries {
+    query: String
   }
 
   input UserInput {
