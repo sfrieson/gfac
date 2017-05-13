@@ -23,16 +23,16 @@ const User = Model.define('user',
     firstname: {
       type: DataType.STRING(32),
       allowNull: false
-      // validate?
+      // TODO validate?
     },
     lastname: {
       type: DataType.STRING(32),
       allowNull: false
-      // validate?
+      // TODO validate?
     },
     role: {
       type: DataType.ENUM('admin', 'photographer', 'contact')
-      // Reference a roles table?
+      // TODO Reference a roles table?
     },
     phone: {
       type: DataType.STRING(24)

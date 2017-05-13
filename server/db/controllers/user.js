@@ -22,6 +22,8 @@ const User = {
   create: function (data) {
     // Whitelist properties necessary for creating User
     const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
+    if (d.role === 'admin') throw new Error('Bad Value') // TODO Should log this attempt somehwere
+
     d.hashPassword = hashPassword(data.password)
 
     return Model.create(d)
@@ -36,6 +38,18 @@ const User = {
     //     hashPassword: hashPassword(data.password)
     //   }).then(() => user)
     // })
+    .catch((err) => {
+      console.log('account creation error', err)
+      return Promise.reject(new Error('Account Creation'))
+    })
+  },
+  createAdmin: function (data) {
+    const d = pick(data, ['firstname', 'lastname', 'email', 'phone', 'phoneType'])
+    d.role = 'admin'
+    d.hashPassword = hashPassword(data.password)
+
+    return Model.create(d)
+    .then((user) => user.get())
     .catch((err) => {
       console.log('account creation error', err)
       return Promise.reject(new Error('Account Creation'))
