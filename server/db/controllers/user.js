@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { pick } from 'lodash'
 import { auth } from '../../config'
-import { User as UserModel } from '../models'
+import { User as Model } from '../models'
 import Photographer from './photographer'
 import Contact from './contact'
 import { ValidationError } from '../../errors'
@@ -24,12 +24,18 @@ const User = {
     const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
     d.hashPassword = hashPassword(data.password)
 
-    return UserModel.create(d)
+    return Model.create(d)
     .then((user) => {
       console.log('user created. now to create extension', user.get())
       if (user.role === 'photographer') return this.createPhotographer(user, data)
       if (user.role === 'contact') return this.createContact(user, data)
     })
+    // .then(user => {
+    //   return UserLogin.create({
+    //     email: user.email,
+    //     hashPassword: hashPassword(data.password)
+    //   }).then(() => user)
+    // })
     .catch((err) => {
       console.log('account creation error', err)
       return Promise.reject(new Error('Account Creation'))
@@ -45,7 +51,7 @@ const User = {
   },
   get: function (query, join = true) {
     console.log('getting user, query', query)
-    return UserModel.findOne({where: query}).then(user => {
+    return Model.findOne({where: query}).then(user => {
       if (join && user.role === 'photographer') return this.getPhotographer(user)
       if (join && user.role === 'contact') return this.getContact(user)
       return user.get()
@@ -66,7 +72,7 @@ const User = {
     }))
   },
   update: function (query, updates) {
-    return UserModel.findOne({where: query})
+    return Model.findOne({where: query})
     .then(user => user.update(updates))
     .then(user => user.get())
   },

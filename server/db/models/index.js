@@ -21,7 +21,6 @@ import Review from './Review'
 // import Task from './Task';
 import User from './User'
 import UserLogin from './UserLogin'
-import UserProfile from './UserProfile'
 
 Availability.belongsTo(Photographer)
 Cause.belongsToMany(Photographer, {through: 'interests'})
@@ -52,17 +51,10 @@ User.hasMany(UserLogin, {
   onDelete: 'cascade'
 })
 
-User.hasOne(UserProfile, {
-  foreignKey: 'userId',
-  as: 'profile',
-  onUpdate: 'cascade',
-  onDelete: 'cascade'
-})
-
 function sync (...args) {
   return sequelize.sync(...args)
 }
 
 export default { sync }
 export { Availability, Cause, Contact, Event, Nonprofit,
-  Photographer, Project, Review, User, UserLogin, UserProfile }
+  Photographer, Project, Review, User, UserLogin }

@@ -27,6 +27,9 @@ const UserLogin = Model.define('user_login', {
   lockoutUntil: {
     type: DataType.INTEGER
   }
+}, {
+  indexes: [{ fields: ['email'] }],
+  hooks: {}
 })
 
 export default UserLogin
