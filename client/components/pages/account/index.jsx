@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Form } from '../../common'
+import { Form } from 'common'
 
-import { Nonprofit, User } from '../../models'
+import { Nonprofit, User } from 'models'
 
 export default connect(({ me, accountForm, nonprofitForm }) => ({me, accountForm, nonprofitForm}))(
   function Account ({ dispatch, me, accountForm, nonprofitForm }) {

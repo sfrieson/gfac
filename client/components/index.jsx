@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
+import store from '../store/index'
+import { Project as ProjectModel, User } from '../models'
 
-import store from './store/index'
 import {
   Account,
   Dashboard,
@@ -11,10 +12,8 @@ import {
   Project,
   Search
 } from './pages'
-import { Project as ProjectModel } from './models'
 import Header from './header'
 import Nav from './nav'
-import User from './models/User'
 
 class LoaderOrBody extends Component {
   constructor (props) {

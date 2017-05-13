@@ -1,9 +1,15 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import {
+  Input
+} from 'common'
 
-export default function Search () {
+export default connect(
+  ({ searchForm, searchResults }) => ({searchForm, searchResults})
+)(function Search ({ searchForm, searchResults }) {
   return (
     <div>
-      Search Page!
+      <Input name='terms' type='text' value={searchForm && searchForm.terms} label='Search' />
     </div>
   )
-}
+})

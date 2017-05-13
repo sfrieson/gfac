@@ -1,7 +1,7 @@
 import { pick } from 'lodash'
 
-import ajaxDispatch from '../utils/ajax-dispatch'
-import api from '../utils/api'
+import ajaxDispatch from 'utils/ajax-dispatch'
+import api from 'utils/api'
 
 const User = {
   getMe: () => {

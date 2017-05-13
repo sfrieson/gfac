@@ -1,5 +1,5 @@
-import ajaxDispatch from '../utils/ajax-dispatch'
-import api from '../utils/api'
+import ajaxDispatch from 'utils/ajax-dispatch'
+import api from 'utils/api'
 
 const Project = {
   update: (id, updates) => {
