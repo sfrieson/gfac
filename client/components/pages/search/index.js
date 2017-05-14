@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import dispatchAjax from 'utils/ajax-dispatch'
 import api from 'utils/api'
+import { Link } from 'react-router-dom'
 import {
   Input
 } from 'common'
@@ -21,17 +22,30 @@ export default connect(
         <Input name='cameraFilm' type='checkbox' value={searchForm.cameraFilm || ''} label='Film' onChange={onChange} />
         <button className='btn'>Submit</button>
       </form>
-      <pre><code>
-        {JSON.stringify(searchResults, null, 2)}
-      </code></pre>
+      {searchResults.length > 0 && renderResults(searchResults)}
     </div>
   )
 
+  function renderResults (results) {
+    const items = results.map(r => (
+      <li><Link to={`/storyteller/${r.id}`}>{`${r.firstname} ${r.lastname} (@${r.instagram})`}</Link></li>
+    ))
+
+    return (
+      <div>
+        <h3>Results</h3>
+        <ul>
+          {items}
+        </ul>
+      </div>
+    )
+  }
   function onSubmit (e) {
     e.preventDefault()
     dispatchAjax('SEARCH', api(`
       query Search ($queries: SearchQueries) {
         search (queries: $queries) {
+          id
           firstname
           lastname
           instagram
