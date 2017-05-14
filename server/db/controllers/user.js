@@ -104,7 +104,10 @@ const User = {
 
     where = {}
     const photoWhere = pick({
-      instagram: query.instagram && {$iLike: `%${query.instagram}%`}
+      instagram: query.instagram && {$iLike: `%${query.instagram}%`},
+      cameraDSLR: query.cameraDSLR,
+      cameraPhone: query.cameraPhone,
+      cameraFilm: query.cameraFilm
     }, queryKeys)
     for (prop in photoWhere) if (photoWhere[prop]) where[prop] = photoWhere[prop]
     const photoFind = Object.keys(where).length

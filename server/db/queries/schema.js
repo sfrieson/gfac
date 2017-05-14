@@ -182,6 +182,9 @@ const inputs = `
     lastname: String
     instagram: String
     role: String
+    cameraDSLR: Boolean
+    cameraPhone: Boolean
+    cameraFilm: Boolean
   }
 
   input UserInput {
