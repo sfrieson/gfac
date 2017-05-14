@@ -8,25 +8,32 @@ import {
 
 export default connect(
   ({ searchForm, searchResults }) => ({searchForm, searchResults})
-)(function Search ({ searchForm = {query: ''}, searchResults, dispatch }) {
+)(function Search ({ searchForm = {}, searchResults, dispatch }) {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <Input name='query' type='text' value={searchForm.query || ''} label='Search' onChange={onChange} />
+        <Input name='firstname' type='text' value={searchForm.firstname || ''} label='First Name' onChange={onChange} />
+        <Input name='lastname' type='text' value={searchForm.lastname || ''} label='Last Name' onChange={onChange} />
+        <Input name='instagram' type='text' value={searchForm.instagram || ''} label='Instagram Handle' onChange={onChange} />
         <button className='btn'>Submit</button>
       </form>
+      <pre><code>
+        {JSON.stringify(searchResults, null, 2)}
+      </code></pre>
     </div>
   )
 
   function onSubmit (e) {
     e.preventDefault()
     dispatchAjax('SEARCH', api(`
-      mutation Search ($queries: SearchQueries) {
+      query Search ($queries: SearchQueries) {
         search (queries: $queries) {
+          firstname
+          lastname
           instagram
         }
       }
-    `, {queries: searchForm}))
+    `, {queries: Object.assign(searchForm, {role: 'photographer'})}))
   }
 
   function onChange ({ target }) {

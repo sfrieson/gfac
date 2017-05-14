@@ -87,24 +87,28 @@ const User = {
   },
   search: function (query) {
     const queryKeys = Object.keys(query)
-
+    let where = {}
+    let prop
     const userWhere = pick({
-      firstname: {$iLike: `%${query.firstname}%`},
-      lastname: {$iLike: `%${query.lastname}%`},
-      role: query.role
+      firstname: query.firstname && {$iLike: `%${query.firstname}%`},
+      lastname: query.lastname && {$iLike: `%${query.lastname}%`},
+      role: (query.firstname || query.lastname) && query.role
     }, queryKeys)
-    const userFind = Object.keys(userWhere).length
-    ? Model.findAll({where: userWhere})
+    for (prop in userWhere) if (userWhere[prop]) where[prop] = userWhere[prop]
+    const userFind = Object.keys(where).length
+    ? Model.findAll({where})
     .then(user => Promise.all(
-      user.map(u => PhotographerModel.findOne({where: {userId: u.id}}).then(p => { console.log(u.id); return {...u.get(), ...p.get()} }))
+      user.map(u => PhotographerModel.findOne({where: {userId: u.id}}).then(p => ({...u.get(), ...p.get()})))
     ))
     : Promise.resolve([])
 
+    where = {}
     const photoWhere = pick({
-      instagram: {$iLike: `%${query.instagram}%`}
+      instagram: query.instagram && {$iLike: `%${query.instagram}%`}
     }, queryKeys)
-    const photoFind = Object.keys(photoWhere).length
-    ? PhotographerModel.findAll({where: photoWhere})
+    for (prop in photoWhere) if (photoWhere[prop]) where[prop] = photoWhere[prop]
+    const photoFind = Object.keys(where).length
+    ? PhotographerModel.findAll({where})
     .then(photogs => Promise.all(
       photogs.map(p => Model.findOne({where: {id: p.userId}}).then(u => ({...u.get(), ...p.get()})))
     ))
@@ -112,6 +116,7 @@ const User = {
 
     return Promise.all([userFind, photoFind])
     .then(([user, photo]) => [...user, ...photo])
+
   },
   update: function (query, updates) {
     return Model.findOne({where: query})
