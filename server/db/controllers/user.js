@@ -116,7 +116,6 @@ const User = {
 
     return Promise.all([userFind, photoFind])
     .then(([user, photo]) => [...user, ...photo])
-
   },
   update: function (query, updates) {
     return Model.findOne({where: query})
