@@ -62,7 +62,6 @@ const User = {
     .then(photographer => ({...user.get(), ...photographer}))
   },
   get: function (query, join = true) {
-    console.log('getting user, query', query)
     return Model.findOne({where: query}).then(user => {
       if (join && user.role === 'photographer') return this.getPhotographer(user)
       if (join && user.role === 'contact') return this.getContact(user)
@@ -77,11 +76,16 @@ const User = {
     }))
   },
   getPhotographer: function (user) { // user can be Instance or object like {id: 12345}
+    console.log('getPhotographer, user:', user.get())
     return Photographer.get(user.id)
     .then(photographer => ({
       ...user.get(),
       ...photographer
     }))
+    .then(p => {
+      console.log('full user:', p)
+      return p
+    })
   },
   hashPassword: function (password) { return bcrypt.hashSync(password, SALT) },
   search: function (query) {

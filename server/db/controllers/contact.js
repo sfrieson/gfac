@@ -25,9 +25,9 @@ export default {
       return contact.get()
     })
   },
-  get: function (id) {
+  get: function (userId) {
     return Model.findOne({
-      query: {id}
+      where: {userId}
     }).then(contact => {
       return contact.getNonprofit()
       .then(np => {
@@ -37,8 +37,8 @@ export default {
       })
     })
   },
-  update: function (id, fields) {
-    return Model.findOne({query: {userId: id}})
+  update: function (userId, fields) {
+    return Model.findOne({query: {userId}})
     .then(contact => contact.update(fields))
   }
 }

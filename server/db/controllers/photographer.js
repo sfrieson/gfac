@@ -24,16 +24,16 @@ export default {
       }))
     })
   },
-  get (id) {
+  get (userId) {
     return Model.findOne({
-      query: {id},
+      where: {userId},
       include: [Model.associations.causes, Model.associations.availabilities]
     }).then(photographer => ({
       ...photographer.get(),
       availabilities: photographer.availabilities.map(a => (`${a.day}_${a.time}`))
     }))
   },
-  update (id, { availabilities, ...updates }) {
+  update (userId, { availabilities, ...updates }) {
     if (availabilities) {
       availabilities =
       (typeof availabilities === 'string' ? [availabilities] : availabilities)
@@ -43,7 +43,7 @@ export default {
       })
     }
 
-    return Model.findOne({query: {userId: id}})
+    return Model.findOne({where: {userId}})
     .then(photographer => {
       if (Object.keys(updates).length) return photographer.update(updates)
       else return photographer
