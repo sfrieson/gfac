@@ -8,8 +8,6 @@ import { ValidationError } from '../../errors'
 
 const SALT = bcrypt.genSaltSync(auth.salt)
 
-const hashPassword = function (password) { return bcrypt.hashSync(password, SALT) }
-
 const User = {
   checkPassword: function (email, password) {
     return this.get({email})
@@ -24,7 +22,7 @@ const User = {
     const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
     if (d.role === 'admin') throw new Error('Bad Value') // TODO Should log this attempt somehwere
 
-    d.hashPassword = hashPassword(data.password)
+    d.hashPassword = this.hashPassword(data.password)
 
     return Model.create(d)
     .then((user) => {
@@ -46,7 +44,7 @@ const User = {
   createAdmin: function (data) {
     const d = pick(data, ['firstname', 'lastname', 'email', 'phone', 'phoneType'])
     d.role = 'admin'
-    d.hashPassword = hashPassword(data.password)
+    d.hashPassword = this.hashPassword(data.password)
 
     return Model.create(d)
     .then((user) => user.get())
@@ -85,6 +83,7 @@ const User = {
       ...photographer
     }))
   },
+  hashPassword: function (password) { return bcrypt.hashSync(password, SALT) },
   search: function (query) {
     const queryKeys = Object.keys(query)
     let where = {}

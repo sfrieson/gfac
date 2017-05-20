@@ -8,6 +8,10 @@
 import fs from 'fs'
 import path from 'path'
 import models, { Contact, Cause, Nonprofit, Photographer, User } from './models'
+import { UserController } from './controllers'
+const hashPassword = UserController.hashPassword
+
+const emailList = []
 
 export default function () {
   const raw = './initial_db'
@@ -68,17 +72,41 @@ export default function () {
     ))
   ))
   .then(() => { console.log('\n\n Contacts and Nonprofits created.') })
+  .then(() => {
+    return new Promise(function (resolve, reject) {
+      fs.writeFile(
+        'email-list.tsv',
+        emailList.map(row => row.join('\t')).join('\n'),
+        resolve
+      )
+    })
+  })
+  .then(() => { console.log('Email list created.') })
   .catch(e => { console.log(e); process.exit(1) })
 
   function parseTsv (file, role) {
     return file.split('\n') // .slice(0, 10)
-    .map(photog => {
-      return photog.split('\t')
+    .map(row => {
+      var user = row.split('\t')
       .reduce((p, val, i) => {
         const col = columns[i]
         if (col[0] !== '_') Object.assign(p, parse[col](val))
         return p
       }, {role: role})
+
+      const pass = generatePassword()
+      user.hashPassword = hashPassword(pass)
+      emailList.push([user.email, user.firstname, user.lastname, pass])
+      return user
     })
   }
 }
+
+const possible = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!$^&_'.split('')
+function generatePassword () {
+  let length = 13
+  let pass = ''
+  while (--length) pass += randomChar()
+  return pass
+}
+function randomChar () { return possible[Math.floor(Math.random() * possible.length)] }
