@@ -100,7 +100,30 @@ const searchResults = (state = [], action) => {
   }
 }
 
-const mainReducer = combineReducers({fetches, me, accountForm, nonprofitForm, projectForm, projectUpdate, projects, searchForm, searchResults})
+const storyteller = (state = {}, action) => {
+  switch (action.type) {
+    case 'CLEAR_STORYTELLER':
+    case 'FETCH_STORYTELLER_START':
+      return {}
+    case 'FETCH_STORYTELLER_END':
+      return action.res.data.getPhotographer
+    default:
+      return state
+  }
+}
+
+const mainReducer = combineReducers({
+  fetches,
+  me,
+  accountForm,
+  nonprofitForm,
+  projectForm,
+  projectUpdate,
+  projects,
+  searchForm,
+  searchResults,
+  storyteller
+})
 
 const middleware = applyMiddleware(logger)
 const store = createStore(mainReducer, middleware)

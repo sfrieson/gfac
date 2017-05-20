@@ -47,6 +47,21 @@ const User = {
       }))
     })
   },
+  getStoryteller: function (userId) {
+    ajaxDispatch('STORYTELLER',
+      api(`query GetPhotogapher ($userId: String) {
+        getPhotographer (userId: $userId) {
+          email
+          firstname
+          lastname
+          instagram
+          phone
+          phoneType
+          role
+        }
+      }`, {userId})
+    )
+  },
   updateMe: (updates) => {
     const mutationVariables = []
     const query = []

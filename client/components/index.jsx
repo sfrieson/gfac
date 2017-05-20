@@ -10,7 +10,8 @@ import {
   NewProject,
   ViewProject,
   Project,
-  Search
+  Search,
+  Storyteller
 } from './pages'
 import Header from './header'
 import Nav from './nav'
@@ -44,6 +45,7 @@ class LoaderOrBody extends Component {
                 <Route path='/project/:id' component={ViewProject} />
                 <Route path='/project' component={Project} />
                 <Route path='/search' component={Search} />
+                <Route path='/storyteller/:userId' component={Storyteller} />
                 <Route path='/' component={Dashboard} />
               </Switch>
             </div>

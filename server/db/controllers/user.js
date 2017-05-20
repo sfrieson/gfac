@@ -97,8 +97,11 @@ const User = {
     for (prop in userWhere) if (userWhere[prop]) where[prop] = userWhere[prop]
     const userFind = Object.keys(where).length
     ? Model.findAll({where})
-    .then(user => Promise.all(
-      user.map(u => PhotographerModel.findOne({where: {userId: u.id}}).then(p => ({...u.get(), ...p.get()})))
+    .then(users => Promise.all(
+      users.map(u => (
+        PhotographerModel.findOne({where: {userId: u.id}})
+        .then(p => ({...u.get(), ...p.get()}))
+      ))
     ))
     : Promise.resolve([])
 
@@ -113,7 +116,10 @@ const User = {
     const photoFind = Object.keys(where).length
     ? PhotographerModel.findAll({where})
     .then(photogs => Promise.all(
-      photogs.map(p => Model.findOne({where: {id: p.userId}}).then(u => ({...u.get(), ...p.get()})))
+      photogs.map(p => (
+        Model.findOne({where: {id: p.userId}})
+        .then(u => ({...u.get(), ...p.get()}))
+      ))
     ))
     : Promise.resolve([])
 

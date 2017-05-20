@@ -28,7 +28,7 @@ export default connect(
 
   function renderResults (results) {
     const items = results.map(r => (
-      <li><Link to={`/storyteller/${r.id}`}>{`${r.firstname} ${r.lastname} (@${r.instagram})`}</Link></li>
+      <li key={r.instagram}><Link to={`/storyteller/${r.id}`}>{`${r.firstname} ${r.lastname} (@${r.instagram})`}</Link></li>
     ))
 
     return (

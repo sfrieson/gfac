@@ -9,10 +9,10 @@ import {
 
 const queryResolvers = {
   getMe: (_, req) => User.get({id: req.user.id}),
+  getPhotographer: (args) => User.get({id: args.userId}),
   getProjects: (args, { user }) => Project.get(args, user),
   getUser: (query) => User.get(query),
-  search: (args) => User.search(args.queries),
-  user: (query) => User.get(query)
+  search: (args) => User.search(args.queries)
 }
 queryResolvers.getMePhotographer = queryResolvers.getMe
 queryResolvers.getMeContact = queryResolvers.getMe
@@ -33,6 +33,7 @@ const queries = `
     getMeContact: Contact
     getMePhotographer: Photographer
     getMe: User
+    getPhotographer (userId: String): Photographer
     getProjects(nonprofitId: String): [Project]
     getUser(id: String, email: String): AnyUser
     search(queries: SearchQueries): [Photographer]
