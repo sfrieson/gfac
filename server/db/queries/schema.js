@@ -93,21 +93,22 @@ const types = `
   # Additional Fields for Storyteller users
   type Photographer implements UserInterface {
     id: String
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
-    userId: String
-    instagram: String
+    availabilities: [String]
     cameraPhone: Boolean
     cameraFilm: Boolean
     cameraDSLR: Boolean
     cameraOther: String
-    preferredContactMethod: String
     causes: [Cause]
-    availabilities: [String]
+    email: String
+    firstname: String
+    instagram: String
+    lastname: String
+    phone: String
+    phoneType: String
+    portfolio: String
+    preferredContactMethod: String
+    role: String
+    userId: String
   }
 
   # Description of a Nonprofit's project

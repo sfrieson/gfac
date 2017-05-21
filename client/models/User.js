@@ -51,13 +51,18 @@ const User = {
     ajaxDispatch('STORYTELLER',
       api(`query GetPhotogapher ($userId: String) {
         getPhotographer (userId: $userId) {
-          email
           firstname
           lastname
+          email
           instagram
           phone
           phoneType
-          role
+          preferredContactMethod
+          portfolio
+          causes {
+            name
+          }
+          availabilities
         }
       }`, {userId})
     )

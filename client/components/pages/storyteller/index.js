@@ -13,7 +13,20 @@ const Display = connect(
     <div>
       <h2>Storyteller</h2>
       <h3>{s.firstname} {s.lastname}</h3>
-      <a href={`https://instagram.com/${s.instagram}/`} target='_blank'>@{s.instagram}</a>
+      <h4>Info</h4>
+      <ul>
+        {s.portfolio && <li><a href={s.portfolio} target='_blank'>Portfolio</a></li>}
+        <li><a href={`https://instagram.com/${s.instagram}/`} target='_blank'>
+          @{s.instagram}{s.preferredContactMethod === 'instagram' && ' - preferred'}
+        </a></li>
+        {s.phone && <li><a href={`tel:${s.phone}`} target='_blank'>
+          {s.phoneType}: {s.phone}{s.preferredContactMethod === 'phone' && ' - preferred'}
+        </a></li>}
+        {s.email && <li><a href={`mailto:${s.email}`} target='_blank'>
+          {s.email}{s.preferredContactMethod === 'email' && ' - preferred'}
+        </a></li>}
+      </ul>
+
     </div>
   )
 })
