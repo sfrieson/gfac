@@ -9,6 +9,7 @@ import {
 
 const queryResolvers = {
   getMe: (_, req) => User.get({id: req.user.id}),
+  getNonprofit: ({ id }) => Nonprofit.get(id),
   getPhotographer: (args) => User.get({id: args.userId}),
   getProjects: (args, { user }) => Project.get(args, user),
   getUser: (query) => User.get(query),
@@ -33,10 +34,11 @@ const queries = `
     getMeContact: Contact
     getMePhotographer: Photographer
     getMe: User
+    getNonprofit (id: String): Nonprofit
     getPhotographer (userId: String): Photographer
-    getProjects(nonprofitId: String): [Project]
-    getUser(id: String, email: String): AnyUser
-    search(queries: SearchQueries): [Photographer]
+    getProjects (nonprofitId: String): [Project]
+    getUser (id: String, email: String): AnyUser
+    search (queries: SearchQueries): [Photographer]
   }
 `
 
@@ -88,6 +90,9 @@ const types = `
     id: String
     name: String
     description: String
+    contacts: [Contact]
+    projects: [Project]
+    causes: [Cause]
   }
 
   # Additional Fields for Storyteller users
