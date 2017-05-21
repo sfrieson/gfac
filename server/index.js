@@ -41,7 +41,7 @@ app.use('/api', expressGraphQL({
   pretty: __DEV__
 }))
 
-app.use(/^(?!\/api).*/, mainRouter)
+app.use(mainRouter)
 
 models.sync()
 .catch(err => console.error(err.stack))
