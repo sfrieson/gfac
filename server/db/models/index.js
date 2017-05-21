@@ -26,6 +26,7 @@ Availability.belongsTo(Photographer)
 Cause.belongsToMany(Photographer, {through: 'interests'})
 Cause.belongsToMany(Nonprofit, {through: 'focuses'})
 Contact.belongsTo(Nonprofit)
+Contact.hasOne(User)
 // Contact.hasMany(Project, {through: Nonprofit}); // Not necessary?
 Event.belongsTo(User)
 Event.belongsTo(Project)
@@ -36,6 +37,7 @@ Nonprofit.belongsToMany(Cause, {through: 'focuses'})
 Photographer.belongsToMany(Cause, {through: 'interests'})
 Photographer.belongsToMany(Project, {through: 'assignments'})
 Photographer.hasMany(Availability)
+Photographer.hasOne(User)
 Project.belongsTo(Nonprofit)
 // Project.belongsToMany(Contact, { through: Nonprofit }); // Not necessary?
 // Project.hasMany(Assignment);
@@ -44,7 +46,7 @@ Project.hasMany(Event)
 Project.hasMany(Review)
 
 User.hasMany(Event)
-User.hasMany(UserLogin, {
+User.hasOne(UserLogin, {
   foreignKey: 'userId',
   as: 'logins',
   onUpdate: 'cascade',

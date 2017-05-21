@@ -40,12 +40,25 @@ const User = Model.define('user',
     phoneType: {
       type: DataType.ENUM('mobile', 'office', 'home')
     },
-    hashPassword: {
-      type: DataType.STRING(100)
-    },
     newsletter: {
       type: DataType.BOOLEAN,
       default: false
+    },
+
+    hashPassword: {
+      type: DataType.STRING(100)
+    },
+    loginAttempts: {
+      type: DataType.INTEGER
+    },
+    lockoutUntil: {
+      type: DataType.INTEGER
+    },
+    loginToken: {
+      type: DataType.STRING
+    },
+    tokenExpires: {
+      type: DataType.INTEGER
     }
   },
   // Options
