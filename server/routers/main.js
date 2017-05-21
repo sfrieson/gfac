@@ -9,13 +9,19 @@ import { ValidationError } from '../errors'
 
 const Router = express.Router()
 
+Router.route('/change-password')
+.get(({ query }, res) => res.json(query))
+.post(({ body, query }, res) => {
+  res.json({req: {body, query}})
+})
+
 Router.route('/login')
 .get((_, res) => res.render('login'))
-.post((req, res) => {
+.post(({ body }, res) => {
   console.log(`Attempting Login
-  Email:    ${req.body.email}
-  Password: ${req.body.password}`)
-  User.checkPassword(req.body.email, req.body.password)
+  Email:    ${body.email}
+  Password: ${body.password}`)
+  User.checkPassword(body.email, body.password)
   .then(user => {
     res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwt.secret))
     res.redirect('/')
