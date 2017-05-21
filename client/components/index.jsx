@@ -8,10 +8,11 @@ import {
   Account,
   Dashboard,
   NewProject,
-  ViewProject,
+  Nonprofit,
   Project,
   Search,
-  Storyteller
+  Storyteller,
+  ViewProject
 } from './pages'
 import Header from './header'
 import Nav from './nav'
@@ -41,6 +42,7 @@ class LoaderOrBody extends Component {
             <div className='col-sm-12 col-md-9'>
               <Switch>
                 <Route path='/account' component={Account} />
+                <Route path='/nonprofit/:id' component={Nonprofit} />
                 <Route path='/project/new' getUserConfirmation component={NewProject} />
                 <Route path='/project/:id' component={ViewProject} />
                 <Route path='/project' component={Project} />

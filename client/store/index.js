@@ -39,6 +39,18 @@ const me = (state = {}, action) => {
   }
 }
 
+const nonprofit = (state = {}, action) => {
+  switch (action.type) {
+    case 'CLEAR_NONPROFIT':
+    case 'FETCH_NONPROFIT_START':
+      return {}
+    case 'FETCH_NONPROFIT_END':
+      return action.res.data.getNonprofit
+    default:
+      return state
+  }
+}
+
 const nonprofitForm = (state = {}, action) => {
   switch (action.type) {
     case 'NONPROFIT_FORM_CHANGE':
@@ -116,6 +128,7 @@ const mainReducer = combineReducers({
   fetches,
   me,
   accountForm,
+  nonprofit,
   nonprofitForm,
   projectForm,
   projectUpdate,
