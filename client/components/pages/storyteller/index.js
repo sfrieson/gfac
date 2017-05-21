@@ -27,6 +27,16 @@ const Display = connect(
         </a></li>}
       </ul>
 
+      <h4>Cause Interests</h4>
+      <ul>
+        {s.causes.map((c, i) => <li>{c.name}</li>)}
+      </ul>
+      <h4>Availability</h4>
+      {/* TODO Make into grid */}
+      <ul>
+        {s.availabilities.map((a, i) => <li>{a}</li>)}
+      </ul>
+
     </div>
   )
 })
