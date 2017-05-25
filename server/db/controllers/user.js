@@ -9,6 +9,13 @@ import { ValidationError } from '../../errors'
 const SALT = bcrypt.genSaltSync(auth.salt)
 
 const User = {
+  changePassword: function (user, password, confirm) {
+    if (password !== confirm) return Promise.reject(new Error('Password and confirmation did not match.'))
+    return Model.findOne({where: {id: user.id}})
+    .then(u => u.update({passwordHash: this.hashPassword(password)}))
+    .then(() => 'Successful')
+    .catch(err => Promise.reject(err))
+  },
   checkPassword: function (email, password) {
     return this.get({email})
     .then(user => {
@@ -88,6 +95,43 @@ const User = {
     })
   },
   hashPassword: function (password) { return bcrypt.hashSync(password, SALT) },
+  passwordResetLink: function ({email}) {
+    const loginToken = generateToken(25)
+    const tokenExpires = Date.now() + (1000 * 60 * 10)
+
+    Model.findOne({where: {email}})
+    .then(m => m.update({loginToken, tokenExpires}))
+    .then(m => {
+      // Email m.email the url
+      const resetUrl = `http://gramforacause.com/reset-password?email=${m.email}&t=${loginToken}`
+      return resetUrl
+    })
+  },
+  resetPassword: function ({email, token, password, confirm}) {
+    return new Promise(function (resolve, reject) {
+      if (password !== confirm) return reject(new Error('Password does not match confirm'))
+
+      Model.findOne({where: {email, loginToken: token}})
+      .then(m => {
+        if (m) return m
+        else throw new Error('Reset did not work.')
+      })
+      .then(m => {
+        const emptyToken = {loginToken: '', tokenExpires: 0}
+
+        if (m.tokenExpires < Date.now()) {
+          m.update(emptyToken)
+          throw new Error('Reset did not work.')
+        }
+
+        return m.update({
+          hashPassword: this.hashPassword(password),
+          ...emptyToken
+        }).then(() => resolve(m.get()))
+      })
+      .catch((err) => reject(err))
+    })
+  },
   search: function (query) {
     const queryKeys = Object.keys(query)
     let where = {}
@@ -144,3 +188,11 @@ const User = {
 }
 
 export default User
+
+const possible = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!$^-+_'.split('')
+function generateToken (length) {
+  let pass = ''
+  while (--length) pass += randomChar()
+  return pass
+}
+function randomChar () { return possible[Math.floor(Math.random() * possible.length)] }

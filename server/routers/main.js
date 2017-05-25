@@ -10,9 +10,11 @@ import { ValidationError } from '../errors'
 const Router = express.Router()
 
 Router.route('/change-password')
-.get(({ query }, res) => res.json(query))
+.get(({ query }, res) => res.render('change-password', {token: query.t, email: query.email}))
 .post(({ body, query }, res) => {
-  res.json({req: {body, query}})
+  User.resetPassword(body)
+  .then(res.json.bind(res))
+  .catch(err => res.send(err.message))
 })
 
 Router.route('/login')

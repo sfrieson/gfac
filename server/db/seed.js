@@ -94,7 +94,7 @@ export default function () {
         return p
       }, {role: role})
 
-      const pass = generatePassword()
+      const pass = generatePassword(13)
       user.hashPassword = hashPassword(pass)
       emailList.push([user.email, user.firstname, user.lastname, pass])
       return user
@@ -103,8 +103,7 @@ export default function () {
 }
 
 const possible = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!$^&_'.split('')
-function generatePassword () {
-  let length = 13
+function generatePassword (length) {
   let pass = ''
   while (--length) pass += randomChar()
   return pass
