@@ -9,7 +9,7 @@ import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import mainRouter from './routers/main'
 
-import { schema, root } from './db/queries/schema'
+import schema from './db/queries/schema'
 
 import {port, auth} from './config'
 import models from './db/models'

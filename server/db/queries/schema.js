@@ -1,207 +1,328 @@
-import { buildSchema } from 'graphql'
 import {
-  ContactController as Contact,
-  NonprofitController as Nonprofit,
-  PhotographerController as Photographer,
-  UserController as User,
-  ProjectController as Project
+  GraphQLBoolean as Bool,
+  // GraphQLEnumType as Enum,
+  GraphQLID as Id,
+  GraphQLInt as Int,
+  GraphQLInputObjectType as Input,
+  GraphQLInterfaceType,
+  GraphQLList as List,
+  GraphQLNonNull as NonNull,
+  GraphQLObjectType as Type,
+  GraphQLSchema,
+  GraphQLString as Str
+} from 'graphql'
+
+import {
+  ContactController as ContactC,
+  NonprofitController as NonprofitC,
+  PhotographerController as PhotographerC,
+  UserController as UserC,
+  ProjectController as ProjectC
 } from '../controllers'
 
-const queryResolvers = {
-  getMe: (_, req) => User.get({id: req.user.id}),
-  getNonprofit: ({ id }) => Nonprofit.get(id),
-  getPhotographer: (args) => User.get({id: args.userId}),
-  getProjects: (args, { user }) => Project.get(args, user),
-  getUser: (query) => User.get(query),
-  search: (args) => User.search(args.queries)
+const userFields = {
+  id: {type: new NonNull(Id)},
+  email: {type: Str},
+  firstname: {type: Str},
+  lastname: {type: Str},
+  phone: {type: Str},
+  // TODO Change to enum
+  phoneType: {type: Str},
+  role: {type: Str}
 }
-queryResolvers.getMePhotographer = queryResolvers.getMe
-queryResolvers.getMeContact = queryResolvers.getMe
-
-const mutationResolvers = {
-  createProject: (args) => Project.create(args.project),
-  updateContactMe: (args, req) => Contact.update({id: req.user.id}, args.updates),
-  updateMe: (args, req) => User.update({id: req.user.id}, args.updates),
-  updateNonprofit: ({id, updates}) => Nonprofit.update(id, updates),
-  updateProject: ({id, updates}) => Project.update(id, updates),
-  updatePhotographerMe: (args, req) => Photographer.update({id: req.user.id}, args.updates)
-}
-
-export const root = {...queryResolvers, ...mutationResolvers}
-
-const queries = `
-  type Query {
-    getMeContact: Contact
-    getMePhotographer: Photographer
-    getMe: User
-    getNonprofit (id: String): Nonprofit
-    getPhotographer (userId: String): Photographer
-    getProjects (nonprofitId: String): [Project]
-    getUser (id: String, email: String): AnyUser
-    search (queries: SearchQueries): [Photographer]
+const User = new GraphQLInterfaceType({
+  name: 'UserInterface',
+  description: 'Base fields of all users.',
+  fields: userFields,
+  resolveType: (user) => {
+    if ('role' in user) {
+      switch (user.role) {
+        case 'admin':
+          return Admin
+        case 'contact':
+          return Contact
+        case 'photographer':
+          return Photographer
+      }
+    } else {
+      if (user.nonprofit) return Contact
+      if (user.instagram) return Photographer
+      if (!user.nonprofit && !user.instagram) return Admin
+    }
   }
-`
+})
 
-const mutations = `
-  type Mutation {
-    createProject(project: ProjectInput): Project
-    updateContactMe(updates: ContactInput): Contact
-    updateMe(updates: UserInput): AnyUser
-    updateNonprofit(id: String, updates: NonprofitInput): Nonprofit
-    updateProject(id: Int, updates: ProjectInput): Project
-    updatePhotographerMe(updates: PhotographerInput): Photographer
+// *****
+// Types
+// *****
+
+const Admin = new Type({
+  name: 'Admin',
+  fields: {
+    ...userFields,
+    userId: {type: Str}
+  },
+  interfaces: [User]
+})
+
+const Cause = new Type({
+  name: 'Cause',
+  fields: {
+    id: {type: new NonNull(Int)},
+    name: {type: new NonNull(Str)}
   }
-`
+})
 
-const types = `
-  # Additional fields for Admin users
-  type Admin implements UserInterface {
-    id: String
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
+const Contact = new Type({
+  name: 'Contact',
+  fields: () => ({
+    ...userFields,
+    nonprofit: {type: Nonprofit},
+    phoneSecondary: {type: Str},
+    phoneSecondaryType: {type: Str},
+    userId: {type: Str}
+  }),
+  interfaces: [User]
+})
+
+const Project = new Type({
+  name: 'Project',
+  description: 'Nonprofit projects',
+  fields: () => ({
+    id: {type: new NonNull(Str)},
+    name: {type: new NonNull(Str)},
+    description: {type: new NonNull(Str)},
+    date: {type: new NonNull(Str)},
+    dateIsApprox: {type: new NonNull(Bool)},
+    location: {type: Str},
+    status: {type: Str},
+    photoLink: {type: Str},
+    nonprofitId: {type: new NonNull(Str)}
+  })
+})
+
+const Nonprofit = new Type({
+  name: 'Nonprofit',
+  fields: () => ({
+    id: {type: Str},
+    name: {type: Str},
+    description: {type: Str},
+    contacts: {type: new List(Contact)},
+    projects: {type: new List(Project)},
+    causes: {type: new List(Cause)}
+  })
+})
+
+const Photographer = new Type({
+  name: 'Photographer',
+  fields: {
+    ...userFields,
+    availabilities: {type: new List(Str)},
+    cameraPhone: {type: Bool},
+    cameraFilm: {type: Bool},
+    cameraDSLR: {type: Bool},
+    cameraOther: {type: Str},
+    causes: {type: new List(Cause)},
+    portfolio: {type: Str},
+    preferredContactMethod: {type: Str},
+    userId: {type: Str}
+  },
+  interfaces: [User]
+})
+
+// ******
+// Inputs
+// ******
+
+const ContactInput = new Input({
+  name: 'ContactInput',
+  fields: {
+    phoneSecondary: {type: Str},
+    phoneSecondaryType: {type: Str}
   }
+})
 
-  # Causes for Interests and Focuses
-  type Cause {
-    id: Int!
-    name: String!
+const PhotographerInput = new Input({
+  name: 'PhotographerInput',
+  fields: {
+    instagram: {type: Str},
+    cameraPhone: {type: Bool},
+    cameraFilm: {type: Bool},
+    cameraDSLR: {type: Bool},
+    cameraOther: {type: Str},
+    preferredContactMethod: {type: Str},
+    causes: {type: new List(Int)},
+    availabilities: {type: new List(Str)}
   }
+})
 
-  # Additional fields for Nonprofit Contact users
-  type Contact implements UserInterface {
-    id: String
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
-    nonprofit: Nonprofit
-    phoneSecondary: String
-    phoneSecondaryType: String
+const ProjectInput = new Input({
+  name: 'ProjectInput',
+  fields: {
+    name: {type: Str},
+    description: {type: Str},
+    nonprofitId: {type: Str},
+    date: {type: Str},
+    dateIsApprox: {type: Str},
+    location: {type: Str}
   }
+})
 
-  # Fields describing a Nonprofit
-  type Nonprofit {
-    id: String
-    name: String
-    description: String
-    contacts: [Contact]
-    projects: [Project]
-    causes: [Cause]
+const NonprofitInput = new Input({
+  name: 'NonprofitInput',
+  fields: {
+    name: {type: Str},
+    description: {type: Str}
   }
+})
 
-  # Additional Fields for Storyteller users
-  type Photographer implements UserInterface {
-    id: String
-    availabilities: [String]
-    cameraPhone: Boolean
-    cameraFilm: Boolean
-    cameraDSLR: Boolean
-    cameraOther: String
-    causes: [Cause]
-    email: String
-    firstname: String
-    instagram: String
-    lastname: String
-    phone: String
-    phoneType: String
-    portfolio: String
-    preferredContactMethod: String
-    role: String
-    userId: String
+const SearchQueries = new Input({
+  name: 'SearchQueries',
+  fields: {
+    firstname: {type: Str},
+    lastname: {type: Str},
+    instagram: {type: Str},
+    role: {type: Str},
+    cameraDSLR: {type: Bool},
+    cameraPhone: {type: Bool},
+    cameraFilm: {type: Bool}
   }
+})
 
-  # Description of a Nonprofit's project
-  type Project {
-    id: String!
-    name: String!
-    description: String!
-    date: String!
-    dateIsApprox: Boolean!
-    location: String
-    status: String
-    photoLink: String
-    nonprofitId: String!
+const UserInput = new Input({
+  name: 'UserInput',
+  fields: {
+    email: {type: Str},
+    firstname: {type: Str},
+    lastname: {type: Str},
+    phone: {type: Str},
+    phoneType: {type: Str},
+    role: {type: Str}
   }
+})
 
-  # Base fields for all users
-  type User {
-    id: String
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
-  }
+// *******
+// Queries
+// *******
+const Query = new Type({
+  name: 'Query',
+  fields: () => ({
+    getMeContact: {
+      type: Contact,
+      resolve: (_, req) => UserC.get({id: req.user.id})
+    },
+    getMePhotographer: {
+      type: Photographer,
+      resolve: (_, req) => UserC.get({id: req.user.id})
+    },
+    getMe: {
+      type: User,
+      resolve: (_, req) => UserC.get({id: req.user.id})
+    },
+    getNonprofit: {
+      type: Nonprofit,
+      args: {
+        id: {type: Id}
+      },
+      resolve: ({ id }) => NonprofitC.get(id)
+    },
+    getPhotographer: {
+      type: Photographer,
+      args: {
+        userId: {type: Id}
+      },
+      resolve: (args) => UserC.get({id: args.userId})
+    },
+    getProjects: {
+      type: new List(Project),
+      args: {
+        nonprofitId: {type: Id}
+      },
+      resolve: (args, { user }) => ProjectC.get(args, user)
+    },
+    getUser: {
+      type: User,
+      args: {
+        id: {type: Id},
+        email: {type: Str}
+      },
+      resolve: (query) => UserC.get(query)
+    },
+    search: {
+      type: new List(Photographer),
+      args: {
+        queries: {type: SearchQueries}
+      },
+      resolve: (args) => UserC.search(args.queries)
+    }
+  })
+})
 
-  union AnyUser = Admin | Contact | Photographer
+const Mutation = new Type({
+  name: 'Mutation',
+  fields: () => ({
+    createProject: {
+      type: Project,
+      args: {
+        project: {type: ProjectInput}
+      },
+      resolve: (args) => ProjectC.create(args.project)
+    },
+    updateContactMe: {
+      type: Contact,
+      args: {
+        updates: {type: ContactInput}
+      },
+      resolve: (args, req) => ContactC.update({id: req.user.id}, args.updates)
+    },
+    updateMe: {
+      type: User,
+      args: {
+        updates: {type: UserInput}
+      },
+      resolve: (args, req) => UserC.update({id: req.user.id}, args.updates)
+    },
+    updateNonprofit: {
+      type: Nonprofit,
+      args: {
+        id: {type: Str},
+        updates: {type: NonprofitInput}
+      },
+      resolve: ({id, updates}) => NonprofitC.update(id, updates)
+    },
+    updateProject: {
+      type: Project,
+      args: {
+        id: {type: Int},
+        updates: {type: ProjectInput}
+      },
+      resolve: ({id, updates}) => ProjectC.update(id, updates)
+    },
+    updatePhotographerMe: {
+      type: Photographer,
+      args: {
+        updates: {type: PhotographerInput}
+      },
+      resolve: (args, req) => PhotographerC.update({id: req.user.id}, args.updates)
+    }
+  })
+})
 
-  interface UserInterface {
-    id: String
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
-  }
-`
-
-const inputs = `
-  input ContactInput {
-    phoneSecondary: String
-    phoneSecondaryType: String
-  }
-
-  input PhotographerInput {
-    instagram: String
-    cameraPhone: Boolean
-    cameraFilm: Boolean
-    cameraDSLR: Boolean
-    cameraOther: String
-    preferredContactMethod: String
-    causes: [Int]
-    availabilities: [String]
-  }
-
-  input ProjectInput {
-    name: String
-    description: String
-    nonprofitId: String
-    date: String
-    dateIsApprox: String
-    location: String
-  }
-
-  input NonprofitInput {
-    name: String
-    description: String
-  }
-
-  input SearchQueries {
-    firstname: String
-    lastname: String
-    instagram: String
-    role: String
-    cameraDSLR: Boolean
-    cameraPhone: Boolean
-    cameraFilm: Boolean
-  }
-
-  input UserInput {
-    email: String
-    firstname: String
-    lastname: String
-    phone: String
-    phoneType: String
-    role: String
-  }
-`
-
-export const schema = buildSchema(types + inputs + queries + mutations)
+export default new GraphQLSchema({
+  query: Query,
+  mutation: Mutation,
+  types: [
+    Admin,
+    Cause,
+    Contact,
+    Project,
+    Nonprofit,
+    Photographer,
+    ContactInput,
+    PhotographerInput,
+    ProjectInput,
+    NonprofitInput,
+    SearchQueries,
+    UserInput
+  ]
+})
