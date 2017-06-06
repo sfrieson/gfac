@@ -7,41 +7,42 @@ const User = {
   getMe: () => {
     return new Promise((resolve) => {
       ajaxDispatch('ME',
-        api(`query GetMe {
-          getMe {
-            email
-            firstname
-            lastname
-            phone
-            phoneType
-            role
-          }
-          getMePhotographer {
-            instagram
-            cameraPhone
-            cameraFilm
-            cameraDSLR
-            cameraOther
-            preferredContactMethod
-            causes {
-              id
+        api(`
+          query GetMe {
+            getMe {
+              email
+              firstname
+              lastname
+              phone
+              phoneType
+              role
+              ... on Photographer {
+                instagram
+                cameraPhone
+                cameraFilm
+                cameraDSLR
+                cameraOther
+                preferredContactMethod
+                causes {
+                  name
+                }
+                availabilities
+              }
+              ... on Contact {
+                phoneSecondary
+                phoneSecondaryType
+                nonprofit {
+                  name
+                  description
+                }
+              }
             }
-            availabilities
           }
-          getMeContact {
-            phoneSecondary
-            phoneSecondaryType
-            nonprofit {
-              id
-              name
-              description
-            }
-          }
-        }`
+        `
       ).then(({ data }) => {
         let me = {...data.getMe}
-        if (me.role === 'photographer') me = {...me, ...data.getMePhotographer, causes: data.getMePhotographer.causes.map(({id}) => id)}
-        if (me.role === 'contact') me = {...me, ...data.getMeContact}
+        // if (me.role === 'photographer') me = {...me, ...data.getMePhotographer, causes: data.getMePhotographer.causes.map(({id}) => id)}
+        // if (me.role === 'contact') me = {...me, ...data.getMeContact}
         resolve(me)
         return me
       }))

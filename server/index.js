@@ -34,12 +34,12 @@ app.use(expressJWT({
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}))
 
-app.use('/api', expressGraphQL({
+app.use('/api', expressGraphQL((req) => ({
   schema,
   graphiql: __DEV__,
-  rootValue: root,
+  rootValue: {vars: req.body, req: req},
   pretty: __DEV__
-}))
+})))
 
 app.use(mainRouter)
 
