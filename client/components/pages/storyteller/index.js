@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 
 import { User } from 'models'
 
+import { Availability } from '../../common'
+
 const Display = connect(
   ({ storyteller }) => ({storyteller})
 )(function StorytellerDisplay ({storyteller}) {
@@ -32,10 +34,7 @@ const Display = connect(
         {s.causes.map((c, i) => <li>{c.name}</li>)}
       </ul>
       <h4>Availability</h4>
-      {/* TODO Make into grid */}
-      <ul>
-        {s.availabilities.map((a, i) => <li>{a}</li>)}
-      </ul>
+      <Availability values={s.availabilities} />
 
     </div>
   )
