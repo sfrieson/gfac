@@ -10,16 +10,20 @@ import {
 export default connect(
   ({ searchForm, searchResults }) => ({searchForm, searchResults})
 )(function Search ({ searchForm = {}, searchResults, dispatch }) {
+  const {
+    firstname, lastname, instagram, cameraDSLR, cameraPhone, cameraFilm, availabilities
+  } = searchForm
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <Input name='firstname' type='text' value={searchForm.firstname || ''} label='First Name' onChange={onChange} />
-        <Input name='lastname' type='text' value={searchForm.lastname || ''} label='Last Name' onChange={onChange} />
-        <Input name='instagram' type='text' value={searchForm.instagram || ''} label='Instagram Handle' onChange={onChange} />
+        <Input name='firstname' type='text' value={firstname || ''} label='First Name' onChange={onChange} />
+        <Input name='lastname' type='text' value={lastname || ''} label='Last Name' onChange={onChange} />
+        <Input name='instagram' type='text' value={instagram || ''} label='Instagram Handle' onChange={onChange} />
         <div style={{fontWeight: 'bold'}}>Shoots with:</div>
-        <Input name='cameraDSLR' type='checkbox' value={searchForm.cameraDSLR || ''} label='DSLR' onChange={onChange} />
-        <Input name='cameraPhone' type='checkbox' value={searchForm.cameraPhone || ''} label='Phone' onChange={onChange} />
-        <Input name='cameraFilm' type='checkbox' value={searchForm.cameraFilm || ''} label='Film' onChange={onChange} />
+        <Input name='cameraDSLR' type='checkbox' value={cameraDSLR || ''} label='DSLR' onChange={onChange} />
+        <Input name='cameraPhone' type='checkbox' value={cameraPhone || ''} label='Phone' onChange={onChange} />
+        <Input name='cameraFilm' type='checkbox' value={cameraFilm || ''} label='Film' onChange={onChange} />
+        <Input name='availabilities' type='availability' value={availabilities || []} label='Availability' onChange={onChange} />
         <button className='btn'>Submit</button>
       </form>
       {searchResults.length > 0 && renderResults(searchResults)}

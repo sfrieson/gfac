@@ -186,7 +186,8 @@ const SearchQueries = new Input({
     role: {type: Str},
     cameraDSLR: {type: Bool},
     cameraPhone: {type: Bool},
-    cameraFilm: {type: Bool}
+    cameraFilm: {type: Bool},
+    availabilities: {type: new List(Str)}
   }
 })
 
@@ -254,7 +255,7 @@ const Query = new Type({
       args: {
         queries: {type: SearchQueries}
       },
-      resolve: ({ args: { queries } }) => UserC.search(queries)
+      resolve: ({vars: {variables: {queries}}}) => UserC.search(queries)
     }
   })
 })
