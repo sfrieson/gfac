@@ -69,6 +69,7 @@ const User = {
     .then(photographer => ({...user.get(), ...photographer}))
   },
   get: function (query, join = true) {
+    console.log('\n\nin Get:\n', query)
     return Model.findOne({where: query}).then(user => {
       if (join && user.role === 'photographer') return this.getPhotographer(user)
       if (join && user.role === 'contact') return this.getContact(user)
@@ -159,9 +160,22 @@ const User = {
       cameraPhone: query.cameraPhone,
       cameraFilm: query.cameraFilm
     }, queryKeys)
+
     for (prop in photoWhere) if (photoWhere[prop]) where[prop] = photoWhere[prop]
-    const photoFind = Object.keys(where).length
-    ? PhotographerModel.findAll({where})
+    let include
+    if (query.availabilities) {
+      include = [{
+        association: PhotographerModel.associations.availabilities,
+        where: query.availabilities.reduce((where, a, i, availabilities) => {
+          const [day, time] = a.split('_')
+          if (availabilities.length === 1) return {day, time}
+          where.$or.push({day, time})
+          return where
+        }, {$or: []})
+      }]
+    }
+    const photoFind = Object.keys(where).length || include
+    ? PhotographerModel.findAll({where, include})
     .then(photogs => Promise.all(
       photogs.map(p => (
         Model.findOne({where: {id: p.userId}})

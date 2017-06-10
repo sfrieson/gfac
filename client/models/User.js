@@ -50,7 +50,7 @@ const User = {
   },
   getStoryteller: function (userId) {
     ajaxDispatch('STORYTELLER',
-      api(`query GetPhotogapher ($userId: String) {
+      api(`query GetPhotogapher ($userId: ID) {
         getPhotographer (userId: $userId) {
           firstname
           lastname

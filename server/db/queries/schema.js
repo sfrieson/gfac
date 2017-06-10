@@ -233,7 +233,7 @@ const Query = new Type({
       args: {
         userId: {type: Id}
       },
-      resolve: ({args: userId}) => UserC.get({id: userId})
+      resolve: ({vars: {variables: {userId}}}) => UserC.get({id: userId})
     },
     getProjects: {
       type: new List(Project),
