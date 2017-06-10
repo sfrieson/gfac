@@ -31,8 +31,9 @@ const Display = connect(
 
       <h4>Cause Interests</h4>
       <ul>
-        {s.causes.map((c, i) => <li>{c.name}</li>)}
+        {s.causes.map((c, i) => <li key={c.name}>{c.name}</li>)}
       </ul>
+
       <h4>Availability</h4>
       <Availability values={s.availabilities} />
 
