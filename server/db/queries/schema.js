@@ -247,7 +247,7 @@ const Query = new Type({
         id: {type: Id},
         email: {type: Str}
       },
-      resolve: ({args: {query}}) => UserC.get(query)
+      resolve: ({args: query}) => UserC.get(query)
     },
     search: {
       type: new List(Photographer),
