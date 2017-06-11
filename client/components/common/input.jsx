@@ -1,5 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
+import fields from '../../../fields.json'
 
 export default function Input (props) {
   const {
@@ -13,6 +14,7 @@ export default function Input (props) {
   if (type === 'date') return <DateInput {...props} />
   if (type === 'radio') return <Radio {...props} />
   if (type === 'hidden') return <input {...props} />
+  if (type === 'causes') return <Checkboxes {...props} options={fields.all.causes.options} />
   if (type === 'select') return <Select {...props} />
   if (type === 'textarea') return <TextArea {...props} />
   if (type === 'checkbox') return <Checkbox {...props} />
@@ -28,7 +30,7 @@ export default function Input (props) {
 }
 
 Input.propTypes = {
-  type: PT.oneOf(['availability', 'checkbox', 'checkboxes', 'date', 'hidden', 'radio', 'select', 'text', 'tel', 'textarea']),
+  type: PT.oneOf(['availability', 'causes', 'checkbox', 'checkboxes', 'date', 'hidden', 'radio', 'select', 'text', 'tel', 'textarea']),
   onChange: PT.func,
   name: PT.string.isRequired,
   value: PT.oneOfType([PT.string, PT.number, PT.array, PT.bool])
@@ -108,13 +110,15 @@ function Radio ({
 // Select Input
 // ------------
 
-function Select ({
-  options,
-  onChange,
-  label,
-  name,
-  value
-                 }) {
+function Select (props) {
+  const {
+    options,
+    onChange,
+    label,
+    name,
+    value
+  } = props
+
   return (
     <div className='input-group'>
       <label htmlFor={name}>{label}</label>
@@ -184,7 +188,7 @@ function Checkbox ({ checked, label, onChange, value, ...props }) {
 *       {label: 'Education', value: '1'},
 *       {label: 'Health', value: '2'}
 *     ]}
-*     />
+*   />
 *
 *
 *   Example with check-specific names
@@ -198,13 +202,15 @@ function Checkbox ({ checked, label, onChange, value, ...props }) {
 *     ]}
 *     />
 * */
-function Checkboxes ({
-  options,
-  onChange,
-  label,
-  name,
-  value
-                     }) {
+function Checkboxes (props) {
+  const {
+    options,
+    onChange,
+    label,
+    name,
+    value
+  } = props
+
   const sameName = name
   const values = value
   return (
