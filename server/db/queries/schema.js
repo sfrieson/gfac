@@ -187,6 +187,7 @@ const SearchQueries = new Input({
     cameraDSLR: {type: Bool},
     cameraPhone: {type: Bool},
     cameraFilm: {type: Bool},
+    interests: {type: new List(Int)},
     availabilities: {type: new List(Str)}
   }
 })
