@@ -69,7 +69,6 @@ const User = {
     .then(photographer => ({...user.get(), ...photographer}))
   },
   get: function (query, join = true) {
-    console.log('\n\nin Get:\n', query)
     return Model.findOne({where: query}).then(user => {
       if (join && user.role === 'photographer') return this.getPhotographer(user)
       if (join && user.role === 'contact') return this.getContact(user)
@@ -136,24 +135,19 @@ const User = {
   search: function (query) {
     const queryKeys = Object.keys(query)
     let where = {}
+    let userIncludeWhere = {}
     let prop
     const userWhere = pick({
       firstname: query.firstname && {$iLike: `%${query.firstname}%`},
       lastname: query.lastname && {$iLike: `%${query.lastname}%`},
       role: (query.firstname || query.lastname) && query.role
     }, queryKeys)
-    for (prop in userWhere) if (userWhere[prop]) where[prop] = userWhere[prop]
-    const userFind = Object.keys(where).length
-    ? Model.findAll({where})
-    .then(users => Promise.all(
-      users.map(u => (
-        PhotographerModel.findOne({where: {userId: u.id}})
-        .then(p => ({...u.get(), ...p.get()}))
-      ))
-    ))
-    : Promise.resolve([])
+    for (prop in userWhere) if (userWhere[prop]) userIncludeWhere[prop] = userWhere[prop]
 
     where = {}
+    const include = [Object.assign(userIncludeWhere, {
+      association: PhotographerModel.associations.user
+    })]
     const photoWhere = pick({
       instagram: query.instagram && {$iLike: `%${query.instagram}%`},
       cameraDSLR: query.cameraDSLR,
@@ -162,9 +156,8 @@ const User = {
     }, queryKeys)
 
     for (prop in photoWhere) if (photoWhere[prop]) where[prop] = photoWhere[prop]
-    let include
     if (query.availabilities) {
-      include = [{
+      include.push({
         association: PhotographerModel.associations.availabilities,
         where: query.availabilities.reduce((where, a, i, availabilities) => {
           const [day, time] = a.split('_')
@@ -172,20 +165,23 @@ const User = {
           where.$or.push({day, time})
           return where
         }, {$or: []})
-      }]
+      })
     }
-    const photoFind = Object.keys(where).length || include
-    ? PhotographerModel.findAll({where, include})
-    .then(photogs => Promise.all(
-      photogs.map(p => (
-        Model.findOne({where: {id: p.userId}})
-        .then(u => ({...u.get(), ...p.get()}))
-      ))
-    ))
-    : Promise.resolve([])
+    if (query.interests) {
+      include.push({
+        association: PhotographerModel.associations.causes,
+        // as: 'interests', // not needed because not returned in search
+        where: query.interests.reduce((where, a, _, interests) => {
+          const id = {id: a}
+          if (interests.length === 1) return id
+          where.$or.push(id)
+          return where
+        }, {$or: []})
+      })
+    }
 
-    return Promise.all([userFind, photoFind])
-    .then(([user, photo]) => [...user, ...photo])
+    return PhotographerModel.findAll({where, include})
+    .then(photogs => photogs.map(p => Object.assign(p.user.get(), p.get())))
   },
   update: function (query, updates) {
     return Model.findOne({where: query})
