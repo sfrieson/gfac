@@ -5,12 +5,6 @@ import User from './User'
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 const Contact = Model.define('contact',
   {
-    phoneSecondary: {
-      type: DataType.STRING(24)
-    },
-    phoneSecondaryType: {
-      type: DataType.ENUM('mobile', 'office', 'home')
-    },
     userId: {
       type: DataType.UUID,
       primaryKey: true,
@@ -18,6 +12,12 @@ const Contact = Model.define('contact',
         model: User,
         key: 'id'
       }
+    },
+    phoneSecondary: {
+      type: DataType.STRING(24)
+    },
+    phoneSecondaryType: {
+      type: DataType.ENUM('mobile', 'office', 'home')
     }
   },
   // Options

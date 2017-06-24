@@ -44,7 +44,6 @@ const User = Model.define('user',
       type: DataType.BOOLEAN,
       default: false
     },
-
     hashPassword: {
       type: DataType.STRING(100)
     },

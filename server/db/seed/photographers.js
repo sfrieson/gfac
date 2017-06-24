@@ -6,6 +6,7 @@
   * Delete row 1 (headers)
 **/
 import { User, Photographer } from '../models'
+import { Photographer as Mock } from './mocks'
 
 import { parseTsv } from '../utils'
 
@@ -27,4 +28,11 @@ export default function (dataType) {
 
 function getData (dataType) {
   if (dataType === 'seed') return parseTsv('photographer')
+
+  const photographers = Mock(20)
+
+  return {
+    users: photographers,
+    emailList: photographers.map(p => [p.email, p.firstname, p.lastname, p.password])
+  }
 }
