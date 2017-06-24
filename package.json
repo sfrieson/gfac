@@ -6,7 +6,7 @@
   "scripts": {
     "db": "babel-node ./server/db/tasks.js",
     "db:seed": "yarn db seed",
-    "lint": "standard --fix",
+    "lint": "standard",
     "create": "babel-node ./.bin/create --",
     "node": "babel-node",
     "start": "nodemon ./index.js --watch ./server --exec babel-node"
