@@ -23,9 +23,9 @@ export default connect(
         <Input name='lastname' type='text' value={lastname || str} label='Last Name' onChange={onChange} />
         <Input name='instagram' type='text' value={instagram || str} label='Instagram Handle' onChange={onChange} />
         <div style={{fontWeight: 'bold'}}>Shoots with:</div>
-        <Input name='cameraDSLR' type='checkbox' value={cameraDSLR || str} label='DSLR' onChange={onChange} />
-        <Input name='cameraPhone' type='checkbox' value={cameraPhone || str} label='Phone' onChange={onChange} />
-        <Input name='cameraFilm' type='checkbox' value={cameraFilm || str} label='Film' onChange={onChange} />
+        <Input name='cameraDSLR' type='checkbox' value={cameraDSLR || false} label='DSLR' onChange={onChange} />
+        <Input name='cameraPhone' type='checkbox' value={cameraPhone || false} label='Phone' onChange={onChange} />
+        <Input name='cameraFilm' type='checkbox' value={cameraFilm || false} label='Film' onChange={onChange} />
         <Input name='interests' type='causes' value={interests || arr} label='Interests' onChange={onChange} />
         <Input name='availabilities' type='availability' value={availabilities || arr} label='Availability' onChange={onChange} />
         <button className='btn'>Submit</button>
