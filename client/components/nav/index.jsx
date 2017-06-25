@@ -11,7 +11,7 @@ export default connect(({me}) => ({me}))(function Nav ({ me }) {
     <nav className='header col-sm-12 col-md-3'>
       Menu
       <ul className='header'>
-        <li><NavLink exact to='/' >Home</NavLink></li>
+        <li><NavLink exact to='/'>Home</NavLink></li>
         <li><NavLink to='/account'>Account</NavLink></li>
         {roleSpecificLinks(me.role)}
         <li><a href='/logout'>Logout</a></li>

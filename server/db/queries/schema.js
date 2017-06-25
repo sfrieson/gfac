@@ -207,6 +207,7 @@ const UserInput = new Input({
 // *******
 // Queries
 // *******
+
 const Query = new Type({
   name: 'Query',
   fields: () => ({
@@ -234,7 +235,7 @@ const Query = new Type({
       args: {
         userId: {type: Id}
       },
-      resolve: ({vars: {variables: {userId}}}) => UserC.get({id: userId})
+      resolve: (_, {userId}) => UserC.get({id: userId})
     },
     getProjects: {
       type: new List(Project),
@@ -261,6 +262,8 @@ const Query = new Type({
   })
 })
 
+// Resolver arguments
+// function ({vars, req}, args, query, info)
 const Mutation = new Type({
   name: 'Mutation',
   fields: () => ({
@@ -269,7 +272,7 @@ const Mutation = new Type({
       args: {
         project: {type: ProjectInput}
       },
-      resolve: ({ args: { project } }) => ProjectC.create(project)
+      resolve: ({req}, {project}) => ProjectC.create(project, req.user)
     },
     updateContactMe: {
       type: Contact,
