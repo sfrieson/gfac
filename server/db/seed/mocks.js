@@ -2,6 +2,16 @@ import casual from 'casual'
 
 import { UserController } from '../controllers'
 
+import { list as causeList } from './causes'
+const causes = causeList.map((name, id) => ({id: id + 1, name}))
+
+const availabilities = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].reduce((a, day) => {
+  ['morning', 'afternoon', 'evening'].forEach(time => a.push({day, time}))
+  return a
+}, [])
+
+casual.define('causes', () => selectFrom(casual.integer(1, 5), causes.map(({id}) => id)))
+casual.define('availabilities', () => selectFrom(casual.integer(2, 7), availabilities))
 casual.define(
   'phone_type',
   () => casual.random_element(['mobile', 'office', 'home'])
@@ -33,7 +43,9 @@ casual.define('photographer', () => {
     cameraFilm: casual.random_element([true, false, false, false, false]),
     cameraOther: casual.random_element(['medium format', undefined, undefined, undefined, undefined, undefined, undefined, undefined]),
     portfolio: casual.populate_one_of(['', 'www.{{url}}', '{{url}}']),
-    preferredContactMethod: casual.random_element(['email', 'phone', 'instagram'])
+    preferredContactMethod: casual.random_element(['email', 'phone', 'instagram']),
+    causes: casual.causes,
+    availabilities: casual.availabilities
   }
 })
 
@@ -48,7 +60,8 @@ casual.define('contact', () => {
 
 casual.define('nonprofit', () => ({
   name: casual.company_name,
-  description: casual.populate_one_of(['{{catch_phrase}}', '{{sentences}}'])
+  description: casual.populate_one_of(['{{catch_phrase}}', '{{sentences}}']),
+  causes: casual.causes
 }))
 casual.define('cause', () => {})
 casual.define('project', () => {})
@@ -72,4 +85,17 @@ export function Contact (num = 1) {
   while (i++ < num) contacts.push(casual.contact)
 
   return {contacts, nonprofits}
+}
+
+function selectFrom (num, set) {
+  let remaining = [...set]
+  let selection = []
+  let i = 0
+  while (i++ < num) {
+    const nextIndex = Math.floor(Math.random() * remaining.length)
+    selection.push(remaining[nextIndex])
+    remaining = [...remaining.slice(0, nextIndex), ...remaining.slice(nextIndex + 1)]
+  }
+
+  return selection
 }

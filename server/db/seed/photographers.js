@@ -13,14 +13,15 @@ import { parseTsv } from '../utils'
 export default function (dataType) {
   const {users: photographers, emailList} = getData(dataType)
 
-  return User.bulkCreate(
-    photographers,
-    {
-      benchmark: true
-    }
-  )
-  .then(photogs => Promise.all(
-    photogs.map((p, i) => Photographer.create(Object.assign({}, photographers[i], {userId: p.id})))
+  return User.bulkCreate(photographers)
+  .then(users => Promise.all(
+    users.map((u, i) => (
+      Photographer.create(
+        Object.assign({}, photographers[i], {userId: u.id}),
+        {include: [Photographer.associations.availabilities]}
+      )
+      .then(p => p.setCauses(photographers[i].causes))
+    ))
   ))
   .then(() => { console.log('\n\n Photographers created.') })
   .then(() => emailList)

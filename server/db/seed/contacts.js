@@ -35,7 +35,12 @@ function dataSeed ({users: contacts, emailList}) {
 
 function mockSeed ({users: contacts, emailList, nonprofits}) {
   console.log('in contacts seed')
-  return Nonprofit.bulkCreate(nonprofits)
+  return Promise.all(
+    nonprofits.map(nonprofit => (
+       Nonprofit.create(nonprofit).then(np => np.setCauses(nonprofit.causes))
+    ))
+  )
+
   .then(nps => {
     console.log('nps created. creating users')
     return User.bulkCreate(contacts)

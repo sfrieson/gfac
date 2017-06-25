@@ -17,7 +17,6 @@ export default function (dataType) {
   })
   .then(() => seedContacts(dataType))
   .then(contactEmails => {
-    console.log(contactEmails)
     emailList = emailList.concat(contactEmails)
   })
   .then(() => {
