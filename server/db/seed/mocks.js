@@ -12,10 +12,7 @@ const availabilities = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].reduce((a, day
 
 casual.define('causes', () => selectFrom(casual.integer(1, 5), causes.map(({id}) => id)))
 casual.define('availabilities', () => selectFrom(casual.integer(2, 7), availabilities))
-casual.define(
-  'phone_type',
-  () => casual.random_element(['mobile', 'office', 'home'])
-)
+casual.define('phone_type', () => casual.random_element(['mobile', 'office']))
 
 casual.define('user', () => {
   const password = casual.password
@@ -24,7 +21,7 @@ casual.define('user', () => {
     emailConfirmed: false,
     firstname: casual.first_name,
     lastname: casual.last_name,
-    role: casual.random_element(['admin', 'photographer', 'contact']),
+    // role: // found in each specific userType model
     phone: casual.phone,
     phoneType: casual.phone_type,
     newsletter: casual.random_element([true, true, true, false]),
@@ -37,6 +34,7 @@ casual.define('photographer', () => {
   const user = casual.user
   return {
     ...user,
+    role: 'photographer', // for user model
     instagram: casual.username,
     cameraPhone: casual.random_element([true, true, false]),
     cameraDSLR: casual.coin_flip,
@@ -53,6 +51,7 @@ casual.define('contact', () => {
   const user = casual.user
   return {
     ...user,
+    role: 'contact',
     phoneSecondary: casual.phone,
     phoneSecondaryType: casual.phone_type
   }

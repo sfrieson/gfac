@@ -27,7 +27,7 @@ Cause.belongsToMany(Photographer, {through: 'interests'})
 Cause.belongsToMany(Nonprofit, {through: 'focuses'})
 Contact.belongsTo(Nonprofit)
 Contact.belongsTo(User)
-// Contact.hasMany(Project, {through: Nonprofit}); // Not necessary?
+// Contact.belongsToMany(Project, {through: Nonprofit}) // Not necessary?
 Event.belongsTo(User)
 Event.belongsTo(Project)
 Nonprofit.hasMany(Contact)

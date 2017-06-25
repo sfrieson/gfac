@@ -37,7 +37,8 @@ function mockSeed ({users: contacts, emailList, nonprofits}) {
   console.log('in contacts seed')
   return Promise.all(
     nonprofits.map(nonprofit => (
-       Nonprofit.create(nonprofit, {include: [Nonprofit.associations.projects]}).then(np => np.setCauses(nonprofit.causes))
+       Nonprofit.create(nonprofit, {include: [Nonprofit.associations.projects]})
+       .then(np => np.setCauses(nonprofit.causes).then(() => np))
     ))
   )
 
@@ -48,9 +49,9 @@ function mockSeed ({users: contacts, emailList, nonprofits}) {
   })
   .then(({nps, users}) => {
     console.log('users created. forming contacts')
-    const npLen = nps.length
+    const npsLen = nps.length
     return contacts.map(
-      (c, i) => Object.assign(c, {nonprofitId: nonprofits[i % npLen].id, userId: users[i].id})
+      (c, i) => Object.assign(c, {nonprofitId: nps[i % npsLen].id, userId: users[i].id})
     )
   })
   .then(contacts => Contact.bulkCreate(contacts))
