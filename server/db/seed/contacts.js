@@ -37,7 +37,7 @@ function mockSeed ({users: contacts, emailList, nonprofits}) {
   console.log('in contacts seed')
   return Promise.all(
     nonprofits.map(nonprofit => (
-       Nonprofit.create(nonprofit).then(np => np.setCauses(nonprofit.causes))
+       Nonprofit.create(nonprofit, {include: [Nonprofit.associations.projects]}).then(np => np.setCauses(nonprofit.causes))
     ))
   )
 

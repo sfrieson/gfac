@@ -57,15 +57,28 @@ casual.define('contact', () => {
     phoneSecondaryType: casual.phone_type
   }
 })
+casual.define('project', () => ({
+  name: casual.populate('{{full_name}} Day ') + casual.numerify('20##'),
+  description: casual.catch_phrase,
+  date: casual.date(),
+  dateIsApprox: casual.coin_flip,
+  location: casual.city
+}))
+
+casual.define('projects', () => {
+  const chance = Math.random()
+  const p = []
+  if (chance > 0.7) p.push(casual.project)
+  if (chance > 0.3) p.push(casual.project)
+  return p
+})
 
 casual.define('nonprofit', () => ({
   name: casual.company_name,
   description: casual.populate_one_of(['{{catch_phrase}}', '{{sentences}}']),
-  causes: casual.causes
+  causes: casual.causes,
+  projects: casual.projects
 }))
-casual.define('cause', () => {})
-casual.define('project', () => {})
-casual.define('availability', () => {})
 
 export function Photographer (num = 1) {
   const photographers = []
@@ -83,7 +96,6 @@ export function Contact (num = 1) {
   i = 0
   let contacts = []
   while (i++ < num) contacts.push(casual.contact)
-
   return {contacts, nonprofits}
 }
 

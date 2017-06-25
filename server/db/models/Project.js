@@ -6,7 +6,7 @@ const Project = Model.define('project',
   {
     id: {
       type: DataType.INTEGER,
-      defaultValue: DataType.INTEGER,
+      autoIncrement: true,
       primaryKey: true
     },
     name: {
