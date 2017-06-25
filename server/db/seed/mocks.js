@@ -34,13 +34,13 @@ casual.define('photographer', () => {
   const user = casual.user
   return {
     ...user,
-    role: 'photographer', // for user model
+    role: 'photographer', // from user model
     instagram: casual.username,
     cameraPhone: casual.random_element([true, true, false]),
     cameraDSLR: casual.coin_flip,
     cameraFilm: casual.random_element([true, false, false, false, false]),
     cameraOther: casual.random_element(['medium format', undefined, undefined, undefined, undefined, undefined, undefined, undefined]),
-    portfolio: casual.populate_one_of(['', 'www.{{url}}', '{{url}}']),
+    portfolio: casual.populate_one_of(['', '{{url}}']),
     preferredContactMethod: casual.random_element(['email', 'phone', 'instagram']),
     causes: casual.causes,
     availabilities: casual.availabilities
@@ -51,7 +51,7 @@ casual.define('contact', () => {
   const user = casual.user
   return {
     ...user,
-    role: 'contact',
+    role: 'contact', // from user model
     phoneSecondary: casual.phone,
     phoneSecondaryType: casual.phone_type
   }
