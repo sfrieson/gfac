@@ -9,13 +9,13 @@ import { Link } from 'react-router-dom'
 
 const stateToProps = ({ me, projects }) => ({me, projects})
 
-class ProjectForm extends Component {
+class ProjectList extends Component {
   constructor (props) {
     super(props)
     Project.get(props.me)
   }
   render () {
-    const { projects = [] } = this.props
+    const projects = this.props.projects || []
 
     return (
       <div>
@@ -38,5 +38,5 @@ class ProjectForm extends Component {
   }
 }
 
-export default connect(stateToProps)(ProjectForm)
+export default connect(stateToProps)(ProjectList)
 export { NewProject, ViewProject }

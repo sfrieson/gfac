@@ -43,7 +43,7 @@ class LoaderOrBody extends Component {
               <Switch>
                 <Route path='/account' component={Account} />
                 <Route path='/nonprofit/:id' component={Nonprofit} />
-                <Route path='/project/new' getUserConfirmation component={NewProject} />
+                <Route path='/project/new' component={NewProject} />
                 <Route path='/project/:id' component={ViewProject} />
                 <Route path='/project' component={Project} />
                 <Route path='/search' component={Search} />

@@ -11,11 +11,12 @@ export default {
   },
   get (args, user) {
     const order = ['date']
-    const query = {}
-    if (user.role === 'contact') query.nonprofitId = user.nonprofitId
-    if (user.role === 'photographer') query.photographerId = user.id
+    const where = {}
+    console.log('ProjectController#get, user:', user)
+    if (user.role === 'contact') where.nonprofitId = user.nonprofitId
+    if (user.role === 'photographer') where.photographerId = user.id
 
-    return Model.findAll({query, order})
+    return Model.findAll({where, order})
   },
   update (id, updates) {
     return Model.findOne({query: {id}})

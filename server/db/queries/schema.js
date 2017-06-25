@@ -241,7 +241,7 @@ const Query = new Type({
       args: {
         nonprofitId: {type: Id}
       },
-      resolve: ({ args, user }) => ProjectC.get(args, user)
+      resolve: ({ args, req: {user} }) => ProjectC.get(args, user)
     },
     getUser: {
       type: User,
