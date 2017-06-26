@@ -1,46 +1,64 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Input } from 'common'
-import { Project } from 'models'
+import { Project, Nonprofit } from 'models'
 
 // TODO Set up redirect when form is complete
 // TODO Set up sharing of information with the Projects Store when complete
-const stateToProps = ({ me, projectForm }) => ({me, projectForm})
+const stateToProps = ({ me, projectForm, nonprofits }) => ({me, projectForm, nonprofits})
 
 class ProjectForm extends Component {
   constructor (props) {
     super(props)
     this.onChange = this.onChange.bind(this, props.dispatch)
     this.onSubmit = this.onSubmit.bind(this)
+
+    if (props.me.role === 'admin') {
+      if (!props.nonprofits.length || !('id' in props.nonprofits[0]) || !('name' in props.nonprofits[0])) {
+        Nonprofit.getAll(`
+          id
+          name
+        `)
+      }
+    }
   }
   render () {
-    const { me, projectForm } = this.props
-    if (!me.nonprofit) return null
-    const {
-      name = '',
-      date = '',
-      dateIsApprox = false,
-      description = '',
-      location = ''
-    } = projectForm
+    const {nonprofits, projectForm, me} = this.props
+    const form = this.addDefaults(projectForm)
+    const isAdmin = me.role === 'admin'
+
+    let npOptions
+    if (isAdmin) {
+      if (!nonprofits) return <div>Loading...</div>
+      else {
+        npOptions = nonprofits.map(({id, name}) => ({value: id, label: name}))
+      }
+    }
 
     return (
       <div>
         New Project Form
         <form onSubmit={this.onSubmit}>
-          <Input label='Name' type='text' name='name' value={name} onChange={this.onChange} />
-          <Input label='Date' type='date' name='date' value={date} onChange={this.onChange} />
-          <Input label='Date is approximate' type='checkbox' name='dateIsApprox' value={dateIsApprox} onChange={this.onChange} />
-          <Input label='Description' type='textarea' name='description' value={description} onChange={this.onChange} />
-          <Input label='Location' type='text' name='location' value={location} onChange={this.onChange} />
+          {isAdmin && <Input label='Nonprofit' type='select' name='nonprofitId' value={form.nonprofitId} options={npOptions} onChange={this.onChange} />}
+          <Input label='Name' type='text' name='name' value={form.name} onChange={this.onChange} />
+          <Input label='Date' type='date' name='date' value={form.date} onChange={this.onChange} />
+          <Input label='Date is approximate' type='checkbox' name='dateIsApprox' value={form.dateIsApprox} onChange={this.onChange} />
+          <Input label='Description' type='textarea' name='description' value={form.description} onChange={this.onChange} />
+          <Input label='Location' type='text' name='location' value={form.location} onChange={this.onChange} />
           <button>Submit</button>
         </form>
       </div>
     )
   }
-
-  getHidden (me) {
-    return {nonprofitId: me.nonprofit.id}
+  addDefaults (projectForm) {
+    return Object.assign({
+      name: '',
+      // date: '', // Automatically sets itself (?) TODO is this browser specific?
+      dateIsApprox: false,
+      description: '',
+      location: '',
+      nonprofitId: '' // Admin-only
+    }, projectForm)
   }
   onChange (dispatch, e) {
     const payload = {}
@@ -52,8 +70,8 @@ class ProjectForm extends Component {
   }
   onSubmit (e) {
     e.preventDefault()
-    Project.create(Object.assign(this.props.projectForm, this.getHidden(this.props.me)))
+    const {projectForm, me} = this.props
+    Project.create(Object.assign(projectForm, {nonprofitId: me.nonprofit.id}))
   }
 }
-
 export default connect(stateToProps)(ProjectForm)

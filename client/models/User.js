@@ -32,6 +32,7 @@ const User = {
                 phoneSecondary
                 phoneSecondaryType
                 nonprofit {
+                  id
                   name
                   description
                 }

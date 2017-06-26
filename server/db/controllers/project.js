@@ -6,7 +6,7 @@ export default {
       // add +0000 for "no" timezone
       data.date = new Date(data.date + '+0000').toString()
 
-      // Created by admin
+      // Created by admin or nonprofitId already on Contact
       if ('nonprofitId' in data) resolve(data)
 
       // Created by Nonprofit Contact

@@ -31,6 +31,7 @@ class LoaderOrBody extends Component {
     }
   }
   render () {
+    // const {me} = this.props
     return this.state.loading
     ? <div>Loading...</div>
     : (
@@ -41,6 +42,7 @@ class LoaderOrBody extends Component {
             <Route path='/' component={Nav} />
             <div className='col-sm-12 col-md-9'>
               <Switch>
+                {/* TODO Figure out how to properly authenticate routes */}
                 <Route path='/account' component={Account} />
                 <Route path='/nonprofit/:id' component={Nonprofit} />
                 <Route path='/project/new' component={NewProject} />

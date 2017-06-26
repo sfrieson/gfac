@@ -208,20 +208,19 @@ const UserInput = new Input({
 // Queries
 // *******
 
+// query arguments
+// function ({vars, req}, args, req, info)
+
 const Query = new Type({
   name: 'Query',
   fields: () => ({
-    // getMeContact: {
-    //   type: Contact,
-    //   resolve: (_, req) => UserC.get({id: req.user.id})
-    // },
-    // getMePhotographer: {
-    //   type: Photographer,
-    //   resolve: (_, req) => UserC.get({id: req.user.id})
-    // },
     getMe: {
       type: User,
       resolve: ({req: {user: {id}}}) => UserC.get({id})
+    },
+    getNonprofits: {
+      type: new List(Nonprofit),
+      resolve: (_, __, {user}, info) => (user.role === 'admin' && NonprofitC.getAll())
     },
     getNonprofit: {
       type: Nonprofit,
@@ -263,7 +262,7 @@ const Query = new Type({
 })
 
 // Resolver arguments
-// function ({vars, req}, args, query, info)
+// function ({vars, req}, args, req, info)
 const Mutation = new Type({
   name: 'Mutation',
   fields: () => ({

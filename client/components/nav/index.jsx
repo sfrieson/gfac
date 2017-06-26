@@ -30,6 +30,7 @@ function roleSpecificLinks (role) {
     case 'admin':
       return [
         <li key='projects'><NavLink to='/project'>Projects</NavLink></li>,
+        <li key='new project'><NavLink to='/project/new'>New Project</NavLink></li>,
         <li key='search'><NavLink to='/search'>Search</NavLink></li>
       ]
     default:
