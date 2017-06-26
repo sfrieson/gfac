@@ -27,6 +27,10 @@ function roleSpecificLinks (role) {
         <li key='projects'><NavLink to='/project'>Your Projects</NavLink></li>,
         <li key='new project'><NavLink to='/project/new'>New Project</NavLink></li>
       ]
+    case 'photographer':
+      return [
+        <li key='projects'><NavLink to='/project'>Your Projects</NavLink></li>
+      ]
     case 'admin':
       return [
         <li key='projects'><NavLink to='/project'>Projects</NavLink></li>,

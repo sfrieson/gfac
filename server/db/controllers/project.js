@@ -1,4 +1,4 @@
-import { Project as Model, Contact } from '../models'
+import { Project as Model, Contact, Photographer } from '../models'
 
 export default {
   create (data, user) {
@@ -21,13 +21,17 @@ export default {
     }).then(data => Model.create(data))
   },
   get (args, user) {
-    const order = ['date']
-    const where = {}
+    const options = {order: ['date']}
     console.log('ProjectController#get, user:', user)
-    if (user.role === 'contact') where.nonprofitId = user.nonprofitId
-    if (user.role === 'photographer') where.photographerId = user.id
+    if (user.role === 'contact') options.where = {nonprofitId: user.nonprofitId}
+    if (user.role === 'photographer') {
+      options.include = [{
+        model: Photographer,
+        where: {userId: user.id}
+      }]
+    }
 
-    return Model.findAll({where, order})
+    return Model.findAll(options)
   },
   update (id, updates) {
     return Model.findOne({query: {id}})

@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import models from './models'
+import models, {Photographer, Project} from './models'
 
 import seedCauses from './seed/causes'
 import seedPhotographers from './seed/photographers'
@@ -20,6 +20,12 @@ export default function (dataType) {
     emailList = emailList.concat(contactEmails)
   })
   .then(() => {
+    return Promise.all([
+      Photographer.find(),
+      Project.find()
+    ]).then(([photographer, project]) => photographer.addProject(project))
+  })
+  .then(() => {
     return new Promise(function (resolve, reject) {
       fs.writeFile(
         'email-list.tsv',
@@ -29,5 +35,6 @@ export default function (dataType) {
     })
   })
   .then(() => { console.log('Email list created.') })
+  .then(() => { process.exit() })
   .catch(e => { console.log(e); process.exit(1) })
 }

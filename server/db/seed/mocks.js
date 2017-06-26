@@ -43,6 +43,7 @@ casual.define('photographer', () => {
     portfolio: casual.populate_one_of(['', '{{url}}']),
     preferredContactMethod: casual.random_element(['email', 'phone', 'instagram']),
     causes: casual.causes,
+    projects: casual.projects,
     availabilities: casual.availabilities
   }
 })
