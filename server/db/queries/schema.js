@@ -99,7 +99,7 @@ const Nonprofit = new Type({
 
 const Photographer = new Type({
   name: 'Photographer',
-  fields: {
+  fields: () => ({
     ...userFields,
     availabilities: {type: new List(Str)},
     cameraPhone: {type: Bool},
@@ -110,8 +110,9 @@ const Photographer = new Type({
     instagram: {type: new NonNull(Str)},
     portfolio: {type: Str},
     preferredContactMethod: {type: Str},
+    projects: {type: new NonNull(new List(Project))},
     userId: {type: Str}
-  },
+  }),
   interfaces: [User]
 })
 

@@ -34,9 +34,9 @@ export default {
   get (userId) {
     return Model.findOne({
       where: {userId},
-      include: [Model.associations.causes, Model.associations.availabilities]
+      include: Object.values(Model.associations)
     }).then(photographer => ({
-      ...photographer.get(),
+      ...photographer.get({plain: true}),
       availabilities: photographer.availabilities.map(a => (`${a.day}_${a.time}`))
     }))
   },

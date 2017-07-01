@@ -36,10 +36,24 @@ const Display = connect(
 
       <h4>Availability</h4>
       <Availability values={s.availabilities} />
+      <h4>Projects</h4>
+      {renderProjects(s.projects)}
 
     </div>
   )
 })
+
+function renderProjects (projects) {
+  return (
+    <ul>
+      {projects.map(p => (
+        <li key={p.id}>
+          {p.name} - {p.date}
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 class Storyteller extends Component {
   constructor (props) {

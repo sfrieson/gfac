@@ -64,8 +64,8 @@ const User = {
   },
   getStoryteller: function (userId) {
     ajaxDispatch('STORYTELLER',
-      api(`query GetPhotogapher ($userId: ID) {
-        getPhotographer (userId: $userId) {
+      api(`query GetPhotogapher($userId: ID) {
+        getPhotographer(userId: $userId) {
           firstname
           lastname
           email
@@ -76,6 +76,12 @@ const User = {
           portfolio
           causes {
             name
+          }
+          projects {
+            id
+            name
+            date
+            dateIsApprox
           }
           availabilities
         }
