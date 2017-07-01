@@ -4,6 +4,21 @@ import ajaxDispatch from 'utils/ajax-dispatch'
 import api from 'utils/api'
 
 const User = {
+  getAllPhotographers: () => (
+    ajaxDispatch('ALL_PHOTOGRAPHERS',
+      api(`
+        query GetAllPhotographers {
+          getAllPhotographers {
+            userId
+            ...on UserInterface{
+              firstname
+              lastname
+            }
+          }
+        }
+      `)
+    )
+  ),
   getMe: () => {
     return new Promise((resolve) => {
       ajaxDispatch('ME',
@@ -42,8 +57,6 @@ const User = {
         `
       ).then(({ data }) => {
         let me = {...data.getMe}
-        // if (me.role === 'photographer') me = {...me, ...data.getMePhotographer, causes: data.getMePhotographer.causes.map(({id}) => id)}
-        // if (me.role === 'contact') me = {...me, ...data.getMeContact}
         resolve(me)
         return me
       }))

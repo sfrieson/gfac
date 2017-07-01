@@ -73,6 +73,17 @@ const nonprofitForm = (state = {}, action) => {
   }
 }
 
+const photographers = (state = [], action) => {
+  switch (action.type) {
+    case 'FETCH_ALL_PHOTOGRAPHERS_START':
+      return []
+    case 'FETCH_ALL_PHOTOGRAPHERS_END':
+      return action.res.data.getAllPhotographers
+    default:
+      return state
+  }
+}
+
 const projectForm = (state = {}, action) => {
   switch (action.type) {
     case 'PROJECT_FORM_CHANGE':
@@ -142,6 +153,7 @@ const mainReducer = combineReducers({
   nonprofit,
   nonprofits,
   nonprofitForm,
+  photographers,
   projectForm,
   projectUpdate,
   projects,

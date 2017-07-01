@@ -22,6 +22,13 @@ const Project = {
           location
           description
           id
+          photographers {
+            userId
+            ... on UserInterface {
+              firstname
+              lastname
+            }
+          }
         }
       }`)
     )
@@ -35,8 +42,36 @@ const Project = {
           dateIsApprox
           location
           description
+          id
+          photographers {
+            userId
+            ... on UserInterface {
+              firstname
+              lastname
+            }
+          }
         }
       }`, {id, updates})
+    )
+  },
+  addPhotographer: function (args) {
+    ajaxDispatch('PROJECT_UPDATE',
+      api(`mutation AddPhotographerToProject ($userId: ID, $projectId: Int) {
+        addProjectPhotographer(id: $projectId, photographerUserId: $userId) {
+          name
+          date
+          dateIsApprox
+          location
+          description
+          photographers {
+            id
+            ... on UserInterface {
+              firstname
+              lastname
+            }
+          }
+        }
+      }`, args)
     )
   }
 }

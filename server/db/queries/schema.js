@@ -85,22 +85,6 @@ const Contact = new Type({
   interfaces: [User]
 })
 
-const Project = new Type({
-  name: 'Project',
-  description: 'Nonprofit projects',
-  fields: () => ({
-    id: {type: new NonNull(Str)},
-    name: {type: new NonNull(Str)},
-    description: {type: new NonNull(Str)},
-    date: {type: new NonNull(Str)},
-    dateIsApprox: {type: new NonNull(Bool)},
-    location: {type: Str},
-    status: {type: Str},
-    photoLink: {type: Str},
-    nonprofitId: {type: new NonNull(Str)}
-  })
-})
-
 const Nonprofit = new Type({
   name: 'Nonprofit',
   fields: () => ({
@@ -129,6 +113,23 @@ const Photographer = new Type({
     userId: {type: Str}
   },
   interfaces: [User]
+})
+
+const Project = new Type({
+  name: 'Project',
+  description: 'Nonprofit projects',
+  fields: () => ({
+    id: {type: new NonNull(Str)},
+    name: {type: new NonNull(Str)},
+    description: {type: new NonNull(Str)},
+    date: {type: new NonNull(Str)},
+    dateIsApprox: {type: new NonNull(Bool)},
+    location: {type: Str},
+    status: {type: Str},
+    photographers: {type: new NonNull(new List(Photographer))},
+    photoLink: {type: Str},
+    nonprofitId: {type: new NonNull(Str)}
+  })
 })
 
 // ******
@@ -220,7 +221,7 @@ const Query = new Type({
     },
     getNonprofits: {
       type: new List(Nonprofit),
-      resolve: (_, __, {user}, info) => (user.role === 'admin' && NonprofitC.getAll())
+      resolve: (_, __, {user}, info) => user.role === 'admin' && NonprofitC.getAll()
     },
     getNonprofit: {
       type: Nonprofit,
@@ -228,6 +229,10 @@ const Query = new Type({
         id: {type: Id}
       },
       resolve: ({args: { id }}) => NonprofitC.get(id)
+    },
+    getAllPhotographers: {
+      type: new List(Photographer),
+      resolve: (_, __, {user}) => user.role === 'admin' && PhotographerC.getAll()
     },
     getPhotographer: {
       type: Photographer,
@@ -239,9 +244,10 @@ const Query = new Type({
     getProjects: {
       type: new List(Project),
       args: {
+        id: {type: Id},
         nonprofitId: {type: Id}
       },
-      resolve: ({ args, req: {user} }) => ProjectC.get(args, user)
+      resolve: (_, args, {user}) => ProjectC.get(args, user)
     },
     getUser: {
       type: User,
@@ -266,6 +272,14 @@ const Query = new Type({
 const Mutation = new Type({
   name: 'Mutation',
   fields: () => ({
+    addProjectPhotographer: {
+      type: Project,
+      args: {
+        id: {type: Int},
+        photographerUserId: {type: Id}
+      },
+      resolve: (_, {id, photographerUserId}) => ProjectC.addPhotographer(id, photographerUserId)
+    },
     createProject: {
       type: Project,
       args: {

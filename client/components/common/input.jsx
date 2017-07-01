@@ -123,6 +123,7 @@ function Select (props) {
     <div className='input-group'>
       <label htmlFor={name}>{label}</label>
       <select name={name} id={name} className='form-control' value={value} onChange={onChange}>
+        <option disabled>Please select one...</option>
         {renderOptions(options)}
       </select>
     </div>

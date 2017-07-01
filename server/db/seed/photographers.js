@@ -15,13 +15,15 @@ export default function (dataType) {
 
   return User.bulkCreate(photographers)
   .then(users => Promise.all(
-    users.map((u, i) => (
-      Photographer.create(
-        Object.assign({}, photographers[i], {userId: u.id}),
+    users.map((u, i) => {
+      const photographer = Object.assign({causes: []}, photographers[i], {userId: u.id})
+
+      return Photographer.create(
+        photographer,
         {include: [Photographer.associations.availabilities]}
       )
-      .then(p => p.setCauses(photographers[i].causes))
-    ))
+      .then(p => p.setCauses(photographer.causes))
+    })
   ))
   .then(() => { console.log('\n\n Photographers created.') })
   .then(() => emailList)

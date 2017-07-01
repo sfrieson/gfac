@@ -12,7 +12,7 @@ const stateToProps = ({ me, projects }) => ({me, projects})
 class ProjectList extends Component {
   constructor (props) {
     super(props)
-    Project.get(props.me)
+    Project.get()
   }
   render () {
     const projects = this.props.projects || []

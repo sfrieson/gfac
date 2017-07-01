@@ -24,6 +24,13 @@ export default {
       }))
     })
   },
+  getAll () {
+    return Model.findAll({include: [{association: 'user'}]})
+    .then(photographers => photographers.map((p) => {
+      const {user, ...photographer} = p.get({plain: true})
+      return {...user, ...photographer}
+    }))
+  },
   get (userId) {
     return Model.findOne({
       where: {userId},
