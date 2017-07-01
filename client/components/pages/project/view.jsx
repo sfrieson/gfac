@@ -35,19 +35,23 @@ class ProjectView extends Component {
           changeAction={'PROJECT_UPDATE_' + project.id}
           onSubmit={(e) => { e.preventDefault(); this.onSubmit(dispatch, project.id, updates) }}
         />
-        {this.renderPhotographers(photographers, isAdmin)}
+        {this.renderPhotographers(photographers, project.id, isAdmin)}
         {isAdmin && <AddPhotographer projectId={project.id} />}
       </div>
     )
   }
 
-  renderPhotographers (photographers, isAdmin) {
+  onSubmit (dispatch, id, updates) {
+    Project.update(id, updates)
+  }
+
+  renderPhotographers (photographers, projectId, isAdmin) {
     const photographerList = photographers.length
       ? (
         <ul>
           {photographers.map(p => (
             <li key={p.userId}>
-              <form>
+              <form onSubmit={e => { e.preventDefault(); this.removePhotographer(p.userId, projectId) }}>
                 {p.firstname} {p.lastname} {isAdmin && <button>Remove</button>}
               </form>
             </li>
@@ -64,8 +68,8 @@ class ProjectView extends Component {
     )
   }
 
-  onSubmit (dispatch, id, updates) {
-    Project.update(id, updates)
+  removePhotographer (photographerUserId, projectId) {
+    Project.removePhotographer({userId: photographerUserId, projectId: projectId})
   }
 
   getProject (projects, id) {

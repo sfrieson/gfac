@@ -7,18 +7,18 @@ function flattenInstance (i) {
   .map(p => {
     if ('user' in p) {
       const {user, ...photographer} = p
-      return {...photographer, ...user}
+      return {...photographer, ...user, userId: user.id}
     } else return p
   })
-  console.log(instance)
+
   return instance
 }
 
 export default {
-  addPhotographer (id, photographerUserId) {
+  updatePhotographer (id, photographerUserId, action) {
     return Model.findOne({where: {id}, include: [photographerInclude]})
     .then(instance => (
-      instance.addPhotographer(photographerUserId)
+      instance[action === 'add' ? 'addPhotographer' : 'removePhotographer'](photographerUserId)
       .then(() => instance.reload())
     ))
     .then(flattenInstance)

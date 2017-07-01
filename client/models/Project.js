@@ -55,9 +55,15 @@ const Project = {
     )
   },
   addPhotographer: function (args) {
+    this.updatePhotographer({...args, action: 'add'})
+  },
+  removePhotographer: function (args) {
+    this.updatePhotographer({...args, action: 'remove'})
+  },
+  updatePhotographer: function (args) {
     ajaxDispatch('PROJECT_UPDATE',
-      api(`mutation AddPhotographerToProject ($userId: ID, $projectId: Int) {
-        addProjectPhotographer(id: $projectId, photographerUserId: $userId) {
+      api(`mutation UpdatePhotographerToProject ($userId: ID, $projectId: Int, $action: String) {
+        updateProjectPhotographer(id: $projectId, photographerUserId: $userId, action: $action) {
           name
           date
           dateIsApprox

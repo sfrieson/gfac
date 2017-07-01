@@ -272,13 +272,14 @@ const Query = new Type({
 const Mutation = new Type({
   name: 'Mutation',
   fields: () => ({
-    addProjectPhotographer: {
+    updateProjectPhotographer: {
       type: Project,
       args: {
         id: {type: Int},
-        photographerUserId: {type: Id}
+        photographerUserId: {type: Id},
+        action: {type: Str}
       },
-      resolve: (_, {id, photographerUserId}) => ProjectC.addPhotographer(id, photographerUserId)
+      resolve: (_, {id, photographerUserId, action}) => ProjectC.updatePhotographer(id, photographerUserId, action)
     },
     createProject: {
       type: Project,
