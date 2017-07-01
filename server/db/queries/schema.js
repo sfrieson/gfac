@@ -20,6 +20,8 @@ import {
   ProjectController as ProjectC
 } from '../controllers'
 
+import { search } from '../elasticlunr'
+
 const userFields = {
   id: {type: new NonNull(Id)},
   email: {type: Str},
@@ -261,9 +263,9 @@ const Query = new Type({
     search: {
       type: new List(Photographer),
       args: {
-        queries: {type: SearchQueries}
+        queries: {type: Str}
       },
-      resolve: ({vars: {variables: {queries}}}) => UserC.search(queries)
+      resolve: (_, {queries}) => search(queries)
     }
   })
 })

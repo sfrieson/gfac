@@ -25,7 +25,7 @@ export default {
     })
   },
   getAll () {
-    return Model.findAll({include: [{association: 'user'}]})
+    return Model.findAll({include: ['user', 'availabilities']})
     .then(photographers => photographers.map((p) => {
       const {user, ...photographer} = p.get({plain: true})
       return {...user, ...photographer}
