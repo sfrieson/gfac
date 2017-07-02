@@ -128,7 +128,8 @@ const searchForm = (state = {}, action) => {
 const searchResults = (state = [], action) => {
   switch (action.type) {
     case 'FETCH_SEARCH_END':
-      return action.res.data.search
+      const {searchStorytellers, searchNonprofits} = action.res.data
+      return searchStorytellers || searchNonprofits
     default:
       return state
   }

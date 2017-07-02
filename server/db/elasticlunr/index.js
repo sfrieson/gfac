@@ -1,13 +1,13 @@
 import elasticLunr from 'elasticlunr'
 import {
   // ContactController,
-  // NonprofitController,
+  NonprofitController,
   PhotographerController
   // ProjectController,
   // UserController
 } from '../controllers'
 
-const fields = [
+const photographerFields = [
   'email',
   'firstname',
   'lastname',
@@ -19,9 +19,9 @@ const fields = [
   'portfolio'
 ]
 
-const idx = elasticLunr(function () {
+const photographerIdx = elasticLunr(function () {
   this.setRef('id')
-  fields.forEach(field => this.addField(field))
+  photographerFields.forEach(field => this.addField(field))
 
   PhotographerController.getAll()
   .then(photographers => photographers.map((p) => {
@@ -35,13 +35,38 @@ const idx = elasticLunr(function () {
       ...p,
       camera,
       availabilities: p.availabilities.map(({day, time}) => `${day}_${time}`),
-      causes: p.causes.map(({id}) => 'cause-' + id)
+      causes: p.causes.map(({id}) => 'cause_' + id)
     }
   }))
   .then(photographers => photographers.map(p => this.addDoc(p)))
 })
 
-export function photographer (term) {
+const nonprofitFields = [
+  'name',
+  'description',
+  'contacts',
+  'projects',
+  'causes'
+]
+
+const nonprofitIdx = elasticLunr(function () {
+  this.setRef('id')
+  nonprofitFields.forEach(field => this.addField(field))
+
+  NonprofitController.getAll()
+  .then(photographers => photographers.map((p) => {
+    return {
+      ...p,
+      contacts: p.contacts.map(({firstname, lastname}) => `${firstname} ${lastname}`),
+      projects: p.projects.map(({name}) => name),
+      causes: p.causes.map(({id}) => 'cause_' + id)
+    }
+  }))
+  .then(photographers => photographers.map(p => this.addDoc(p)))
+})
+
+export default function photographer (term, type) {
+  const idx = type === 'storyteller' ? photographerIdx : nonprofitIdx
   return Promise.resolve(
     idx.search(term)
     .map(({ref}) => idx.documentStore.getDoc(ref))

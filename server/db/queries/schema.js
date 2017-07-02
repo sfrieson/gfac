@@ -20,7 +20,7 @@ import {
   ProjectController as ProjectC
 } from '../controllers'
 
-import { photographer as photographerSearch } from '../elasticlunr'
+import search from '../elasticlunr'
 
 const userFields = {
   id: {type: new NonNull(Id)},
@@ -260,12 +260,19 @@ const Query = new Type({
       },
       resolve: ({args: query}) => UserC.get(query)
     },
-    search: {
+    searchStorytellers: {
       type: new List(Photographer),
       args: {
         queries: {type: Str}
       },
-      resolve: (_, {queries}) => photographerSearch(queries)
+      resolve: (_, {queries}) => search(queries, 'storyteller')
+    },
+    searchNonprofits: {
+      type: new List(Nonprofit),
+      args: {
+        queries: {type: Str}
+      },
+      resolve: (_, {queries}) => search(queries, 'nonprofit')
     }
   })
 })
