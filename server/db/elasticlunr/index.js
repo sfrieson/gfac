@@ -34,13 +34,14 @@ const idx = elasticLunr(function () {
     return {
       ...p,
       camera,
-      availabilities: p.availabilities.map(({day, time}) => `${day}_${time}`)
+      availabilities: p.availabilities.map(({day, time}) => `${day}_${time}`),
+      causes: p.causes.map(({id}) => 'cause-' + id)
     }
   }))
   .then(photographers => photographers.map(p => this.addDoc(p)))
 })
 
-export function search (term) {
+export function photographer (term) {
   return Promise.resolve(
     idx.search(term)
     .map(({ref}) => idx.documentStore.getDoc(ref))

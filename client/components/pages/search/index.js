@@ -1,27 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+
 import dispatchAjax from 'utils/ajax-dispatch'
 import api from 'utils/api'
-import { Link } from 'react-router-dom'
 import {
   Input
 } from 'common'
 
 const arr = []
-const str = []
 
 export default connect(
   ({ searchForm, searchResults }) => ({searchForm, searchResults})
 )(function Search ({ searchForm = {}, searchResults, dispatch }) {
   const {
-    firstname, lastname, instagram, cameraDSLR, cameraPhone, cameraFilm, availabilities, interests
+    search, cameraDSLR, cameraPhone, cameraFilm, availabilities, interests
   } = searchForm
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <Input name='firstname' type='text' value={firstname || str} label='First Name' onChange={onChange} />
-        <Input name='lastname' type='text' value={lastname || str} label='Last Name' onChange={onChange} />
-        <Input name='instagram' type='text' value={instagram || str} label='Instagram Handle' onChange={onChange} />
+        <Input name='search' type='text' value={search || ''} label='Search' onChange={onChange} />
         <div style={{fontWeight: 'bold'}}>Shoots with:</div>
         <Input name='cameraDSLR' type='checkbox' value={cameraDSLR || false} label='DSLR' onChange={onChange} />
         <Input name='cameraPhone' type='checkbox' value={cameraPhone || false} label='Phone' onChange={onChange} />
@@ -50,8 +48,15 @@ export default connect(
   }
   function onSubmit (e) {
     e.preventDefault()
+    let queries = `${search} ${(availabilities || arr).join(' ')}`
+    if (cameraDSLR) queries += ' DSLR'
+    if (cameraPhone) queries += ' phone'
+    if (cameraFilm) queries += ' film'
+
+    ;(interests || []).forEach(id => { queries += ' cause-' + id })
+
     dispatchAjax('SEARCH', api(`
-      query Search ($queries: SearchQueries) {
+      query Search ($queries: String) {
         search (queries: $queries) {
           id
           firstname
@@ -59,7 +64,7 @@ export default connect(
           instagram
         }
       }
-    `, {queries: Object.assign(searchForm, {role: 'photographer'})}))
+    `, {queries}))
   }
 
   function onChange ({ target }) {
