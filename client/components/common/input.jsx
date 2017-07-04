@@ -1,6 +1,6 @@
 import React from 'react'
 import PT from 'prop-types'
-import fields from '../../../fields.json'
+import { fields } from 'client-config'
 
 export default function Input (props) {
   const {

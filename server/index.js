@@ -1,9 +1,11 @@
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
+import Config from 'config'
 import express from 'express'
 import expressGraphQL from 'express-graphql'
 import expressJWT from 'express-jwt'
 import webpack from 'webpack'
+
 import webpackConfig from '../webpack.config'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 
@@ -11,9 +13,9 @@ import mainRouter from './routers/main'
 
 import schema from './db/queries/schema'
 
-import {port, auth} from './config'
 import models from './db/models'
 
+const config = Config.get('server')
 const app = express()
 
 // TODO change to real code elsewhere
@@ -29,7 +31,7 @@ app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(expressJWT({
-  secret: auth.jwt.secret,
+  secret: config.auth.jwtSecret,
   credentialsRequired: false,
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}))
@@ -46,7 +48,7 @@ app.use(mainRouter)
 models.sync()
 .catch(err => console.error(err.stack))
 .then(() => {
-  app.listen(port, () => {
-    console.log(`Listening on ${port}`)
+  app.listen(config.port, () => {
+    console.log(`Listening on ${config.port}`)
   })
 })

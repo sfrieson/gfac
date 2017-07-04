@@ -1,11 +1,12 @@
 import bcrypt from 'bcryptjs'
 import { pick } from 'lodash'
-import { auth } from '../../config'
+import config from 'config'
 import { User as Model, Photographer as PhotographerModel } from '../models'
 import Photographer from './photographer'
 import Contact from './contact'
 import { ValidationError } from '../../errors'
 
+const { auth } = config.get('server')
 const SALT = bcrypt.genSaltSync(auth.salt)
 
 const User = {
