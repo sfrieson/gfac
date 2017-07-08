@@ -1,6 +1,7 @@
 import Seqeulize from 'sequelize'
-import {databaseUrl} from '../config'
+import config from 'config'
 
+const databaseUrl = config.get('server.databaseUrl')
 const sequelize = new Seqeulize(
   databaseUrl,
   { // Application-wide settings

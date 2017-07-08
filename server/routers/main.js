@@ -1,11 +1,13 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
 
-import { auth } from '../config'
+import config from 'config'
 import sequelize from '../db/sequelize'
 import { Cause } from '../db/models'
 import User from '../db/controllers/user'
 import { ValidationError } from '../errors'
+
+const auth = config.get('server.auth')
 
 const Router = express.Router()
 
