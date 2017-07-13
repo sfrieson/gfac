@@ -27,7 +27,7 @@ Router.route('/login')
   Password: ${body.password}`)
   User.checkPassword(body.email, body.password)
   .then(user => {
-    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwt.secret))
+    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwtSecret))
     res.redirect('/')
   }).catch(err => {
     // TODO Show error to user
@@ -59,7 +59,7 @@ Router.route('/register')
   .then(user => {
     console.log('returned user:', user)
     req.user = user
-    res.cookie('id_token', jwt.sign({id: user.id, role: user.role}, auth.jwt.secret))
+    res.cookie('id_token', jwt.sign({id: user.id, role: user.role}, auth.jwtSecret))
     res.redirect('/')
   })
   .catch((err) => {
