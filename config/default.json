@@ -1,4 +1,7 @@
 {
+  "app": {
+    "url": "http://localhost:3000"
+  },
   "email": {
     "transporter": {
       "host": "[smtp.mail.com]",

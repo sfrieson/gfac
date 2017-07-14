@@ -4,6 +4,7 @@ import config from 'config'
 import { User as Model, Photographer as PhotographerModel } from '../models'
 import Photographer from './photographer'
 import Contact from './contact'
+import Email from '../../email'
 import { ValidationError } from '../../errors'
 
 const { auth } = config.get('server')
@@ -70,7 +71,12 @@ const User = {
     .then(photographer => ({...user.get(), ...photographer}))
   },
   get: function (query, join = true) {
-    return Model.findOne({where: query}).then(user => {
+    return Model.findOne({where: query})
+    .then(user => {
+      if (user) return user
+      throw new Error('No user')
+    })
+    .then(user => {
       if (join && user.role === 'photographer') return this.getPhotographer(user)
       if (join && user.role === 'contact') return this.getContact(user)
       return user.get()
@@ -183,6 +189,12 @@ const User = {
 
     return PhotographerModel.findAll({where, include})
     .then(photogs => photogs.map(p => Object.assign(p.user.get(), p.get())))
+  },
+  sendResetEmail: function (email) {
+    return this.get({email})
+    .then(user => (
+      Email.reset(user.email)
+    ))
   },
   update: function (query, updates) {
     return Model.findOne({where: query})

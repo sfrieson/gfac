@@ -19,6 +19,16 @@ Router.route('/change-password')
   .catch(err => res.send(err.message))
 })
 
+Router.route('/forgot-password')
+.get((_, res) => res.render('forgot-password'))
+.post(({ body }, res) => {
+  User.sendResetEmail(body.email)
+  .then(() => (
+    res.render('email-success', {email: body.email})
+  ))
+  .catch(err => res.send(err.message))
+})
+
 Router.route('/login')
 .get((_, res) => res.render('login'))
 .post(({ body }, res) => {

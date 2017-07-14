@@ -9,7 +9,7 @@
     "lint": "standard",
     "create": "babel-node ./.bin/create --",
     "node": "babel-node",
-    "start": "nodemon ./index.js --watch ./server --exec babel-node"
+    "dev": "NODE_ENV=development nodemon ./index.js --watch ./server --exec babel-node"
   },
   "babel": {
     "presets": [
