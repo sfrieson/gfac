@@ -15,6 +15,17 @@ Router.route('/change-password')
 .get(({ query }, res) => res.render('change-password', {token: query.t, email: query.email}))
 .post(({ body, query }, res) => {
   User.resetPassword(body)
+  .then(user => {
+    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwtSecret))
+    res.redirect('/')
+  })
+  .catch(err => res.send(err.message))
+})
+
+Router.route('/reset-password')
+.get(({ query }, res) => res.render('change-password', {token: query.t, email: query.email}))
+.post(({ body, query }, res) => {
+  User.resetPassword(body)
   .then(res.json.bind(res))
   .catch(err => res.send(err.message))
 })

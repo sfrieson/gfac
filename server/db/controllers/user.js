@@ -15,7 +15,7 @@ const User = {
   changePassword: function (user, password, confirm) {
     if (password !== confirm) return Promise.reject(new Error('Password and confirmation did not match.'))
     return Model.findOne({where: {id: user.id}})
-    .then(u => u.update({passwordHash: this.hashPassword(password)}))
+    .then(u => u.update({hashPassword: hashPassword(password)}))
     .then(() => 'Successful')
     .catch(err => Promise.reject(err))
   },
@@ -32,7 +32,7 @@ const User = {
     const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
     if (d.role === 'admin') throw new Error('Bad Value') // TODO Should log this attempt somehwere
 
-    d.hashPassword = this.hashPassword(data.password)
+    d.hashPassword = hashPassword(data.password)
 
     return Model.create(d)
     .then((user) => {
@@ -54,7 +54,7 @@ const User = {
   createAdmin: function (data) {
     const d = pick(data, ['firstname', 'lastname', 'email', 'phone', 'phoneType'])
     d.role = 'admin'
-    d.hashPassword = this.hashPassword(data.password)
+    d.hashPassword = hashPassword(data.password)
 
     return Model.create(d)
     .then((user) => user.get())
@@ -110,7 +110,7 @@ const User = {
       return p
     })
   },
-  hashPassword: function (password) { return bcrypt.hashSync(password, SALT) },
+  hashPassword: hashPassword,
   makePasswordResetLink: function (user) {
     console.log('\n\nuser\n\n', user)
     const loginToken = generateToken(25)
@@ -134,13 +134,13 @@ const User = {
       .then(m => {
         const emptyToken = {loginToken: '', tokenExpires: 0}
 
-        if (m.tokenExpires < Date.now()) {
+        if (+m.tokenExpires < Date.now()) {
           m.update(emptyToken)
-          throw new Error('Reset did not work.')
+          throw new Error('Reset didn\'t work.')
         }
 
         return m.update({
-          hashPassword: this.hashPassword(password),
+          hashPassword: hashPassword(password),
           ...emptyToken
         }).then(() => resolve(m.get()))
       })
@@ -222,3 +222,4 @@ function generateToken (length) {
   return pass
 }
 function randomChar () { return possible[Math.floor(Math.random() * possible.length)] }
+function hashPassword (password) { return bcrypt.hashSync(password, SALT) }
