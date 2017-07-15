@@ -46,10 +46,10 @@ export default {
       )
     })
   },
-  reset: async function (email, token) {
+  reset: async function (email, link) {
     return this.send({
       to: email,
-      ...reset(email, token)
+      ...reset(email, link)
     })
   }
 }

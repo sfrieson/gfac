@@ -22,7 +22,7 @@ Router.route('/change-password')
 Router.route('/forgot-password')
 .get((_, res) => res.render('forgot-password'))
 .post(({ body }, res) => {
-  User.sendResetEmail(body.email)
+  User.forgotPassword(body.email)
   .then(() => (
     res.render('email-success', {email: body.email})
   ))

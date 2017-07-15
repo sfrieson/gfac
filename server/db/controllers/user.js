@@ -8,6 +8,7 @@ import Email from '../../email'
 import { ValidationError } from '../../errors'
 
 const { auth } = config.get('server')
+const app = config.get('app')
 const SALT = bcrypt.genSaltSync(auth.salt)
 
 const User = {
@@ -70,16 +71,24 @@ const User = {
     return Photographer.create(data, user)
     .then(photographer => ({...user.get(), ...photographer}))
   },
+  forgotPassword: function (email) {
+    return this.getInstance({email})
+    .then(user => this.makePasswordResetLink(user))
+    .then(({email, link}) => Email.reset(email, link))
+  },
   get: function (query, join = true) {
-    return Model.findOne({where: query})
-    .then(user => {
-      if (user) return user
-      throw new Error('No user')
-    })
+    return this.getInstance(query)
     .then(user => {
       if (join && user.role === 'photographer') return this.getPhotographer(user)
       if (join && user.role === 'contact') return this.getContact(user)
       return user.get()
+    })
+  },
+  getInstance: function (query) {
+    return Model.findOne({where: query})
+    .then(user => {
+      if (user) return user
+      throw new Error('No user')
     })
   },
   getContact: function (user) { // user can be Instance or object like {id: 12345}
@@ -102,17 +111,16 @@ const User = {
     })
   },
   hashPassword: function (password) { return bcrypt.hashSync(password, SALT) },
-  passwordResetLink: function ({email}) {
+  makePasswordResetLink: function (user) {
+    console.log('\n\nuser\n\n', user)
     const loginToken = generateToken(25)
-    const tokenExpires = Date.now() + (1000 * 60 * 10)
+    const tokenExpires = Date.now() + (1000 * 60 * 10) + ''
 
-    Model.findOne({where: {email}})
-    .then(m => m.update({loginToken, tokenExpires}))
-    .then(m => {
-      // Email m.email the url
-      const resetUrl = `http://gramforacause.com/reset-password?email=${m.email}&t=${loginToken}`
-      return resetUrl
-    })
+    return user.update({loginToken, tokenExpires})
+    .then(u => ({
+      email: u.email,
+      link: `${app.url}/reset-password?email=${u.email}&t=${loginToken}`
+    }))
   },
   resetPassword: function ({email, token, password, confirm}) {
     return new Promise(function (resolve, reject) {
@@ -190,12 +198,7 @@ const User = {
     return PhotographerModel.findAll({where, include})
     .then(photogs => photogs.map(p => Object.assign(p.user.get(), p.get())))
   },
-  sendResetEmail: function (email) {
-    return this.get({email})
-    .then(user => (
-      Email.reset(user.email)
-    ))
-  },
+
   update: function (query, updates) {
     return Model.findOne({where: query})
     .then(user => user.update(updates))

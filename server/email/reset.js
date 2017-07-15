@@ -1,8 +1,4 @@
-import config from 'config'
-
-const appUrl = config.get('app.url')
-
-export default function (email, token) {
+export default function (email, link) {
   return {
     static: 'Password reset successeful!',
     html: `
@@ -11,10 +7,10 @@ export default function (email, token) {
         Password Reset
       </div>
       <div>
-        Continue through to  <a href="${appUrl}change-password?t=${token}&email=${email}">reset your password</a>
+        Continue through to <a href="${link}">reset your password</a>
       </div>
       <div>If you are having trouble clicking the link, copy and paste this link into your browser.</div>
-      <div>${appUrl}change-password?t=${token}&email=${email}</div>
+      <div>${link}</div>
     </div>
     `
   }

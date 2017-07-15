@@ -57,7 +57,7 @@ const User = Model.define('user',
       type: DataType.STRING
     },
     tokenExpires: {
-      type: DataType.INTEGER
+      type: DataType.STRING(13)
     }
   },
   // Options
