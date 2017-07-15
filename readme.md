@@ -5,4 +5,5 @@
 - Webpack
 - GraphQL
 - Serialize (PostgreSQL)
-- SASS
+- Bootstrap v3
+- React
