@@ -7,8 +7,8 @@ import Contact from './contact'
 import Email from '../../email'
 import { ValidationError } from '../../errors'
 
-const { auth } = config.get('server')
 const app = config.get('app')
+const { auth, email } = config.get('server')
 const SALT = bcrypt.genSaltSync(auth.salt)
 
 const User = {
@@ -114,7 +114,7 @@ const User = {
   makePasswordResetLink: function (user) {
     console.log('\n\nuser\n\n', user)
     const loginToken = generateToken(25)
-    const tokenExpires = Date.now() + (1000 * 60 * 10) + ''
+    const tokenExpires = Date.now() + (email.expiryMin * 60 * 1000) + ''
 
     return user.update({loginToken, tokenExpires})
     .then(u => ({

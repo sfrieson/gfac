@@ -3,7 +3,7 @@ import mailer from 'nodemailer'
 
 import reset from './reset'
 
-const { transporter } = mailer.createTransport(config.get('email'))
+const { transporter } = mailer.createTransport(config.get('server.email'))
 
 // setup email data with unicode symbols
 // let mailOptions = {

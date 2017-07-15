@@ -1,3 +1,6 @@
+import config from 'config'
+const { expiryMin } = config.get('server.email')
+
 export default function (email, link) {
   return {
     static: 'Password reset successeful!',
@@ -6,11 +9,11 @@ export default function (email, link) {
       <div style="font-weight: bold;">
         Password Reset
       </div>
-      <div>
-        Continue through to <a href="${link}">reset your password</a>
-      </div>
-      <div>If you are having trouble clicking the link, copy and paste this link into your browser.</div>
-      <div>${link}</div>
+      <p>
+        Continue through to <a href="${link}">reset your password</a>. This link will expire in ${expiryMin} minutes.
+      </p>
+      <p>If you are having trouble clicking the link, copy and paste the below URL into your browser.</p>
+      <p>${link}</p>
     </div>
     `
   }

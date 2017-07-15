@@ -7,7 +7,7 @@ import { Cause } from '../db/models'
 import User from '../db/controllers/user'
 import { ValidationError } from '../errors'
 
-const auth = config.get('server.auth')
+const { auth, email } = config.get('server')
 
 const Router = express.Router()
 
@@ -35,7 +35,7 @@ Router.route('/forgot-password')
 .post(({ body }, res) => {
   User.forgotPassword(body.email)
   .then(() => (
-    res.render('email-success', {email: body.email})
+    res.render('email-success', {email: body.email, expiryMin: email.expiryMin})
   ))
   .catch(err => res.send(err.message))
 })

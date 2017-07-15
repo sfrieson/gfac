@@ -2,17 +2,6 @@
   "app": {
     "url": "http://localhost:3000"
   },
-  "email": {
-    "transporter": {
-      "host": "[smtp.mail.com]",
-      "port": "[port]",
-      "secure": "[boolean]",
-      "auth": {
-        "user": "[email@me.com]",
-        "pass": "[password]"
-      }
-    }
-  },
   "server": {
     "port": 3000,
     "host": "[host]",
@@ -20,6 +9,18 @@
     "auth": {
       "jwtSecret": "[JWTSecret]",
       "salt": "[salt]"
+    },
+    "email": {
+      "expiryMin": 15,
+      "transporter": {
+        "host": "[smtp.mail.com]",
+        "port": "[port]",
+        "secure": "[boolean]",
+        "auth": {
+          "user": "[email@me.com]",
+          "pass": "[password]"
+        }
+      }
     }
   },
   "client": {
