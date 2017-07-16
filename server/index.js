@@ -18,8 +18,8 @@ import models from './db/models'
 const config = Config.get('server')
 const app = express()
 
-// TODO change to real code elsewhere
-const __DEV__ = true
+const isDev = process.env.NODE_ENV === 'development'
+const isTest = process.env.NODE_ENV === 'test'
 
 app.set('views', './server/views')
 app.set('view engine', 'ejs')
@@ -38,14 +38,14 @@ app.use(expressJWT({
 
 app.use('/api', expressGraphQL((req) => ({
   schema,
-  graphiql: __DEV__,
+  graphiql: isDev,
   rootValue: {vars: req.body, req: req},
-  pretty: __DEV__
+  pretty: isDev
 })))
 
 app.use(mainRouter)
 
-models.sync()
+models.sync({force: isTest})
 .catch(err => console.error(err.stack))
 .then(() => {
   app.listen(config.port, () => {

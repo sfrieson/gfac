@@ -10,7 +10,7 @@
     "create": "babel-node ./.bin/create --",
     "node": "babel-node",
     "dev": "NODE_ENV=development nodemon ./index.js --watch ./server --exec babel-node",
-    "test": "NODE_ENV=test mocha --require babel-register ./server/**/*.test.js ./client/**/*.test.js"
+    "test": "NODE_ENV=test mocha --require babel-register  ./server/**/**/*.test.js ./client/**/*.test.js"
   },
   "babel": {
     "presets": [
@@ -104,7 +104,11 @@
   "standard": {
     "globals": [
       "describe",
-      "it"
+      "it",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach"
     ]
   }
 }

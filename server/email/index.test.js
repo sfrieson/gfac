@@ -17,7 +17,6 @@ describe('Email', () => {
       emitter.once('email', (err, info, options) => {
         if (err) done(err)
         else {
-          console.log('info', info, 'options', options)
           expect(typeof info).to.equal('object')
           expect(typeof options).to.equal('object')
           done()

@@ -3,7 +3,10 @@ import Model from '../sequelize'
 
 import config from 'config'
 
-const app = config('app')
+const app = config.get('app')
+// const isDev = process.env.NODE_ENV === 'development'
+// const isTest = process.env.NODE_ENV === 'test'
+const isProd = process.env.NODE_ENV === 'production'
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 
@@ -68,7 +71,7 @@ const User = Model.define('user',
   // https://github.com/sequelize/sequelize/blob/3e5b8772ef75169685fc96024366bca9958fee63/lib/model.js#L26
   {
     indexes: [{ fields: ['email', 'id'] }],
-    paranoid: true
+    paranoid: isProd
   }
 )
 

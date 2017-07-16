@@ -59,6 +59,7 @@ typings/
 # dotenv environment variables file
 client-config.json
 config/development.json
+config/test.json
 config/production.json
 
 
