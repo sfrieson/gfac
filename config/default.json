@@ -1,6 +1,7 @@
 {
   "app": {
-    "url": "http://localhost:3000"
+    "url": "http://localhost:3000",
+    "tokenLength": 25
   },
   "server": {
     "port": 3000,
@@ -12,6 +13,7 @@
     },
     "email": {
       "expiryMin": 15,
+      "inviteWeeks": 2,
       "transporter": {
         "host": "[smtp.mail.com]",
         "port": "[port]",

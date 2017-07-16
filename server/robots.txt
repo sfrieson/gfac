@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /admin-invite
+Disallow: /email-success
+Disallow: /forgot-password

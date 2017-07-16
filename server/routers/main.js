@@ -7,9 +7,22 @@ import { Cause } from '../db/models'
 import User from '../db/controllers/user'
 import { ValidationError } from '../errors'
 
+const app = config.get('app')
 const { auth, email } = config.get('server')
 
 const Router = express.Router()
+
+Router.route('/admin-invite')
+.get(({ query }, res) => {
+  if (!('t' in query)) return res.redirect('/login')
+  if (query.t.length !== app.tokenLength) return res.redirect('/login')
+  User.get({loginToken: query.t})
+  .then((u) => {
+    if (!u) return res.redirect('/login')
+    res.render('register-admin', {admin: u})
+  })
+  .catch(() => res.redirect('/login'))
+})
 
 Router.route('/change-password')
 .get(({ query }, res) => res.render('change-password', {token: query.t, email: query.email}))

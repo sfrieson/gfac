@@ -1,6 +1,10 @@
 import DataType from 'sequelize'
 import Model from '../sequelize'
 
+import config from 'config'
+
+const app = config('app')
+
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 
 const User = Model.define('user',
@@ -54,7 +58,7 @@ const User = Model.define('user',
       type: DataType.INTEGER
     },
     loginToken: {
-      type: DataType.STRING
+      type: DataType.STRING(app.tokenLength)
     },
     tokenExpires: {
       type: DataType.STRING(13)

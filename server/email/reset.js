@@ -1,7 +1,7 @@
 import config from 'config'
 const { expiryMin } = config.get('server.email')
 
-export default function (email, link) {
+export default function ({link}) {
   return {
     static: 'Password reset successeful!',
     html: `
