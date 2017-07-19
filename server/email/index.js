@@ -2,8 +2,9 @@ import config from 'config'
 import mailer from 'nodemailer'
 
 import emitter from 'emitter'
-import reset from './reset'
 import invite from './invite'
+import reset from './reset'
+import verify from './verify'
 
 const { transporter } = mailer.createTransport(config.get('server.email'))
 
@@ -60,10 +61,16 @@ export default {
       ...invite(options)
     })
   },
-  reset: async function (email, link) {
+  reset: async function ({email, link}) {
     return this.send({
       to: email,
       ...reset({email, link})
+    })
+  },
+  verify: async function ({email, link}) {
+    return this.send({
+      to: email,
+      ...verify({link})
     })
   }
 }

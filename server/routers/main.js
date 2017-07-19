@@ -23,6 +23,7 @@ Router.route('/admin-invite')
   })
   .catch(() => res.redirect('/login'))
 })
+.post(/* TODO */)
 
 Router.route('/change-password')
 .get(({ query }, res) => res.render('change-password', {token: query.t, email: query.email}))

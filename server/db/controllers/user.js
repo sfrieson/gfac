@@ -33,7 +33,7 @@ const User = {
     if (d.role === 'admin') throw new Error('Bad Value') // TODO Should log this attempt somehwere
 
     d.hashPassword = hashPassword(data.password)
-
+    d.loginToken = generateToken(app.tokenLength)
     return Model.create(d)
     .then((user) => {
       if (user.role === 'photographer') return this.createPhotographer(user, data)
@@ -45,8 +45,14 @@ const User = {
     //     hashPassword: hashPassword(data.password)
     //   }).then(() => user)
     // })
+    .then((user) => (
+      Email.verify({
+        email: user.email,
+        link: `${app.url}/verify?t=${user.loginToken}`
+      }).then(() => user)
+    ))
     .catch((err) => {
-      return Promise.reject(new Error('Account Creation:\n%s', err))
+      return Promise.reject(err)
     })
   },
   createAdmin: function (data) {
@@ -57,7 +63,7 @@ const User = {
     return Model.create(d)
     .then((user) => user.get())
     .catch((err) => {
-      return Promise.reject(new Error('Account Creation:\n%s', err))
+      return Promise.reject(new Error('Account Creation:\n', err))
     })
   },
   createContact: function (user, data) {
@@ -71,7 +77,7 @@ const User = {
   forgotPassword: function (email) {
     return this.getInstance({email})
     .then(user => this.makePasswordResetLink(user))
-    .then(({email, link}) => Email.reset(email, link))
+    .then(({email, link}) => Email.reset({email, link}))
   },
   get: function (query, join = true) {
     return this.getInstance(query)
@@ -196,7 +202,6 @@ const User = {
     return PhotographerModel.findAll({where, include})
     .then(photogs => photogs.map(p => Object.assign(p.user.get(), p.get())))
   },
-
   update: function (query, updates) {
     return Model.findOne({where: query})
     .then(user => user.update(updates))

@@ -26,7 +26,7 @@ Availability.belongsTo(Photographer)
 Cause.belongsToMany(Photographer, {through: 'interests'})
 Cause.belongsToMany(Nonprofit, {through: 'focuses'})
 Contact.belongsTo(Nonprofit)
-Contact.belongsTo(User)
+Contact.belongsTo(User, {onDelete: 'cascade'})
 // Contact.belongsToMany(Project, {through: Nonprofit}) // Not necessary?
 Event.belongsTo(User)
 Event.belongsTo(Project)
@@ -37,7 +37,7 @@ Nonprofit.belongsToMany(Cause, {through: 'focuses'})
 Photographer.belongsToMany(Cause, {through: 'interests'})
 Photographer.belongsToMany(Project, {through: 'assignments'})
 Photographer.hasMany(Availability)
-Photographer.belongsTo(User)
+Photographer.belongsTo(User, {onDelete: 'cascade'})
 Project.belongsTo(Nonprofit)
 // Project.belongsToMany(Contact, { through: Nonprofit }); // Not necessary?
 // Project.hasMany(Assignment);
