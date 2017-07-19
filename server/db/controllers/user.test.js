@@ -1,19 +1,24 @@
 import { expect } from 'chai'
 
-// import emitter from 'emitter'
+import emitter from 'emitter'
 import User from './user'
 
 describe('Controller: User', () => {
   describe('#inviteAdmin', () => {
-    let res
     const opts = {
       firstname: 'Ally',
       lastname: 'Admin',
       email: 'admin@me.com'
     }
 
+    let emailEvent
+
     before((done) => {
-      res = User.inviteAdmin(opts)
+      emailEvent = new Promise((resolve) => {
+        emitter.once('email', function () { resolve(arguments) })
+      })
+
+      User.inviteAdmin(opts)
       .then((opts) => { done(); return opts })
     })
 
@@ -23,12 +28,29 @@ describe('Controller: User', () => {
       .then(() => done())
     })
 
-    it('creates a customized link', (done) => {
-      res.then(opts => {
-        expect(opts.link.indexOf('t=')).to.be.gt(-1)
+    it('creates a base account', (done) => {
+      User.get({email: opts.email})
+      .then(u => expect(Object.keys(u).length).to.be.gt(0))
+      .then(() => done())
+      .catch(err => done(err))
+    })
+
+    it('sends the correct user an email', (done) => {
+      emailEvent.then(([err, info, emailOpts]) => {
+        if (err) throw err
+        expect(emailOpts.to).to.equal(opts.email)
         done()
       })
+      .catch(err => done(err))
     })
-    it('creates a base account')
+
+    it('sends the message', (done) => {
+      emailEvent.then(([err, info, emailOpts]) => {
+        if (err) throw err
+        expect(emailOpts.html.indexOf('What power!')).to.be.gt(-1)
+        done()
+      })
+      .catch(err => done(err))
+    })
   })
 })

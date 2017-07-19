@@ -36,7 +36,6 @@ const User = {
 
     return Model.create(d)
     .then((user) => {
-      console.log('user created. now to create extension', user.get())
       if (user.role === 'photographer') return this.createPhotographer(user, data)
       if (user.role === 'contact') return this.createContact(user, data)
     })
@@ -47,8 +46,7 @@ const User = {
     //   }).then(() => user)
     // })
     .catch((err) => {
-      console.log('account creation error', err)
-      return Promise.reject(new Error('Account Creation'))
+      return Promise.reject(new Error('Account Creation:\n%s', err))
     })
   },
   createAdmin: function (data) {
@@ -59,8 +57,7 @@ const User = {
     return Model.create(d)
     .then((user) => user.get())
     .catch((err) => {
-      console.log('account creation error', err)
-      return Promise.reject(new Error('Account Creation'))
+      return Promise.reject(new Error('Account Creation:\n%s', err))
     })
   },
   createContact: function (user, data) {
@@ -99,23 +96,19 @@ const User = {
     }))
   },
   getPhotographer: function (user) { // user can be Instance or object like {id: 12345}
-    console.log('getPhotographer, user:', user.get())
     return Photographer.get(user.id)
     .then(photographer => ({
       ...user.get(),
       ...photographer
     }))
-    .then(p => {
-      console.log('full user:', p)
-      return p
-    })
   },
   hashPassword: hashPassword,
   inviteAdmin: function (opts) {
     const loginToken = generateToken(app.tokenLength)
     const tokenExpires = Date.now() + (email.inviteWeeks * 7 * 24 * 60 * 60 * 1000) + ''
     return this.createAdmin({...opts, loginToken, tokenExpires})
-    .then(() => ({link: `${app.url}/admin-invite?t=${loginToken}`}))
+    .then(() => ({...opts, role: 'admin', link: `${app.url}/admin-invite?t=${loginToken}`}))
+    .then(opts => Email.invite(opts))
   },
   makePasswordResetLink: function (user) {
     const loginToken = generateToken(app.tokenLength)

@@ -3,6 +3,7 @@ import mailer from 'nodemailer'
 
 import emitter from 'emitter'
 import reset from './reset'
+import invite from './invite'
 
 const { transporter } = mailer.createTransport(config.get('server.email'))
 
@@ -54,7 +55,10 @@ export default {
     })
   },
   invite: async function (options) {
-
+    return this.send({
+      to: options.email,
+      ...invite(options)
+    })
   },
   reset: async function (email, link) {
     return this.send({
