@@ -1,7 +1,7 @@
 import config from 'config'
 const { inviteWeeks } = config.get('server.email')
 
-export default function ({role, link}) {
+export default function ({role, link, nonprofit}) {
   return {
     static: 'Password reset successeful!',
     html: `
@@ -11,21 +11,16 @@ export default function ({role, link}) {
       </div>
       ${role === 'admin' && `
         <p>
-          You have been invited to be an admin on the Gramforacause website. What power!
+          You have been invited to be an admin on Gramforacause. What power!
         </p>
       `}
       ${role === 'contact' && `
         <p>
-          You have been invited to be an organization on the Gramforacause website. What power!
-        </p>
-      `}
-      ${role === 'storyteller' && `
-        <p>
-          You have been invited to be an photographer Storyteller on the Gramforacause website.
+          You have been invited to manage ${nonprofit} on Gramforacause.
         </p>
       `}
       <p>
-        Continue through to <a href="${link}">reset your password</a>. This link will expire in ${inviteWeeks} week${inviteWeeks === 1 ? '' : 's'}.
+        Continue through to <a href="${link}">claim your account</a>. This invitation will expire in ${inviteWeeks} week${inviteWeeks === 1 ? '' : 's'}.
       </p>
       <p>If you are having trouble clicking the link, copy and paste the below URL into your browser.</p>
       <p>${link}</p>

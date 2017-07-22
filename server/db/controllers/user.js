@@ -1,9 +1,10 @@
 import bcrypt from 'bcryptjs'
-import { pick } from 'lodash'
+import { pick as whitelist } from 'lodash'
 import config from 'config'
 import { User as Model, Photographer as PhotographerModel } from '../models'
-import Photographer from './photographer'
 import Contact from './contact'
+import Nonprofit from './nonprofit'
+import Photographer from './photographer'
 import Email from '../../email'
 import { ValidationError } from '../../errors'
 
@@ -28,23 +29,17 @@ const User = {
     })
   },
   create: function (data) {
-    // Whitelist properties necessary for creating User
-    const d = pick(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
+    const d = whitelist(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
     if (d.role === 'admin') throw new Error('Bad Value') // TODO Should log this attempt somehwere
 
     d.hashPassword = hashPassword(data.password)
     d.loginToken = generateToken(app.tokenLength)
+
     return Model.create(d)
     .then((user) => {
       if (user.role === 'photographer') return this.createPhotographer(user, data)
       if (user.role === 'contact') return this.createContact(user, data)
     })
-    // .then(user => {
-    //   return UserLogin.create({
-    //     email: user.email,
-    //     hashPassword: hashPassword(data.password)
-    //   }).then(() => user)
-    // })
     .then((user) => (
       Email.verify({
         email: user.email,
@@ -56,7 +51,7 @@ const User = {
     })
   },
   createAdmin: function (data) {
-    const d = pick(data, ['firstname', 'lastname', 'email', 'phone', 'phoneType'])
+    const d = whitelist(data, ['firstname', 'lastname', 'email', 'phone', 'phoneType'])
     d.role = 'admin'
     if ('password' in data) d.hashPassword = hashPassword(data.password)
 
@@ -113,7 +108,27 @@ const User = {
     const loginToken = generateToken(app.tokenLength)
     const tokenExpires = Date.now() + (email.inviteWeeks * 7 * 24 * 60 * 60 * 1000) + ''
     return this.createAdmin({...opts, loginToken, tokenExpires})
-    .then(() => ({...opts, role: 'admin', link: `${app.url}/admin-invite?t=${loginToken}`}))
+    .then(() => ({
+      ...whitelist(opts, ['firstname', 'lastname', 'email']),
+      role: 'admin',
+      link: `${app.url}/admin-invite?t=${loginToken}`
+    }))
+    .then(opts => Email.invite(opts))
+  },
+  inviteContact: function (opts, nonprofitId) {
+    const loginToken = generateToken(app.tokenLength)
+    const tokenExpires = Date.now() + (email.inviteWeeks * 7 * 24 * 60 * 60 * 1000) + ''
+
+    return Model.create({
+      ...whitelist(opts, ['firstname', 'lastname', 'email']),
+      role: 'contact',
+      nonprofit_id: nonprofitId,
+      loginToken,
+      tokenExpires
+    })
+    .then(i => Contact.create({nonprofitId}, i))
+    .then(() => Nonprofit.get(nonprofitId))
+    .then((np) => ({...opts, role: 'contact', link: `${app.url}/nonprofit-invite?t=${loginToken}`, nonprofit: np.name}))
     .then(opts => Email.invite(opts))
   },
   makePasswordResetLink: function (user) {
@@ -156,7 +171,7 @@ const User = {
     let where = {}
     let userIncludeWhere = {}
     let prop
-    const userWhere = pick({
+    const userWhere = whitelist({
       firstname: query.firstname && {$iLike: `%${query.firstname}%`},
       lastname: query.lastname && {$iLike: `%${query.lastname}%`},
       role: (query.firstname || query.lastname) && query.role
@@ -167,7 +182,7 @@ const User = {
     const include = [Object.assign(userIncludeWhere, {
       association: PhotographerModel.associations.user
     })]
-    const photoWhere = pick({
+    const photoWhere = whitelist({
       instagram: query.instagram && {$iLike: `%${query.instagram}%`},
       cameraDSLR: query.cameraDSLR,
       cameraPhone: query.cameraPhone,
@@ -213,6 +228,18 @@ const User = {
     if (!data.password || data.password !== data.confirm) errors.push('Password does not match.')
     if (errors.length === 0) return Promise.resolve(data)
     else return Promise.reject(new ValidationError('Account Creation', errors))
+  },
+  verify: function (loginToken) {
+    return this.getInstance({loginToken})
+    .then(u => {
+      if (u) {
+        return u.update({
+          loginToken: '',
+          tokenExpires: 0,
+          emailConfirmed: true
+        })
+      } else throw new Error('No user')
+    })
   }
 }
 

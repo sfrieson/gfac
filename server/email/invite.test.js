@@ -9,35 +9,24 @@ describe('Email: invite', () => {
     expect('static' in email).to.equal(true)
     expect('html' in email).to.equal(true)
   })
-  describe('Admin version', () => {
+  it('includes a link in the body', () => {
+    const email = invite({...baseArgs, role: 'admin'})
+    expect(
+      email.html.indexOf(baseArgs.link)
+    ).to.be.gt(-1)
+  })
+  it('Admin version adds admin text', () => {
     const args = {...baseArgs, role: 'admin'}
     const email = invite(args)
-    it('adds specific admin text', () => {
-      expect(
-        email.html.indexOf(`What power!`)
-      ).to.be.gt(-1)
-    })
-    it('has a link to an admin only signup form')
+    expect(
+      email.html.indexOf(`What power!`)
+    ).to.be.gt(-1)
   })
-  describe('Contact version', () => {
+  it('Contact version adds contact text', () => {
     const args = {...baseArgs, role: 'contact'}
     const email = invite(args)
-    it('adds specific contact text', () => {
-      expect(
-        email.html.indexOf(`organization`)
-      ).to.be.gt(-1)
-    })
-    it('tells which organization invited them')
-    it('has a link to account creation with organization info')
-  })
-  describe('Storyteller version', () => {
-    const args = {...baseArgs, role: 'storyteller'}
-    const email = invite(args)
-    it('adds specific storyteller text', () => {
-      expect(
-        email.html.indexOf(`Storyteller`)
-      ).to.be.gt(-1)
-    })
-    it('has a link to account creation with storyteller info')
+    expect(
+      email.html.indexOf(`invited to manage`)
+    ).to.be.gt(-1)
   })
 })

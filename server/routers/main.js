@@ -29,10 +29,7 @@ Router.route('/change-password')
 .get(({ query }, res) => res.render('change-password', {token: query.t, email: query.email}))
 .post(({ body, query }, res) => {
   User.resetPassword(body)
-  .then(user => {
-    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwtSecret))
-    res.redirect('/')
-  })
+  .then(user => login(user, res))
   .catch(err => res.send(err.message))
 })
 
@@ -87,23 +84,23 @@ Router.route('/register')
 .get((req, res) => { res.render('register', {err: [], responses: {}, causes: req.causes}) })
 .post((req, res) => {
   const responses = req.body
-  console.log('Response ' + JSON.stringify(responses, null, 2))
 
   User.validate(responses)
   .then(() => User.create(responses))
-  .then(user => {
-    console.log('returned user:', user)
-    req.user = user
-    res.cookie('id_token', jwt.sign({id: user.id, role: user.role}, auth.jwtSecret))
-    res.redirect('/')
-  })
+  .then(user => login(req.user, res))
   .catch((err) => {
     if (err instanceof ValidationError) res.render('register', {err: err.errors, responses: responses, causes: req.causes})
     if (err.message === 'Account Creation') res.status(500).send('Error: ' + err.message)
   })
 })
 
-// React Router takes over from here
+Router.get('verify', ({query}, res) => {
+  User.verify(query.t)
+  .then(user => login(user, res))
+  .catch(() => res.redirect('/login'))
+})
+
+// React Router takes over from here (in the client)
 Router.get('*', (req, res) => {
   if (!req.user) return res.redirect('/login')
 
@@ -117,3 +114,8 @@ Router.get('*', (req, res) => {
 })
 
 export default Router
+
+function login (user, res, redirect = '/') {
+  res.cookie('id_token', jwt.sign({id: user.id, role: user.role}, auth.jwtSecret))
+  res.redirect(redirect)
+}
