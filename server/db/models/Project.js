@@ -9,11 +9,8 @@ const Project = Model.define('project',
       autoIncrement: true,
       primaryKey: true
     },
-    name: {
-      type: DataType.STRING
-    },
-    description: {
-      type: DataType.TEXT
+    attendance: {
+      type: DataType.INTEGER
     },
     date: {
       type: DataType.DATE,
@@ -24,13 +21,32 @@ const Project = Model.define('project',
       allowNull: false,
       defaultValue: false
     },
+    description: {
+      type: DataType.TEXT
+    },
+    duration: {
+      type: DataType.INTEGER
+    },
+    // in the future this may be the google place_id
     location: {
       type: DataType.STRING(255)
     },
-    status: {
-      type: DataType.ENUM('Prospective', 'Planning', 'Past', 'Completed')
+    name: {
+      type: DataType.STRING
     },
     photoLink: {
+      type: DataType.STRING(255)
+    },
+    photographersNeeded: {
+      type: DataType.INTEGER
+    },
+    status: {
+      type: DataType.ENUM('prospective', 'planning', 'past', 'completed')
+    },
+    venue: {
+      type: DataType.STRING(140)
+    },
+    website: {
       type: DataType.STRING(255)
     }
   },

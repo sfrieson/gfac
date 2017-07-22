@@ -123,15 +123,22 @@ const Project = new Type({
   description: 'Nonprofit projects',
   fields: () => ({
     id: {type: new NonNull(Str)},
-    name: {type: new NonNull(Str)},
-    description: {type: new NonNull(Str)},
+    // attachments: {type: new List(Attachment)},
+    attendance: {type: Int},
     date: {type: new NonNull(Str)},
     dateIsApprox: {type: new NonNull(Bool)},
+    description: {type: new NonNull(Str)},
+    duration: {type: Int},
     location: {type: Str},
-    status: {type: Str},
-    photographers: {type: new NonNull(new List(Photographer))},
+    locationType: {type: Str},
+    name: {type: new NonNull(Str)},
+    nonprofitId: {type: new NonNull(Str)},
     photoLink: {type: Str},
-    nonprofitId: {type: new NonNull(Str)}
+    photographers: {type: new NonNull(new List(Photographer))},
+    photographersNeeded: {type: Int},
+    status: {type: Str},
+    venue: {type: Str},
+    website: {type: Str}
   })
 })
 

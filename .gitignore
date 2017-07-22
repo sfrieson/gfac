@@ -59,8 +59,9 @@ typings/
 # dotenv environment variables file
 client-config.json
 config/development.json
-config/test.json
+config/heroku.json
 config/production.json
+config/test.json
 
 
 email-list.tsv
