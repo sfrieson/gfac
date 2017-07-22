@@ -31,6 +31,9 @@ const Project = Model.define('project',
     location: {
       type: DataType.STRING(255)
     },
+    locationType: {
+      type: DataType.STRING
+    },
     name: {
       type: DataType.STRING
     },
