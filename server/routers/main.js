@@ -84,13 +84,13 @@ Router.route('/register')
 .get((req, res) => { res.render('register', {err: [], responses: {}, causes: req.causes}) })
 .post((req, res) => {
   const responses = req.body
-
   User.validate(responses)
   .then(() => User.create(responses))
-  .then(user => login(req.user, res))
+  .then(user => login(user, res))
   .catch((err) => {
     if (err instanceof ValidationError) res.render('register', {err: err.errors, responses: responses, causes: req.causes})
-    if (err.message === 'Account Creation') res.status(500).send('Error: ' + err.message)
+    else if (err.message === 'Account Creation') res.status(500).send('Error: ' + err.message)
+    else res.status(500).json(err)
   })
 })
 

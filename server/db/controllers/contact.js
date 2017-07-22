@@ -3,6 +3,7 @@ import { Contact as Model, Nonprofit } from '../models'
 
 export default {
   create: function (data, user) {
+    console.log('Contact.create')
     let getNp
     if ('nonprofitId' in data) getNp = Promise.resolve({id: data.nonprofitId})
     else {

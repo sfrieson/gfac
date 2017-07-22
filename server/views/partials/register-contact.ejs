@@ -3,6 +3,9 @@
   class=<%= selected === 'contact' ? '' : 'hidden'%>
   aria-hidden=<%= selected === 'contact' ? 'true' : 'false'%>
 >
+  <span class="help-block">
+    Note: If your nonprofit already has an account, ask your coworker for an invite link.
+  </span>
   <div class="input-group">
     <label for="phoneSecondary">Secondary Phone number</label>
     <input name="phoneSecondary" type="tel" id="phoneSecondary" class="form-control">
@@ -20,55 +23,15 @@
       Office
     </label>
   </div>
-  <span class="help-block">
-    Note: If your nonprofit already has an account, ask your coworker for an invite link.
-  </span>
-  <div>Nonprofit Information</div>
-  <span class="radio">
-    <label>
-      <input name="nonprofit" type="radio" value="new" aria-label="New Nonprofit" checked="checked">
-      New Nonprofit
-    </label>
-  </span>
-  <span class="radio">
-    <label>
-      <input name="nonprofit" type="radio" value="existing" aria-label="Join Nonprofit">
-      Join existing Nonprofit
-    </label>
-  </span>
-  <div id="nonprofit_new" style="overflow: hidden">
+  <h3>Nonprofit Information</h3>
+  <div>
     <div class="form-group">
       <label for="nonprofit_name">Nonprofit Name</label>
       <input id="nonprofit_name" name="nonprofit_name" type="text" class="form-control">
     </div>
     <div class="form-group">
-      <label for="nonprofit_description">Short Nonprofit Description</label>
+      <label for="nonprofit_description">Short Description</label>
       <textarea name="nonprofit_description" class="form-control" rows="3"></textarea>
     </div>
   </div>
-  <div id="nonprofit_existing" style="height: 0; overflow: hidden">
-    <div class="input-group">
-      <label for="nonprofit_accesscode">Nonprofit Access Code</label>
-      <input name="nonprofit_accesscode" type="tel" id="nonprofit_accesscode" class="form-control">
-    </div>
-  </div>
-  <script>
-    var nonprofit = {
-      new: document.getElementById('nonprofit_new'),
-      existing: document.getElementById('nonprofit_existing')
-    }
-    var radios = document.querySelectorAll('[name="nonprofit"]')
-    for (var i = 0; i < radios.length; i++) {
-      radios[i].addEventListener('change', function (e) {
-        if (e.target.value === 'new') {
-          nonprofit.new.style.height = 'auto'
-          nonprofit.existing.style.height = 0
-        }
-        else {
-          nonprofit.new.style.height = 0
-          nonprofit.existing.style.height = 'auto'
-        }
-      })
-    }
-  </script>
 </fieldset>

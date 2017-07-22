@@ -31,7 +31,6 @@ const User = {
   create: function (data) {
     const d = whitelist(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
     if (d.role === 'admin') throw new Error('Bad Value') // TODO Should log this attempt somehwere
-
     d.hashPassword = hashPassword(data.password)
     d.loginToken = generateToken(app.tokenLength)
 
@@ -46,9 +45,6 @@ const User = {
         link: `${app.url}/verify?t=${user.loginToken}`
       }).then(() => user)
     ))
-    .catch((err) => {
-      return Promise.reject(err)
-    })
   },
   createAdmin: function (data) {
     const d = whitelist(data, ['firstname', 'lastname', 'email', 'phone', 'phoneType'])
