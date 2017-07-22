@@ -1,11 +1,10 @@
 import Seqeulize from 'sequelize'
-import config from 'config'
 
 // const isDev = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
 const isProd = process.env.NODE_ENV === 'production'
 
-const databaseUrl = config.get('server.databaseUrl')
+const databaseUrl = process.env.DATABASE_URL
 const sequelize = new Seqeulize(
   databaseUrl,
   { // Application-wide settings

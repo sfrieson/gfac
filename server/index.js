@@ -48,7 +48,8 @@ app.use(mainRouter)
 models.sync({force: isTest})
 .catch(err => console.error(err.stack))
 .then(() => {
-  app.listen(config.port, () => {
-    console.log(`Listening on ${config.port}`)
+  const port = process.env.PORT
+  app.listen(port, () => {
+    console.log(`Listening on ${port}`)
   })
 })

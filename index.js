@@ -1,6 +1,6 @@
 var fs = require('fs')
 var config = require('config')
-
+require('dotenv').config({path: 'config/.env.' + process.env.NODE_ENV})
 // Prepare config for client
 fs.writeFileSync(
   'client-config.json',

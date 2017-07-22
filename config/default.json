@@ -4,9 +4,7 @@
     "tokenLength": 25
   },
   "server": {
-    "port": 3000,
     "host": "[host]",
-    "databaseUrl": "[databaseUrl]",
     "auth": {
       "jwtSecret": "[JWTSecret]",
       "salt": "[salt]"
