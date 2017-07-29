@@ -1,5 +1,6 @@
-import { UserController as User } from '../server/db/controllers'
-import readline from 'readline'
+require('dotenv').config({path: 'config/.env.' + process.env.NODE_ENV})
+const { UserController: User } = require('../server/db/controllers')
+const readline = require('readline')
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout

@@ -1,93 +1,98 @@
-<fieldset
-id="photographer-more"
-class=<%= selected === 'photographer' ? '' : 'hidden'%>
-aria-hidden=<%= selected === 'photographer' ? 'true' : 'false'%>
->
-Select your favorite causes (choose up to 5)
-<div class="checkbox">
-  <% causes.forEach(function (cause) { %>
-    <label>
-      <input name="causes" type="checkbox" value="<%= cause.id %>" <%= responses.causes && responses
-      .causes.indexOf(cause.id) > -1 ? 'checked' : ''
-      %>>
-      <%= cause.name %>
-    </label>
-    <% }); %>
-  </div>
-  <label for="instagram">Instagram Handle</label>
-  <div class="input-group">
-    <span class="input-group-addon" id="basic-addon1">@</span>
-    <input name="instagram" type="text" id="instagram" class="form-control">
-  </div>
-  How I generally take photos:
+export default function ({selected}) {
+  return `
+  <fieldset
+  id="photographer-more"
+  class=<%= selected === 'photographer' ? '' : 'hidden'%>
+  aria-hidden=<%= selected === 'photographer' ? 'true' : 'false'%>
+  >
+  Select your favorite causes (choose up to 5)
   <div class="checkbox">
-    <label>
-      <input name="cameraPhone" type="checkbox">Phone
-    </label>
-    <label>
-      <input name="cameraFilm" type="checkbox">Film
-    </label>
-    <label>
-      <input name="cameraDSLR" type="checkbox">DSLR
-    </label>
-    <div class="input-group">
-      <span class="input-group-addon" id="basic-addon1">Other</span>
-      <input name="cameraOther" type="text" class="form-control">
+    <% causes.forEach(function (cause) { %>
+      <label>
+        <input name="causes" type="checkbox" value="<%= cause.id %>" <%= responses.causes && responses
+        .causes.indexOf(cause.id) > -1 ? 'checked' : ''
+        %>>
+        <%= cause.name %>
+      </label>
+      <% }); %>
     </div>
-  </div>
-  <div class="input-group">
-    <label for="preferredContactMethod">Preferred Contact Method</label>
-    <select name="preferredContactMethod" id="preferredContactMethod" class="form-control" >
-      <option value="instagram">Instagram Direct Message</option>
-      <option value="phone">Phone</option>
-      <option value="email">Email</option>
-    </select>
-  </div>
+    <label for="instagram">Instagram Handle</label>
+    <div class="input-group">
+      <span class="input-group-addon" id="basic-addon1">@</span>
+      <input name="instagram" type="text" id="instagram" class="form-control">
+    </div>
+    How I generally take photos:
+    <div class="checkbox">
+      <label>
+        <input name="cameraPhone" type="checkbox">Phone
+      </label>
+      <label>
+        <input name="cameraFilm" type="checkbox">Film
+      </label>
+      <label>
+        <input name="cameraDSLR" type="checkbox">DSLR
+      </label>
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">Other</span>
+        <input name="cameraOther" type="text" class="form-control">
+      </div>
+    </div>
+    <div class="input-group">
+      <label for="preferredContactMethod">Preferred Contact Method</label>
+      <select name="preferredContactMethod" id="preferredContactMethod" class="form-control" >
+        <option value="instagram">Instagram Direct Message</option>
+        <option value="phone">Phone</option>
+        <option value="email">Email</option>
+      </select>
+    </div>
 
-  <table class="table table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Time</th>
-        <th>Mon</th>
-        <th>Tue</th>
-        <th>Wed</th>
-        <th>Thu</th>
-        <th>Fri</th>
-        <th>Sat</th>
-        <th>Sun</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Morning</td>
-        <td><input type="checkbox" name="availability" value="Mo_morning"/></td>
-        <td><input type="checkbox" name="availability" value="Tu_morning"/></td>
-        <td><input type="checkbox" name="availability" value="We_morning"/></td>
-        <td><input type="checkbox" name="availability" value="Th_morning"/></td>
-        <td><input type="checkbox" name="availability" value="Fr_morning"/></td>
-        <td><input type="checkbox" name="availability" value="Sa_morning"/></td>
-        <td><input type="checkbox" name="availability" value="Su_morning"/></td>
-      </tr>
-      <tr>
-        <td>Afternoon</td>
-        <td><input type="checkbox" name="availability" value="Mo_afternoon"/></td>
-        <td><input type="checkbox" name="availability" value="Tu_afternoon"/></td>
-        <td><input type="checkbox" name="availability" value="We_afternoon"/></td>
-        <td><input type="checkbox" name="availability" value="Th_afternoon"/></td>
-        <td><input type="checkbox" name="availability" value="Fr_afternoon"/></td>
-        <td><input type="checkbox" name="availability" value="Sa_afternoon"/></td>
-        <td><input type="checkbox" name="availability" value="Su_afternoon"/></td>
-      </tr>
-      <tr>
-        <td>Evening</td>
-        <td><input type="checkbox" name="availability" value="Mo_evening"/></td>
-        <td><input type="checkbox" name="availability" value="Tu_evening"/></td>
-        <td><input type="checkbox" name="availability" value="We_evening"/></td>
-        <td><input type="checkbox" name="availability" value="Th_evening"/></td>
-        <td><input type="checkbox" name="availability" value="Fr_evening"/></td>
-        <td><input type="checkbox" name="availability" value="Sa_evening"/></td>
-        <td><input type="checkbox" name="availability" value="Su_evening"/></td>
-      </tr>
-    </tbody>
-  </table>
-</fieldset>
+    <table class="table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Mon</th>
+          <th>Tue</th>
+          <th>Wed</th>
+          <th>Thu</th>
+          <th>Fri</th>
+          <th>Sat</th>
+          <th>Sun</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Morning</td>
+          <td><input type="checkbox" name="availability" value="Mo_morning"/></td>
+          <td><input type="checkbox" name="availability" value="Tu_morning"/></td>
+          <td><input type="checkbox" name="availability" value="We_morning"/></td>
+          <td><input type="checkbox" name="availability" value="Th_morning"/></td>
+          <td><input type="checkbox" name="availability" value="Fr_morning"/></td>
+          <td><input type="checkbox" name="availability" value="Sa_morning"/></td>
+          <td><input type="checkbox" name="availability" value="Su_morning"/></td>
+        </tr>
+        <tr>
+          <td>Afternoon</td>
+          <td><input type="checkbox" name="availability" value="Mo_afternoon"/></td>
+          <td><input type="checkbox" name="availability" value="Tu_afternoon"/></td>
+          <td><input type="checkbox" name="availability" value="We_afternoon"/></td>
+          <td><input type="checkbox" name="availability" value="Th_afternoon"/></td>
+          <td><input type="checkbox" name="availability" value="Fr_afternoon"/></td>
+          <td><input type="checkbox" name="availability" value="Sa_afternoon"/></td>
+          <td><input type="checkbox" name="availability" value="Su_afternoon"/></td>
+        </tr>
+        <tr>
+          <td>Evening</td>
+          <td><input type="checkbox" name="availability" value="Mo_evening"/></td>
+          <td><input type="checkbox" name="availability" value="Tu_evening"/></td>
+          <td><input type="checkbox" name="availability" value="We_evening"/></td>
+          <td><input type="checkbox" name="availability" value="Th_evening"/></td>
+          <td><input type="checkbox" name="availability" value="Fr_evening"/></td>
+          <td><input type="checkbox" name="availability" value="Sa_evening"/></td>
+          <td><input type="checkbox" name="availability" value="Su_evening"/></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+  `
+
+}

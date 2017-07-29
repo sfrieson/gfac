@@ -1,4 +1,6 @@
-import seed from './seed'
+require('dotenv').config({path: 'config/.env.' + process.env.NODE_ENV})
+
+const seed = require('./seed').default
 
 const [,, task] = process.argv
 

@@ -21,8 +21,6 @@ const app = express()
 const isDev = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
 
-app.set('views', './server/views')
-app.set('view engine', 'ejs')
 
 app.use(express.static('./build/public'))
 app.use(webpackDevMiddleware(webpack(webpackConfig)))
