@@ -1,5 +1,5 @@
 import headTemplate from './head'
-export default function ({body, title, head}) {
+export default function ({body, title, head, scripts = true}) {
   return `
     <!doctype html>
     <html lang="en">
@@ -8,7 +8,7 @@ export default function ({body, title, head}) {
     </head>
     <body>
       <div id="app">${body}</div>
-      <script src="/scripts.js"></script>
+      ${scripts ? '<script src="/scripts.js"></script>' : ''}
     </body>
     </html>
 `

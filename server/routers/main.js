@@ -6,7 +6,6 @@ import sequelize from '../db/sequelize'
 import { Cause } from '../db/models'
 import User from '../db/controllers/user'
 import { ValidationError } from '../errors'
-import { renderToString } from 'react-dom/server'
 
 import views from '../views'
 
@@ -110,7 +109,7 @@ Router.get('*', (req, res) => {
   sequelize.authenticate()
   .then(() => User.get({id: req.user.id}))
   .then(user => {
-    if (user.email) res.send(views('ssr', {user: user, body: '<h1>SSR</h1><p>This is an SSR render</p>'}))
+    if (user.email) res.send(views('ssr', {user: user, body: '<h1>Loading...</h1>'}))
     else throw new Error('No user')
   })
   .catch(_err => res.redirect('/login'))

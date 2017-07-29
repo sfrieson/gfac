@@ -33,6 +33,7 @@ export default function () {
           Forgot Password?
         </a>
       </div>
-    `
+    `,
+    scripts: false
   })
 }
