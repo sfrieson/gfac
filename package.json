@@ -9,6 +9,7 @@
     "lint": "standard",
     "create": "babel-node ./.bin/create --",
     "node": "babel-node",
+    "start": "NODE_ENV=heroku nodemon ./index.js --watch ./server --exec babel-node",
     "dev": "NODE_ENV=development nodemon ./index.js --watch ./server --exec babel-node",
     "test": "NODE_ENV=test mocha --require babel-register  ./server/**/*.test.js ./server/**/**/*.test.js ./client/**/*.test.js"
   },
