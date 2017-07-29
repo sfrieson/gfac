@@ -130,14 +130,14 @@ const Project = new Type({
     description: {type: new NonNull(Str)},
     duration: {type: Int},
     location: {type: Str},
-    locationType: {type: Str},
     name: {type: new NonNull(Str)},
     nonprofitId: {type: new NonNull(Str)},
     photoLink: {type: Str},
     photographers: {type: new NonNull(new List(Photographer))},
     photographersNeeded: {type: Int},
-    status: {type: Str},
-    venue: {type: Str},
+    status: {type: Str}, // enum: prospective, planning, past, completed
+    venueName: {type: Str},
+    venueType: {type: Str},
     website: {type: Str}
   })
 })

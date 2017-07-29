@@ -10,6 +10,7 @@
 import sequelize from '../sequelize'
 // import Admin from './Admin';
 // import Assignment from './Assignment';
+// import Attachment from './Attachment';
 import Availability from './Availability'
 import Cause from './Cause'
 import Contact from './Contact'
@@ -23,24 +24,31 @@ import User from './User'
 import UserLogin from './UserLogin'
 
 Availability.belongsTo(Photographer)
+
 Cause.belongsToMany(Photographer, {through: 'interests'})
 Cause.belongsToMany(Nonprofit, {through: 'focuses'})
+
 Contact.belongsTo(Nonprofit)
 Contact.belongsTo(User, {onDelete: 'cascade'})
 // Contact.belongsToMany(Project, {through: Nonprofit}) // Not necessary?
+
 Event.belongsTo(User)
 Event.belongsTo(Project)
+
 Nonprofit.hasMany(Contact)
 Nonprofit.hasMany(Project)
 Nonprofit.belongsToMany(Cause, {through: 'focuses'})
+
 // Photographer.hasMany(Assignment);
 Photographer.belongsToMany(Cause, {through: 'interests'})
 Photographer.belongsToMany(Project, {through: 'assignments'})
 Photographer.hasMany(Availability)
 Photographer.belongsTo(User, {onDelete: 'cascade'})
+
 Project.belongsTo(Nonprofit)
 // Project.belongsToMany(Contact, { through: Nonprofit }); // Not necessary?
 // Project.hasMany(Assignment);
+// Project.hasMany(Attachment);
 Project.belongsToMany(Photographer, {through: 'assignments'})
 Project.hasMany(Event)
 Project.hasMany(Review)

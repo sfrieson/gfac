@@ -13,6 +13,9 @@ const Contact = Model.define('contact',
         key: 'id'
       }
     },
+    position: {
+      type: DataType.STRING(40)
+    },
     phoneSecondary: {
       type: DataType.STRING(24)
     },

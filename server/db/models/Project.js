@@ -27,12 +27,12 @@ const Project = Model.define('project',
     duration: {
       type: DataType.INTEGER
     },
-    // in the future this may be the google place_id
+    // Google's place_id will maybe take the place of location
+    // gPlaceId: {
+    //   type: DataType.STRING(255)
+    // },
     location: {
       type: DataType.STRING(255)
-    },
-    locationType: {
-      type: DataType.STRING
     },
     name: {
       type: DataType.STRING
@@ -46,8 +46,11 @@ const Project = Model.define('project',
     status: {
       type: DataType.ENUM('prospective', 'planning', 'past', 'completed')
     },
-    venue: {
+    venueName: {
       type: DataType.STRING(140)
+    },
+    venueType: {
+      type: DataType.STRING(12) // indoor, outoor, both
     },
     website: {
       type: DataType.STRING(255)

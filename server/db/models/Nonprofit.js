@@ -14,6 +14,18 @@ const Nonprofit = Model.define('nonprofit',
     },
     description: {
       type: DataType.TEXT
+    },
+    city: {
+      type: DataType.STRING(30)
+    },
+    state: {
+      type: DataType.STRING(30)
+    },
+    country: {
+      type: DataType.STRING(30)
+    },
+    website: {
+      type: DataType.STRING(64)
     }
   },
   // Options
