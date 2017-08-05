@@ -6,13 +6,16 @@ const extractCSS = new ExtractTextPlugin('styles.css')
 
 var pkg = require('./package.json')
 
-const config = {
+const browserConfig = {
   context: path.resolve(__dirname),
   target: 'web',
+  name: 'client',
 
-  entry: ['babel-polyfill', './client/scripts.js'],
+  entry: {
+    client: ['babel-polyfill', './client/scripts.js']
+  },
   output: {
-    path: path.resolve(__dirname, './build/public'),
+    path: path.resolve(__dirname, './build/client'),
     filename: 'scripts.js'
     // publicPath: '/assets/', // Still not sure what this is for
     // pathinfo: false, // TODO Add way to decide if this should have verbose path info or not (--verbose)
@@ -29,16 +32,16 @@ const config = {
           presets: [
             ['env', {targets: pkg.browserslist}],
             'react',
-            'stage-2'
+            'stage-0'
           ]
-        } // end options
-      }, // end jsx
+        }
+      },
       {
         test: /\.scss$/,
         loader: extractCSS.extract(['css-loader', 'sass-loader'])
       }
-    ] // end rules
-  }, // end modules
+    ]
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': process.argv.includes('-p') || process.argv.includes('--production') ? '"production"' : '"development"',
@@ -52,4 +55,32 @@ const config = {
   }
 }
 
-module.exports = config
+const serverConfig = {
+  context: path.resolve(__dirname),
+  target: 'node',
+
+  entry: ['babel-polyfill', './server/index.js'],
+  output: {
+    path: path.resolve(__dirname, './build/server'),
+    filename: 'index.js',
+    libraryTarget: 'commonjs'
+  },
+  externals: [/^(?!\.|\/).+/i],
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['react', 'stage-0', 'es2015']
+        }
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  }
+}
+
+module.exports = [browserConfig, serverConfig]

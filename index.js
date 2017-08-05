@@ -1,6 +1,8 @@
 var fs = require('fs')
 var config = require('config')
+const isProd = process.env.NODE_ENV === 'heroku' || process.env.NODE_ENV === 'production'
 require('dotenv').config({path: 'config/.env.' + process.env.NODE_ENV})
+
 // Prepare config for client
 fs.writeFileSync(
   'client-config.json',
@@ -16,4 +18,5 @@ console.log(`
 '--------------'
 
 `)
-require('./server')
+var appVersion = isProd ? './build/server' : './server'
+require(appVersion)

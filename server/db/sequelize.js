@@ -2,7 +2,7 @@ import Seqeulize from 'sequelize'
 
 // const isDev = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'heroku'
 
 const databaseUrl = process.env.DATABASE_URL
 const sequelize = new Seqeulize(
@@ -12,7 +12,7 @@ const sequelize = new Seqeulize(
     paranoid: isProd, // doesn't delete entries, just sets deleted at timestamp, default: false
     // underscored: false // Changes camel-cased names to snake-case, default: false
     // freezeTableName: false, // don't pluralize table name, default: true,
-    logging: (isTest || isProd) && (() => {})
+    logging: (isTest || isProd) ? () => {} : console.log
   })
 
 export default sequelize
