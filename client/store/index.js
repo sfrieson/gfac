@@ -1,5 +1,4 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import logger from 'redux-logger'
+import { createStore, combineReducers } from 'redux'
 
 const accountForm = (state = {}, action) => {
   switch (action.type) {
@@ -163,8 +162,7 @@ const mainReducer = combineReducers({
   storyteller
 })
 
-const middleware = applyMiddleware(logger)
-const store = createStore(mainReducer, middleware)
+const store = createStore(mainReducer)
 
 export default store
 export const dispatch = store.dispatch

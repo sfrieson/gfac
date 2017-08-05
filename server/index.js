@@ -20,6 +20,7 @@ const app = express()
 
 const isDev = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
+// const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'heroku'
 
 app.use(express.static('./build/public'))
 if (isDev) app.use(webpackDevMiddleware(webpack(webpackConfig)))

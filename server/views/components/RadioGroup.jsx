@@ -3,7 +3,7 @@ export default function ({label, name, options, value: radioValue}) {
   return (
     <div>
       <div>Phone Type</div>
-      {options.map(({label, value}, key) => <RadioButton key={key} name={name} label={label} value={radioValue === value} />)}
+      {options.map(({label, value}, key) => <RadioButton key={key} name={name} label={label} value={value} selected={radioValue === value} />)}
     </div>
   )
 }

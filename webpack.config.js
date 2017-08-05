@@ -9,15 +9,10 @@ var pkg = require('./package.json')
 const browserConfig = {
   context: path.resolve(__dirname),
   target: 'web',
-  name: 'client',
-
-  entry: {
-    client: ['babel-polyfill', './client/scripts.js']
-  },
+  entry: ['babel-polyfill', './client/scripts.js'],
   output: {
-    path: path.resolve(__dirname, './build/client'),
+    path: path.resolve(__dirname, './build/public'),
     filename: 'scripts.js'
-    // publicPath: '/assets/', // Still not sure what this is for
     // pathinfo: false, // TODO Add way to decide if this should have verbose path info or not (--verbose)
   }, // end output
   module: {
@@ -80,6 +75,14 @@ const serverConfig = {
   },
   resolve: {
     extensions: ['.js', '.jsx']
+  },
+  node: {
+    console: false,
+    global: false,
+    process: false,
+    Buffer: false,
+    __filename: false,
+    __dirname: false
   }
 }
 

@@ -46,8 +46,8 @@ export default {
             <label for='role'>Which are you?</label>
             <select name='role' id='role' className='form-control' defaultValue={responses.role || 'default'}>
               <option value='default' disabled>Select one...</option>
-              <option value='photographer' selected={responses.role === 'photographer' ? 'selected' : ''}>Photographer</option>
-              <option value='contact' selected={responses.role === 'contact' ? 'selected' : ''}>Nonprofit Contact</option>
+              <option value='photographer'>Photographer</option>
+              <option value='contact'>Nonprofit Contact</option>
             </select>
           </div>
 
