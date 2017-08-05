@@ -1,9 +1,15 @@
-import login from './login'
-import ssr from './ssr'
-const t = {
-  login,
-  ssr
-}
-export default function (template, opts) {
-  return t[template](opts)
+import head from './partials/head'
+export default function () {
+  return `
+  <!doctype html>
+  <html lang="en">
+  <head>
+    ${head('Gramforacause')}
+  </head>
+  <body>
+    <div id="app">Loading...</div>
+    <script src="/scripts.js"></script>
+  </body>
+  </html>
+  `
 }

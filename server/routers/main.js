@@ -7,7 +7,8 @@ import { Cause } from '../db/models'
 import User from '../db/controllers/user'
 import { ValidationError } from '../errors'
 
-import views from '../views'
+import renderSpa from '../views'
+import renderStatic from '../views/static'
 
 const app = config.get('app')
 const { auth, email } = config.get('server')
@@ -21,14 +22,14 @@ Router.route('/admin-invite')
   User.get({loginToken: query.t})
   .then((u) => {
     if (!u) return res.redirect('/login')
-    res.send(views('register-admin', {admin: u}))
+    res.send(renderStatic('registerAdmin', {admin: u}))
   })
   .catch(() => res.redirect('/login'))
 })
 .post(/* TODO */)
 
 Router.route('/change-password')
-.get(({ query }, res) => res.send(views('change-password', {token: query.t, email: query.email})))
+.get(({ query }, res) => res.send(renderStatic('changePassword', {token: query.t, email: query.email})))
 .post(({ body, query }, res) => {
   User.resetPassword(body)
   .then(user => login(user, res))
@@ -36,7 +37,7 @@ Router.route('/change-password')
 })
 
 Router.route('/reset-password')
-.get(({ query }, res) => res.send(views('change-password', {token: query.t, email: query.email})))
+.get(({ query }, res) => res.send(renderStatic('changePassword', {token: query.t, email: query.email})))
 .post(({ body, query }, res) => {
   User.resetPassword(body)
   .then(res.json.bind(res))
@@ -44,17 +45,17 @@ Router.route('/reset-password')
 })
 
 Router.route('/forgot-password')
-.get((_, res) => res.send(views('forgot-password')))
+.get((_, res) => res.send(renderStatic('forgotPassword')))
 .post(({ body }, res) => {
   User.forgotPassword(body.email)
   .then(() => (
-    res.send(views('email-success', {email: body.email, expiryMin: email.expiryMin}))
+    res.send(renderStatic('email-success', {email: body.email, expiryMin: email.expiryMin}))
   ))
   .catch(err => res.send(err.message))
 })
 
 Router.route('/login')
-.get((_, res) => res.send(views('login')))
+.get((_, res) => res.send(renderStatic('login')))
 .post(({ body }, res) => {
   console.log(`Attempting Login
   Email:    ${body.email}
@@ -83,14 +84,14 @@ Router.route('/register')
     next()
   })
 })
-.get((req, res) => { res.send(views('register', {err: [], responses: {}, causes: req.causes})) })
+.get((req, res) => { res.send(renderStatic('register', {err: [], responses: {}, causes: req.causes})) })
 .post((req, res) => {
   const responses = req.body
   User.validate(responses)
   .then(() => User.create(responses))
   .then(user => login(user, res))
   .catch((err) => {
-    if (err instanceof ValidationError) res.send(views('register', {err: err.errors, responses: responses, causes: req.causes}))
+    if (err instanceof ValidationError) res.send(renderStatic('register', {err: err.errors, responses: responses, causes: req.causes}))
     else if (err.message === 'Account Creation') res.status(500).send('Error: ' + err.message)
     else res.status(500).json(err)
   })
@@ -109,7 +110,7 @@ Router.get('*', (req, res) => {
   sequelize.authenticate()
   .then(() => User.get({id: req.user.id}))
   .then(user => {
-    if (user.email) res.send(views('ssr', {user: user, body: '<h1>Loading...</h1>'}))
+    if (user.email) res.send(renderSpa())
     else throw new Error('No user')
   })
   .catch(_err => res.redirect('/login'))
