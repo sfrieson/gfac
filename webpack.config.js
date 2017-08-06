@@ -1,3 +1,4 @@
+var fs = require('fs')
 var path = require('path')
 var webpack = require('webpack')
 
@@ -5,6 +6,12 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const extractCSS = new ExtractTextPlugin('styles.css')
 
 var pkg = require('./package.json')
+var config = require('config')
+fs.writeFileSync(
+  'client-config.json',
+  JSON.stringify(config.get('client'))
+)
+require('dotenv').config({path: 'config/.env.' + process.env.NODE_ENV})
 
 const browserConfig = {
   context: path.resolve(__dirname),
