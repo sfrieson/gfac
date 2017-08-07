@@ -12,8 +12,8 @@ import webpackDevMiddleware from 'webpack-dev-middleware'
 import mainRouter from './routers/main'
 
 import schema from './db/queries/schema'
-
 import models from './db/models'
+import { bulkIndex } from './db/elasticlunr'
 
 const config = Config.get('server')
 const app = express()
@@ -44,6 +44,7 @@ app.use('/api', expressGraphQL((req) => ({
 app.use(mainRouter)
 
 models.sync({force: isTest})
+.then(bulkIndex)
 .catch(err => console.error(err.stack))
 .then(() => {
   const port = process.env.PORT

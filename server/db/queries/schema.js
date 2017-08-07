@@ -20,7 +20,7 @@ import {
   ProjectController as ProjectC
 } from '../controllers'
 
-import search from '../elasticlunr'
+import { search } from '../elasticlunr'
 
 const userFields = {
   id: {type: new NonNull(Id)},

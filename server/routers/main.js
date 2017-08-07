@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken'
 
 import config from 'config'
 import sequelize from '../db/sequelize'
-import { Cause } from '../db/models'
 import User from '../db/controllers/user'
 import { ValidationError } from '../errors'
 
@@ -76,22 +75,16 @@ Router.get('/logout', (req, res) => {
   res.redirect('/login')
 })
 
+const {fields: {all: { causes }}} = require('client-config')
 Router.route('/register')
-.all((req, _, next) => {
-  Cause.findAll()
-  .then(causes => {
-    req.causes = causes
-    next()
-  })
-})
-.get((req, res) => { res.send(renderStatic('register', {err: [], responses: {}, causes: req.causes})) })
+.get((req, res) => { res.send(renderStatic('register', {err: [], responses: {}, causes})) })
 .post((req, res) => {
   const responses = req.body
   User.validate(responses)
   .then(() => User.create(responses))
   .then(user => login(user, res))
   .catch((err) => {
-    if (err instanceof ValidationError) res.send(renderStatic('register', {err: err.errors, responses: responses, causes: req.causes}))
+    if (err instanceof ValidationError) res.send(renderStatic('register', {err: err.errors, responses: responses, causes}))
     else if (err.message === 'Account Creation') res.status(500).send('Error: ' + err.message)
     else res.status(500).json(err)
   })

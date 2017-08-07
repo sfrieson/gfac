@@ -19,11 +19,14 @@ const photographerFields = [
   'portfolio'
 ]
 
-const photographerIdx = elasticLunr(function () {
-  this.setRef('id')
-  photographerFields.forEach(field => this.addField(field))
+let photographerIdx
+function buildPhotographerIndex () {
+  photographerIdx = elasticLunr(function () {
+    this.setRef('id')
+    photographerFields.forEach(field => this.addField(field))
+  })
 
-  PhotographerController.getAll()
+  return PhotographerController.getAll()
   .then(photographers => photographers.map((p) => {
     const camera = []
     if (p.cameraFilm) camera.push('film')
@@ -38,8 +41,8 @@ const photographerIdx = elasticLunr(function () {
       causes: p.causes.map(({id}) => 'cause_' + id)
     }
   }))
-  .then(photographers => photographers.map(p => this.addDoc(p)))
-})
+  .then(photographers => photographers.map(p => photographerIdx.addDoc(p)))
+}
 
 const nonprofitFields = [
   'name',
@@ -49,11 +52,14 @@ const nonprofitFields = [
   'causes'
 ]
 
-const nonprofitIdx = elasticLunr(function () {
-  this.setRef('id')
-  nonprofitFields.forEach(field => this.addField(field))
+let nonprofitIdx
+function buildNonprofitIndex () {
+  nonprofitIdx = elasticLunr(function () {
+    this.setRef('id')
+    nonprofitFields.forEach(field => this.addField(field))
+  })
 
-  NonprofitController.getAll()
+  return NonprofitController.getAll()
   .then(photographers => photographers.map((p) => {
     return {
       ...p,
@@ -62,13 +68,20 @@ const nonprofitIdx = elasticLunr(function () {
       causes: p.causes.map(({id}) => 'cause_' + id)
     }
   }))
-  .then(photographers => photographers.map(p => this.addDoc(p)))
-})
+  .then(photographers => photographers.map(p => nonprofitIdx.addDoc(p)))
+}
 
-export default function photographer (term, type) {
+export function search (term, type) {
   const idx = type === 'storyteller' ? photographerIdx : nonprofitIdx
   return Promise.resolve(
     idx.search(term)
     .map(({ref}) => idx.documentStore.getDoc(ref))
   )
+}
+
+export function bulkIndex () {
+  return Promise.all([
+    buildNonprofitIndex(),
+    buildPhotographerIndex()
+  ])
 }
