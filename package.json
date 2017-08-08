@@ -4,10 +4,10 @@
   "description": "The adminitistrative site for Gramforacause",
   "main": "index.js",
   "scripts": {
-    "db": "NODE_ENV=production babel-node ./server/db/tasks.js",
+    "db": "babel-node ./server/db/tasks.js",
     "db:seed": "yarn db seed",
     "lint": "standard",
-    "create": "NODE_ENV=development babel-node ./.bin/create --",
+    "create": "babel-node ./.bin/create --",
     "node": "babel-node",
     "start": "NODE_ENV=heroku webpack -p && babel-node ./index.js",
     "start:prod": "NODE_ENV=production babel-node ./index.js",

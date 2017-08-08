@@ -9,6 +9,7 @@ import seedContacts from './seed/contacts'
 let emailList = []
 
 export default function (dataType) {
+  if (dataType === 'causes') return models.sync({force: false}).then(seedCauses)
   return models.sync({force: true})
   .then(seedCauses)
   .then(() => seedPhotographers(dataType))
