@@ -45,7 +45,6 @@ app.use(mainRouter)
 
 models.sync({force: isTest})
 .then(bulkIndex)
-.catch(err => console.error(err.stack))
 .then(() => {
   const port = process.env.PORT
   app.listen(port, () => {
