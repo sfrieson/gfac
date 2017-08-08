@@ -1,5 +1,4 @@
 import { User, Contact, Nonprofit } from '../models'
-import { Contact as Mock } from './mocks'
 
 import { parseTsv } from '../utils'
 
@@ -61,12 +60,14 @@ function mockSeed ({users: contacts, emailList, nonprofits}) {
 
 function getData (dataType) {
   if (dataType === 'seed') return parseTsv('contact')
+  else {
+    const { Contact: Mock } = require('./mocks')
+    const {contacts, nonprofits} = Mock(20)
 
-  const {contacts, nonprofits} = Mock(20)
-
-  return {
-    nonprofits,
-    users: contacts,
-    emailList: contacts.map(c => ([c.email, c.firstname, c.lastname, c.password]))
+    return {
+      nonprofits,
+      users: contacts,
+      emailList: contacts.map(c => ([c.email, c.firstname, c.lastname, c.password]))
+    }
   }
 }

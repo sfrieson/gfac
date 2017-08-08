@@ -14,6 +14,7 @@
     "build": "webpack -p",
     "prod": "yarn build && yarn start:prod",
     "dev": "NODE_ENV=development nodemon ./index.js --watch ./server --exec babel-node",
+    "deploy": "git checkout deploy && git merge master -m 'merge to deploy' && git push heroku deploy:master && git checkout master",
     "test": "NODE_ENV=test mocha --require babel-register  ./server/**/*.test.js ./server/**/**/*.test.js ./client/**/*.test.js"
   },
   "babel": {
