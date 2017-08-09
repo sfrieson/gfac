@@ -30,7 +30,7 @@ function makeFieldInfos (inputs, onChange) {
     if (key === 'nonprofit') return null
     const info = {
       key,
-      ...fields.all[key],
+      ...fields[key],
       onChange,
       value: inputs[key]
     }

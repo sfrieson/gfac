@@ -1,5 +1,5 @@
 import React from 'react'
-import PT from 'prop-types'
+import PropTypes from 'prop-types'
 import { fields } from 'client-config'
 
 export default function Input (props) {
@@ -14,7 +14,7 @@ export default function Input (props) {
   if (type === 'date') return <DateInput {...props} />
   if (type === 'radio') return <Radio {...props} />
   if (type === 'hidden') return <input {...props} />
-  if (type === 'causes') return <Checkboxes {...props} options={fields.all.causes.options} />
+  if (type === 'causes') return <Checkboxes {...props} options={fields.causes.options} />
   if (type === 'select') return <Select {...props} />
   if (type === 'textarea') return <TextArea {...props} />
   if (type === 'checkbox') return <Checkbox {...props} />
@@ -30,15 +30,15 @@ export default function Input (props) {
 }
 
 Input.propTypes = {
-  type: PT.oneOf(['availability', 'causes', 'checkbox', 'checkboxes', 'date', 'hidden', 'radio', 'select', 'text', 'tel', 'textarea']),
-  onChange: PT.func,
-  name: PT.string.isRequired,
-  value: PT.oneOfType([PT.string, PT.number, PT.array, PT.bool])
+  type: PropTypes.oneOf(['availability', 'causes', 'checkbox', 'checkboxes', 'date', 'hidden', 'radio', 'select', 'text', 'tel', 'textarea']),
+  onChange: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.array, PropTypes.bool])
 }
 
 Input.defaultProps = {
   onChange: () => {},
-  type: 'string'
+  type: 'text'
 }
 
 // ----------
@@ -78,13 +78,15 @@ function DateInput ({ label, name, value, ...props }) {
 // Radio Input
 // -----------
 
-function Radio ({
-  options,
-  onChange,
-  label,
-  name,
-  value
-                }) {
+function Radio (props) {
+  const {
+    options,
+    onChange,
+    label,
+    name,
+    value
+  } = props
+
   const checked = value
   // TODO check on hardcoded 'role' below
   return (
