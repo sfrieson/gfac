@@ -2,7 +2,7 @@ import React from 'react'
 
 import config from 'config'
 import CheckboxGroup from '../components/CheckboxGroup'
-const causes = config.get('client.fields.all.causes')
+const causes = config.get('client.fields.causes')
 
 export default function ({responses}) {
   const hidden = responses.selected !== 'photographer'

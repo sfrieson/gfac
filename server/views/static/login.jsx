@@ -1,4 +1,9 @@
 import React from 'react'
+import config from 'config'
+
+import InputGroup from '../components/InputGroup'
+const fields = config.get('client.fields')
+const loginFields = config.get('client.fieldsets.login').map(fieldName => fields[fieldName])
 
 export default {
   title: 'Login | Gramforacause',
@@ -17,11 +22,7 @@ export default {
         <div className='login__container'>
           <h2>Login!</h2>
           <form action='/login' method='POST'>
-            <label for='email'>Email:</label>
-            <input id='email' type='text' name='email' />
-
-            <label for='password'>Password:</label>
-            <input id='password' type='password' name='password' />
+            {loginFields.map((data, key) => <InputGroup key={key} {...data} />)}
 
             <button className='btn'>Login</button>
           </form>

@@ -75,7 +75,7 @@ Router.get('/logout', (req, res) => {
   res.redirect('/login')
 })
 
-const {fields: {all: { causes }}} = require('client-config')
+const {fields: { causes }} = require('client-config')
 Router.route('/register')
 .get((req, res) => { res.send(renderStatic('register', {err: [], responses: {}, causes})) })
 .post((req, res) => {

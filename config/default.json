@@ -24,7 +24,7 @@
     }
   },
   "client": {
-    "forms": {
+    "fieldsets": {
       "createProject": ["name", "description", "date", "dateIsApprox", "location", "photoLink"],
       "editContact": ["phoneSecondary", "phoneSecondaryType"],
       "editStoryteller": ["instagram", "cameraType", "cameraOther", "preferredContactMethod", "causes", "availabilities"],
@@ -93,7 +93,7 @@
       "email": {
         "label": "Email",
         "name": "email",
-        "type": "text"
+        "type": "email"
       },
       "description": {
         "label": "Short Description",
@@ -133,6 +133,11 @@
         "label": "Name",
         "name": "name",
         "type": "text"
+      },
+      "password": {
+        "label": "Password",
+        "name": "password",
+        "type": "password"
       },
       "phone": {
         "label": "Phone Number",
