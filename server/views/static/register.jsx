@@ -1,10 +1,22 @@
 import React from 'react'
+import config from 'config'
 
 import InputGroup from '../components/InputGroup'
 import RadioGroup from '../components/RadioGroup'
 import ContactMore from '../partials/register-contact'
 import StorytellerMore from '../partials/register-storyteller'
 
+const fields = config.get('client.fields')
+const userFields = config.get('client.fieldsets.registerUser').map(fieldName => fields[fieldName])
+// const contactFields = config.get('client.fieldsets.registerContact').map(fieldName => fields[fieldName])
+// const storytellerFields = config.get('client.fieldsets.registerStoryteller').map(fieldName => fields[fieldName])
+
+function chooseField (props, key) {
+  switch (props.inputType) {
+    case 'RadioGroup': return <RadioGroup key={key} {...props} />
+    default: return <InputGroup key={key} {...props} />
+  }
+}
 export default {
   title: 'Create an Account | Gramforacause',
   head: `
@@ -28,19 +40,7 @@ export default {
 
         <h1>Create an account</h1>
         <form method='POST' action='/register'>
-          <InputGroup name='firstname' label='First name' type='text' value={responses.firstname} />
-          <InputGroup name='lastname' label='Last name' type='text' value={responses.lastname} />
-          <InputGroup name='email' label='Email' type='text' value={responses.email} />
-          <InputGroup name='password' label='Password' type='password' />
-          <InputGroup name='confirm' label='Confirm Password' type='password' />
-          <InputGroup name='phone' label='Phone number' type='text' />
-
-          <RadioGroup
-            name='phoneType'
-            label='Phone Type'
-            options={[{label: 'Mobile', value: 'mobile'}, {label: 'Office', value: 'office'}]}
-            value={responses.phoneType}
-          />
+          {userFields.map(chooseField)}
 
           <div className='input-group'>
             <label for='role'>Which are you?</label>

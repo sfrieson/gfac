@@ -32,7 +32,7 @@
       "login": ["email", "password"],
       "registerContact": ["instagram", "cameraType", "location"],
       "registerStoryteller": ["instagram", "cameraType", "location"],
-      "registerUser": ["nonprofitName", "nonprofitWebsite", "jobTitle", "location"]
+      "registerUser": ["firstname", "lastname", "email", "password", "confirm"]
     },
     "fields": {
       "availabilities": {
@@ -84,6 +84,11 @@
           {"value": 8, "label": "Children with Special Needs"},
           {"value": 9, "label": "Disaster Response"}
         ]
+      },
+      "confirm": {
+        "label": "Confirm Password",
+        "name": "confirm",
+        "type": "password"
       },
       "date": {
         "label": "Date",
