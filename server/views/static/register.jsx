@@ -1,19 +1,21 @@
 import React from 'react'
 import config from 'config'
 
+import AvailabilityGroup from '../components/AvailabilityGroup'
+import CameraTypeGroup from '../components/CameraTypeGroup'
 import InputGroup from '../components/InputGroup'
 import RadioGroup from '../components/RadioGroup'
-import ContactMore from '../partials/register-contact'
-import StorytellerMore from '../partials/register-storyteller'
 
 const fields = config.get('client.fields')
 const userFields = config.get('client.fieldsets.registerUser').map(fieldName => fields[fieldName])
-// const contactFields = config.get('client.fieldsets.registerContact').map(fieldName => fields[fieldName])
-// const storytellerFields = config.get('client.fieldsets.registerStoryteller').map(fieldName => fields[fieldName])
+const contactFields = config.get('client.fieldsets.registerContact').map(fieldName => fields[fieldName])
+const storytellerFields = config.get('client.fieldsets.registerStoryteller').map(fieldName => fields[fieldName])
 
-function chooseField (props, key) {
+function renderField (props, key) {
   switch (props.inputType) {
     case 'RadioGroup': return <RadioGroup key={key} {...props} />
+    case 'CameraTypeGroup': return <CameraTypeGroup key={key} {...props} />
+    case 'AvailabilityGroup': return <AvailabilityGroup key={key} {...props} />
     default: return <InputGroup key={key} {...props} />
   }
 }
@@ -40,7 +42,7 @@ export default {
 
         <h1>Create an account</h1>
         <form method='POST' action='/register'>
-          {userFields.map(chooseField)}
+          {userFields.map(renderField)}
 
           <div className='input-group'>
             <label for='role'>Which are you?</label>
@@ -51,8 +53,16 @@ export default {
             </select>
           </div>
 
-          <ContactMore responses={responses} />
-          <StorytellerMore responses={responses} />
+          <fieldset id='contact-more' className={responses.selected !== 'contact' && 'hidden'} aria-hidden={responses.selected !== 'contact'}>
+            <span className='help-block'>
+              Note: If your nonprofit already has an account, ask your coworker for an invite link.
+            </span>
+            {contactFields.map(renderField)}
+          </fieldset>
+
+          <fieldset id='photographer-more' className={responses.selected !== 'photographer' && 'hidden'} aria-hidden={responses.selected !== 'photographer'}>
+            {storytellerFields.map(renderField)}
+          </fieldset>
 
           <button className='btn'>Submit</button>
         </form>

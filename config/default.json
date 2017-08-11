@@ -30,15 +30,15 @@
       "editStoryteller": ["instagram", "cameraType", "cameraOther", "preferredContactMethod", "causes", "availabilities"],
       "editUser": ["email", "firstname", "lastname", "phone", "phoneType"],
       "login": ["email", "password"],
-      "registerContact": ["instagram", "cameraType", "location"],
-      "registerStoryteller": ["instagram", "cameraType", "location"],
+      "registerContact": ["nonprofitName", "nonprofitWebsite", "jobTitle", "locationPersonal"],
+      "registerStoryteller": ["instagram", "cameraTypeRegistration", "location", "availabilities"],
       "registerUser": ["firstname", "lastname", "email", "password", "confirm"]
     },
     "fields": {
       "availabilities": {
-        "label": "Availability",
+        "label": "General Availability",
         "name": "availabilities",
-        "type": "availability"
+        "inputType": "AvailabilityGroup"
       },
       "cameraOther": {
         "label": "Other",
@@ -62,12 +62,16 @@
       },
       "cameraType": {
         "label": "Camera Type",
-        "type": "checkboxes",
+        "inputType": "CameraTypeGroup",
         "options": [
           {"label": "Film", "name": "cameraFilm"},
           {"label": "Phone", "name": "cameraPhone"},
           {"label": "DSLR", "name": "cameraDSLR"}
         ]
+      },
+      "cameraTypeRegistration": {
+        "label": "I generally shoot with...",
+        "inputType": "CameraTypeGroup"
       },
       "causes": {
         "label": "Causes you're interested in (pick up to 5)",
@@ -125,7 +129,7 @@
         "type": "text"
       },
       "jobTitle": {
-        "label": "Position",
+        "label": "Your job title",
         "name": "jobTitle",
         "type": "text"
       },
@@ -139,18 +143,23 @@
         "name": "location",
         "type": "text"
       },
+      "locationPersonal": {
+        "label": "City, State, Country",
+        "name": "location",
+        "type": "text"
+      },
       "name": {
         "label": "Name",
         "name": "name",
         "type": "text"
       },
       "nonprofitName": {
-        "label": "Nonprofit Name",
+        "label": "Organization name",
         "name": "nonprofitName",
         "type": "text"
       },
       "nonprofitWebsite": {
-        "label": "Nonprofit Website",
+        "label": "Organization website",
         "name": "nonprofitWebsite",
         "type": "text"
       },
