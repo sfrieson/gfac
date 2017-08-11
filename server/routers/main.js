@@ -56,9 +56,6 @@ Router.route('/forgot-password')
 Router.route('/login')
 .get((_, res) => res.send(renderStatic('login')))
 .post(({ body }, res) => {
-  console.log(`Attempting Login
-  Email:    ${body.email}
-  Password: ${body.password}`)
   User.checkPassword(body.email, body.password)
   .then(user => {
     res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwtSecret))
