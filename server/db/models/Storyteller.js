@@ -4,7 +4,7 @@ import Model from '../sequelize'
 import User from './User'
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
-const Photographer = Model.define('photographer',
+const Storyteller = Model.define('storyteller',
   {
     // Should the email be the foreign key?
     userId: {
@@ -52,4 +52,4 @@ const Photographer = Model.define('photographer',
   }
 )
 
-export default Photographer
+export default Storyteller

@@ -1,13 +1,13 @@
-import { Project as Model, Contact, Photographer } from '../models'
+import { Project as Model, Contact, Storyteller } from '../models'
 
-const photographerInclude = {model: Photographer, include: ['user']}
+const storytellerInclude = {model: Storyteller, include: ['user']}
 function flattenInstance (i) {
   const instance = i.get({plain: true})
-  instance.photographers = (instance.photographers || [])
+  instance.storytellers = (instance.storytellers || [])
   .map(p => {
     if ('user' in p) {
-      const {user, ...photographer} = p
-      return {...photographer, ...user, userId: user.id}
+      const {user, ...storyteller} = p
+      return {...storyteller, ...user, userId: user.id}
     } else return p
   })
 
@@ -15,10 +15,10 @@ function flattenInstance (i) {
 }
 
 export default {
-  updatePhotographer (id, photographerUserId, action) {
-    return Model.findOne({where: {id}, include: [photographerInclude]})
+  updateStoryteller (id, storytellerUserId, action) {
+    return Model.findOne({where: {id}, include: [storytellerInclude]})
     .then(instance => (
-      instance[action === 'add' ? 'addPhotographer' : 'removePhotographer'](photographerUserId)
+      instance[action === 'add' ? 'addStoryteller' : 'removeStoryteller'](storytellerUserId)
       .then(() => instance.reload())
     ))
     .then(flattenInstance)
@@ -46,13 +46,13 @@ export default {
     const options = {
       order: ['date'],
       where: args || {},
-      include: [photographerInclude]
+      include: [storytellerInclude]
     }
     console.log('ProjectController#get, args:', args, 'user:', user)
     if (user.role === 'contact') options.where.nonprofitId = user.nonprofitId
-    if (user.role === 'photographer') {
+    if (user.role === 'storyteller') {
       options.include = [{
-        model: Photographer,
+        model: Storyteller,
         where: {userId: user.id}
       }]
     }

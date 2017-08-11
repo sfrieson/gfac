@@ -4,11 +4,11 @@ import ajaxDispatch from 'utils/ajax-dispatch'
 import api from 'utils/api'
 
 const User = {
-  getAllPhotographers: () => (
+  getAllStorytellers: () => (
     ajaxDispatch('ALL_PHOTOGRAPHERS',
       api(`
-        query GetAllPhotographers {
-          getAllPhotographers {
+        query GetAllStorytellers {
+          getAllStorytellers {
             userId
             ...on UserInterface{
               firstname
@@ -31,7 +31,7 @@ const User = {
               phone
               phoneType
               role
-              ... on Photographer {
+              ... on Storyteller {
                 instagram
                 cameraPhone
                 cameraFilm
@@ -65,7 +65,7 @@ const User = {
   getStoryteller: function (userId) {
     ajaxDispatch('STORYTELLER',
       api(`query GetPhotogapher($userId: ID) {
-        getPhotographer(userId: $userId) {
+        getStoryteller(userId: $userId) {
           firstname
           lastname
           email
@@ -100,12 +100,12 @@ const User = {
         updateFieldName: 'contactUpdates',
         variable: '$contactUpdates: ContactInput'
       },
-      { // Photographer Fields
+      { // Storyteller Fields
         fields: ['instagram', 'cameraPhone', 'cameraFilm', 'cameraDSLR',
           'cameraOther', 'preferredContactMethod', 'causes', 'availabilities'],
-        updateFieldName: 'photographerUpdates',
-        mutation: 'updatePhotographerMe(updates: $photographerUpdates) { userId }',
-        variable: '$photographerUpdates: PhotographerInput'
+        updateFieldName: 'storytellerUpdates',
+        mutation: 'updateStorytellerMe(updates: $storytellerUpdates) { userId }',
+        variable: '$storytellerUpdates: StorytellerInput'
       },
       { // User Fields
         fields: ['email', 'firstname', 'lastname', 'phone', 'phoneType', 'role'],

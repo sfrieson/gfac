@@ -5,9 +5,9 @@ import CheckboxGroup from '../components/CheckboxGroup'
 const causes = config.get('client.fields.causes')
 
 export default function ({responses}) {
-  const hidden = responses.selected !== 'photographer'
+  const hidden = responses.selected !== 'storyteller'
   return (
-    <fieldset id='photographer-more' className={hidden && 'hidden'} aria-hidden={hidden}>
+    <fieldset id='storyteller-more' className={hidden && 'hidden'} aria-hidden={hidden}>
       {causes.label}
       <div className='checkbox'>{causes.options.map((cause, key) => (
         <CheckboxGroup

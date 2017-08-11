@@ -22,7 +22,7 @@ const Project = {
           location
           description
           id
-          photographers {
+          storytellers {
             userId
             ... on UserInterface {
               firstname
@@ -43,7 +43,7 @@ const Project = {
           location
           description
           id
-          photographers {
+          storytellers {
             userId
             ... on UserInterface {
               firstname
@@ -54,22 +54,22 @@ const Project = {
       }`, {id, updates})
     )
   },
-  addPhotographer: function (args) {
-    this.updatePhotographer({...args, action: 'add'})
+  addStoryteller: function (args) {
+    this.updateStoryteller({...args, action: 'add'})
   },
-  removePhotographer: function (args) {
-    this.updatePhotographer({...args, action: 'remove'})
+  removeStoryteller: function (args) {
+    this.updateStoryteller({...args, action: 'remove'})
   },
-  updatePhotographer: function (args) {
+  updateStoryteller: function (args) {
     ajaxDispatch('PROJECT_UPDATE',
-      api(`mutation UpdatePhotographerToProject ($userId: ID, $projectId: Int, $action: String) {
-        updateProjectPhotographer(id: $projectId, photographerUserId: $userId, action: $action) {
+      api(`mutation UpdateStorytellerToProject ($userId: ID, $projectId: Int, $action: String) {
+        updateProjectStoryteller(id: $projectId, storytellerUserId: $userId, action: $action) {
           name
           date
           dateIsApprox
           location
           description
-          photographers {
+          storytellers {
             id
             ... on UserInterface {
               firstname

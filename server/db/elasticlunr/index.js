@@ -2,12 +2,12 @@ import elasticLunr from 'elasticlunr'
 import {
   // ContactController,
   NonprofitController,
-  PhotographerController
+  StorytellerController
   // ProjectController,
   // UserController
 } from '../controllers'
 
-const photographerFields = [
+const storytellerFields = [
   'email',
   'firstname',
   'lastname',
@@ -19,15 +19,15 @@ const photographerFields = [
   'portfolio'
 ]
 
-let photographerIdx
-function buildPhotographerIndex () {
-  photographerIdx = elasticLunr(function () {
+let storytellerIdx
+function buildStorytellerIndex () {
+  storytellerIdx = elasticLunr(function () {
     this.setRef('id')
-    photographerFields.forEach(field => this.addField(field))
+    storytellerFields.forEach(field => this.addField(field))
   })
 
-  return PhotographerController.getAll()
-  .then(photographers => photographers.map((p) => {
+  return StorytellerController.getAll()
+  .then(storytellers => storytellers.map((p) => {
     const camera = []
     if (p.cameraFilm) camera.push('film')
     if (p.cameraDSLR) camera.push('DSLR')
@@ -41,7 +41,7 @@ function buildPhotographerIndex () {
       causes: p.causes.map(({id}) => 'cause_' + id)
     }
   }))
-  .then(photographers => photographers.map(p => photographerIdx.addDoc(p)))
+  .then(storytellers => storytellers.map(p => storytellerIdx.addDoc(p)))
 }
 
 const nonprofitFields = [
@@ -60,7 +60,7 @@ function buildNonprofitIndex () {
   })
 
   return NonprofitController.getAll()
-  .then(photographers => photographers.map((p) => {
+  .then(storytellers => storytellers.map((p) => {
     return {
       ...p,
       contacts: p.contacts.map(({firstname, lastname}) => `${firstname} ${lastname}`),
@@ -68,11 +68,11 @@ function buildNonprofitIndex () {
       causes: p.causes.map(({id}) => 'cause_' + id)
     }
   }))
-  .then(photographers => photographers.map(p => nonprofitIdx.addDoc(p)))
+  .then(storytellers => storytellers.map(p => nonprofitIdx.addDoc(p)))
 }
 
 export function search (term, type) {
-  const idx = type === 'storyteller' ? photographerIdx : nonprofitIdx
+  const idx = type === 'storyteller' ? storytellerIdx : nonprofitIdx
   return Promise.resolve(
     idx.search(term)
     .map(({ref}) => idx.documentStore.getDoc(ref))
@@ -82,6 +82,6 @@ export function search (term, type) {
 export function bulkIndex () {
   return Promise.all([
     buildNonprofitIndex(),
-    buildPhotographerIndex()
+    buildStorytellerIndex()
   ])
 }

@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs'
 import { pick as whitelist } from 'lodash'
 import config from 'config'
-import { User as Model, Photographer as PhotographerModel } from '../models'
+import { User as Model, Storyteller as StorytellerModel } from '../models'
 import Contact from './contact'
 import Nonprofit from './nonprofit'
-import Photographer from './photographer'
+import Storyteller from './storyteller'
 import Email from '../../email'
 import { ValidationError } from '../../errors'
 
@@ -36,7 +36,7 @@ const User = {
 
     return Model.create(d)
     .then((user) => {
-      if (user.role === 'photographer') return this.createPhotographer(user, data)
+      if (user.role === 'storyteller') return this.createStoryteller(user, data)
       if (user.role === 'contact') return this.createContact(user, data)
     })
     .then((user) => (
@@ -61,9 +61,9 @@ const User = {
     return Contact.create(data, user)
     .then(contact => ({...user.get(), ...contact}))
   },
-  createPhotographer: function (user, data) {
-    return Photographer.create(data, user)
-    .then(photographer => ({...user.get(), ...photographer}))
+  createStoryteller: function (user, data) {
+    return Storyteller.create(data, user)
+    .then(storyteller => ({...user.get(), ...storyteller}))
   },
   forgotPassword: function (email) {
     return this.getInstance({email})
@@ -73,7 +73,7 @@ const User = {
   get: function (query, join = true) {
     return this.getInstance(query)
     .then(user => {
-      if (join && user.role === 'photographer') return this.getPhotographer(user)
+      if (join && user.role === 'storyteller') return this.getStoryteller(user)
       if (join && user.role === 'contact') return this.getContact(user)
       return user.get()
     })
@@ -92,11 +92,11 @@ const User = {
       ...contact
     }))
   },
-  getPhotographer: function (user) { // user can be Instance or object like {id: 12345}
-    return Photographer.get(user.id)
-    .then(photographer => ({
+  getStoryteller: function (user) { // user can be Instance or object like {id: 12345}
+    return Storyteller.get(user.id)
+    .then(storyteller => ({
       ...user.get(),
-      ...photographer
+      ...storyteller
     }))
   },
   hashPassword: hashPassword,
@@ -176,7 +176,7 @@ const User = {
 
     where = {}
     const include = [Object.assign(userIncludeWhere, {
-      association: PhotographerModel.associations.user
+      association: StorytellerModel.associations.user
     })]
     const photoWhere = whitelist({
       instagram: query.instagram && {$iLike: `%${query.instagram}%`},
@@ -188,7 +188,7 @@ const User = {
     for (prop in photoWhere) if (photoWhere[prop]) where[prop] = photoWhere[prop]
     if (query.availabilities) {
       include.push({
-        association: PhotographerModel.associations.availabilities,
+        association: StorytellerModel.associations.availabilities,
         where: query.availabilities.reduce((where, a, i, availabilities) => {
           const [day, time] = a.split('_')
           if (availabilities.length === 1) return {day, time}
@@ -199,7 +199,7 @@ const User = {
     }
     if (query.interests) {
       include.push({
-        association: PhotographerModel.associations.causes,
+        association: StorytellerModel.associations.causes,
         // as: 'interests', // not needed because not returned in search
         where: query.interests.reduce((where, a, _, interests) => {
           const id = {id: a}
@@ -210,8 +210,8 @@ const User = {
       })
     }
 
-    return PhotographerModel.findAll({where, include})
-    .then(photogs => photogs.map(p => Object.assign(p.user.get(), p.get())))
+    return StorytellerModel.findAll({where, include})
+    .then(storytellers => storytellers.map(p => Object.assign(p.user.get(), p.get())))
   },
   update: function (query, updates) {
     return Model.findOne({where: query})

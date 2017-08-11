@@ -2,7 +2,7 @@ import { buildSchema } from 'graphql'
 import {
   ContactController as Contact,
   NonprofitController as Nonprofit,
-  PhotographerController as Photographer,
+  StorytellerController as Storyteller,
   UserController as User,
   ProjectController as Project
 } from '../controllers'
@@ -10,12 +10,12 @@ import {
 const queryResolvers = {
   getMe: (_, req) => User.get({id: req.user.id}),
   getNonprofit: ({ id }) => Nonprofit.get(id),
-  getPhotographer: (args) => User.get({id: args.userId}),
+  getStoryteller: (args) => User.get({id: args.userId}),
   getProjects: (args, { user }) => Project.get(args, user),
   getUser: (query) => User.get(query),
   search: (args) => User.search(args.queries)
 }
-queryResolvers.getMePhotographer = queryResolvers.getMe
+queryResolvers.getMeStoryteller = queryResolvers.getMe
 queryResolvers.getMeContact = queryResolvers.getMe
 
 const mutationResolvers = {
@@ -24,7 +24,7 @@ const mutationResolvers = {
   updateMe: (args, req) => User.update({id: req.user.id}, args.updates),
   updateNonprofit: ({id, updates}) => Nonprofit.update(id, updates),
   updateProject: ({id, updates}) => Project.update(id, updates),
-  updatePhotographerMe: (args, req) => Photographer.update({id: req.user.id}, args.updates)
+  updateStorytellerMe: (args, req) => Storyteller.update({id: req.user.id}, args.updates)
 }
 
 export const root = {...queryResolvers, ...mutationResolvers}
@@ -32,13 +32,13 @@ export const root = {...queryResolvers, ...mutationResolvers}
 const queries = `
   type Query {
     getMeContact: Contact
-    getMePhotographer: Photographer
+    getMeStoryteller: Storyteller
     getMe: User
     getNonprofit (id: String): Nonprofit
-    getPhotographer (userId: String): Photographer
+    getStoryteller (userId: String): Storyteller
     getProjects (nonprofitId: String): [Project]
     getUser (id: String, email: String): AnyUser
-    search (queries: SearchQueries): [Photographer]
+    search (queries: SearchQueries): [Storyteller]
   }
 `
 
@@ -49,7 +49,7 @@ const mutations = `
     updateMe(updates: UserInput): AnyUser
     updateNonprofit(id: String, updates: NonprofitInput): Nonprofit
     updateProject(id: Int, updates: ProjectInput): Project
-    updatePhotographerMe(updates: PhotographerInput): Photographer
+    updateStorytellerMe(updates: StorytellerInput): Storyteller
   }
 `
 
@@ -96,7 +96,7 @@ const types = `
   }
 
   # Additional Fields for Storyteller users
-  type Photographer implements UserInterface {
+  type Storyteller implements UserInterface {
     id: String
     availabilities: [String]
     cameraPhone: Boolean
@@ -140,7 +140,7 @@ const types = `
     role: String
   }
 
-  union AnyUser = Admin | Contact | Photographer
+  union AnyUser = Admin | Contact | Storyteller
 
   # Base fields of all users.
   interface UserInterface {
@@ -160,7 +160,7 @@ const inputs = `
     phoneSecondaryType: String
   }
 
-  input PhotographerInput {
+  input StorytellerInput {
     instagram: String
     cameraPhone: Boolean
     cameraFilm: Boolean

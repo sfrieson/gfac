@@ -38,7 +38,7 @@ const User = Model.define('user',
       // TODO validate?
     },
     role: {
-      type: DataType.ENUM('admin', 'photographer', 'contact')
+      type: DataType.ENUM('admin', 'storyteller', 'contact')
       // TODO Reference a roles table?
     },
     phone: {

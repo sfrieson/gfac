@@ -216,7 +216,7 @@
         "name": "role",
         "type": "select",
         "options": [
-          {"label": "Storyteller", "value": "photographer"},
+          {"label": "Storyteller", "value": "storyteller"},
           {"label": "Nonprofit Contact", "value": "contact"}
         ]
       }

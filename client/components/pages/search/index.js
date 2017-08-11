@@ -17,7 +17,7 @@ export default connect(
     search, cameraDSLR, cameraPhone, cameraFilm, availabilities, interests, queryType = 'searchStorytellers'
   } = searchForm
   const typeOptions = [
-    {label: 'Photographers', value: 'searchStorytellers'},
+    {label: 'Storytellers', value: 'searchStorytellers'},
     {label: 'Nonprofits', value: 'searchNonprofits'}
   ]
   const isStoryteller = queryType === 'searchStorytellers'

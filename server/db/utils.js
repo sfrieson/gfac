@@ -41,7 +41,7 @@ const parse = {
   followers: (d) => ({followers: +d.replace(/,/, '')})
 }
 
-const photographerColumns = '_matches|submitted on|name|newsletter|email|instagram|_causes|_rates|camera|portfolio|citystatecountry|_style|_style notes|_paid amount|followers'.split('|')
+const storytellerColumns = '_matches|submitted on|name|newsletter|email|instagram|_causes|_rates|camera|portfolio|citystatecountry|_style|_style notes|_paid amount|followers'.split('|')
 
 const contactColumns = 'nonprofit|contactEmail|newsletter|location|matches'.split('|')
 
@@ -50,9 +50,9 @@ export function parseTsv (role) {
 
   let columns
   let filename
-  if (role === 'photographer') {
-    columns = photographerColumns
-    filename = 'photographers.tsv'
+  if (role === 'storyteller') {
+    columns = storytellerColumns
+    filename = 'storytellers.tsv'
   }
   if (role === 'contact') {
     columns = contactColumns

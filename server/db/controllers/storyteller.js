@@ -1,9 +1,9 @@
 import { pick } from 'lodash'
-import { Availability, Photographer as Model } from '../models'
+import { Availability, Storyteller as Model } from '../models'
 const AvailabilityRE = new RegExp('(\\w{2})_(\\w*)')
 export default {
   create (data, user) {
-    // Whitelist properties necessary for creating Photographer
+    // Whitelist properties necessary for creating Storyteller
     const d = pick(Object.assign(data, user, {userId: user.id}), Object.keys(Model.attributes))
 
     ;['cameraPhone', 'cameraDSLR', 'cameraFilm'].forEach(prop => {
@@ -17,27 +17,27 @@ export default {
     })
 
     return Model.create(d, {include: [Availability]})
-    .then(photographer => {
-      return photographer.setCauses(data.causes)
+    .then(storyteller => {
+      return storyteller.setCauses(data.causes)
       .then(() => ({
-        ...photographer.get()
+        ...storyteller.get()
       }))
     })
   },
   getAll () {
     return Model.findAll({include: ['user', 'availabilities', 'causes']})
-    .then(photographers => photographers.map((p) => {
-      const {user, ...photographer} = p.get({plain: true})
-      return {...user, ...photographer}
+    .then(storytellers => storytellers.map((p) => {
+      const {user, ...storyteller} = p.get({plain: true})
+      return {...user, ...storyteller}
     }))
   },
   get (userId) {
     return Model.findOne({
       where: {userId},
       include: Object.values(Model.associations)
-    }).then(photographer => ({
-      ...photographer.get({plain: true}),
-      availabilities: photographer.availabilities.map(a => (`${a.day}_${a.time}`))
+    }).then(storyteller => ({
+      ...storyteller.get({plain: true}),
+      availabilities: storyteller.availabilities.map(a => (`${a.day}_${a.time}`))
     }))
   },
   update (userId, { availabilities, ...updates }) {
@@ -51,19 +51,19 @@ export default {
     }
 
     return Model.findOne({where: {userId}})
-    .then(photographer => {
-      if (Object.keys(updates).length) return photographer.update(updates)
-      else return photographer
-    }).then(photographer => { // TODO Optimize this process
+    .then(storyteller => {
+      if (Object.keys(updates).length) return storyteller.update(updates)
+      else return storyteller
+    }).then(storyteller => { // TODO Optimize this process
       if (availabilities) {
-        return Availability.destroy({where: {photographerUserId: photographer.userId}})
-        .then(() => Promise.all(availabilities.map(photographer.createAvailability.bind(photographer))))
-        .then(() => photographer)
-      } else return photographer
+        return Availability.destroy({where: {storytellerUserId: storyteller.userId}})
+        .then(() => Promise.all(availabilities.map(storyteller.createAvailability.bind(storyteller))))
+        .then(() => storyteller)
+      } else return storyteller
     })
-    .then(photographer => {
-      return photographer.getCauses()
-      .then(causes => ({...photographer.get(), causes: causes.map(c => c.get())}))
+    .then(storyteller => {
+      return storyteller.getCauses()
+      .then(causes => ({...storyteller.get(), causes: causes.map(c => c.get())}))
     })
   }
 }

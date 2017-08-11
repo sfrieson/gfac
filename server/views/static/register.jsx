@@ -48,7 +48,7 @@ export default {
             <label for='role'>Which are you?</label>
             <select name='role' id='role' className='form-control' defaultValue={responses.role || 'default'}>
               <option value='default' disabled>Select one...</option>
-              <option value='photographer'>Photographer</option>
+              <option value='storyteller'>Storyteller</option>
               <option value='contact'>Nonprofit Contact</option>
             </select>
           </div>
@@ -60,7 +60,7 @@ export default {
             {contactFields.map(renderField)}
           </fieldset>
 
-          <fieldset id='photographer-more' className={responses.selected !== 'photographer' && 'hidden'} aria-hidden={responses.selected !== 'photographer'}>
+          <fieldset id='storyteller-more' className={responses.selected !== 'storyteller' && 'hidden'} aria-hidden={responses.selected !== 'storyteller'}>
             {storytellerFields.map(renderField)}
           </fieldset>
 
@@ -68,14 +68,14 @@ export default {
         </form>
         <script dangerouslySetInnerHTML={{__html: `
           var more = {
-            photographer: document.getElementById('photographer-more'),
+            storyteller: document.getElementById('storyteller-more'),
             contact: document.getElementById('contact-more')
           }
           var role = document.getElementById('role');
           role.addEventListener('change', function (e) {
             var val = e.target.value;
 
-            ['photographer', 'contact'].forEach(function (role) {
+            ['storyteller', 'contact'].forEach(function (role) {
               var el = more[role];
               var hidden = /hidden/.test(el.className);
               if (val === role) {

@@ -1,9 +1,9 @@
 import fs from 'fs'
 
-import models, {Photographer, Project} from './models'
+import models, {Storyteller, Project} from './models'
 
 import seedCauses from './seed/causes'
-import seedPhotographers from './seed/photographers'
+import seedStorytellers from './seed/storytellers'
 import seedContacts from './seed/contacts'
 
 let emailList = []
@@ -12,9 +12,9 @@ export default function (dataType) {
   if (dataType === 'causes') return models.sync({force: false}).then(seedCauses)
   return models.sync({force: true})
   .then(seedCauses)
-  .then(() => seedPhotographers(dataType))
-  .then(photographerEmails => {
-    emailList = emailList.concat(photographerEmails)
+  .then(() => seedStorytellers(dataType))
+  .then(storytellerEmails => {
+    emailList = emailList.concat(storytellerEmails)
   })
   .then(() => seedContacts(dataType))
   .then(contactEmails => {
@@ -22,9 +22,9 @@ export default function (dataType) {
   })
   .then(() => {
     return Promise.all([
-      Photographer.find(),
+      Storyteller.find(),
       Project.find()
-    ]).then(([photographer, project]) => photographer.addProject(project))
+    ]).then(([storyteller, project]) => storyteller.addProject(project))
   })
   .then(() => {
     return new Promise(function (resolve, reject) {

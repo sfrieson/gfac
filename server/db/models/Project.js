@@ -40,7 +40,7 @@ const Project = Model.define('project',
     photoLink: {
       type: DataType.STRING(255)
     },
-    photographersNeeded: {
+    storytellersNeeded: {
       type: DataType.INTEGER
     },
     status: {

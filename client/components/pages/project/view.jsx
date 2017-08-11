@@ -25,7 +25,7 @@ class ProjectView extends Component {
     if (!project) return <div>Loading?</div>
     const updates = projectUpdate[match.params.id] || {}
     const isAdmin = this.props.me.role === 'admin'
-    const {photographers, ...base} = project
+    const {storytellers, ...base} = project
     return (
       <div>
         <h2>Edit Project</h2>
@@ -35,8 +35,8 @@ class ProjectView extends Component {
           changeAction={'PROJECT_UPDATE_' + project.id}
           onSubmit={(e) => { e.preventDefault(); this.onSubmit(dispatch, project.id, updates) }}
         />
-        {this.renderPhotographers(photographers, project.id, isAdmin)}
-        {isAdmin && <AddPhotographer projectId={project.id} />}
+        {this.renderStorytellers(storytellers, project.id, isAdmin)}
+        {isAdmin && <AddStoryteller projectId={project.id} />}
       </div>
     )
   }
@@ -45,13 +45,13 @@ class ProjectView extends Component {
     Project.update(id, updates)
   }
 
-  renderPhotographers (photographers, projectId, isAdmin) {
-    const photographerList = photographers.length
+  renderStorytellers (storytellers, projectId, isAdmin) {
+    const storytellerList = storytellers.length
       ? (
         <ul>
-          {photographers.map(p => (
+          {storytellers.map(p => (
             <li key={p.userId}>
-              <form onSubmit={e => { e.preventDefault(); this.removePhotographer(p.userId, projectId) }}>
+              <form onSubmit={e => { e.preventDefault(); this.removeStoryteller(p.userId, projectId) }}>
                 {p.firstname} {p.lastname} {isAdmin && <button>Remove</button>}
               </form>
             </li>
@@ -63,13 +63,13 @@ class ProjectView extends Component {
     return (
       <div>
         <h3>Storytellers</h3>
-        {photographerList}
+        {storytellerList}
       </div>
     )
   }
 
-  removePhotographer (photographerUserId, projectId) {
-    Project.removePhotographer({userId: photographerUserId, projectId: projectId})
+  removeStoryteller (storytellerUserId, projectId) {
+    Project.removeStoryteller({userId: storytellerUserId, projectId: projectId})
   }
 
   getProject (projects, id) {
@@ -78,27 +78,27 @@ class ProjectView extends Component {
   }
 }
 
-class AdminPhotographerForm extends Component {
+class AdminStorytellerForm extends Component {
   constructor (props) {
     super(props)
     this.onSubmit = this.onSubmit.bind(this)
     this.onChange = this.onChange.bind(this)
-    this.state = {photographerId: ''}
+    this.state = {storytellerId: ''}
     if (props.me.role === 'admin') {
-      if (!props.photographers.length) User.getAllPhotographers()
+      if (!props.storytellers.length) User.getAllStorytellers()
     }
   }
 
   render () {
     return (
       <div>
-        <h3>Add Photographer</h3>
+        <h3>Add Storyteller</h3>
         <form onSubmit={this.onSubmit}>
           <Input
-            name='photographer'
+            name='storyteller'
             type='select'
-            options={this.props.photographers.map(({userId, firstname, lastname}) => ({label: `${firstname} ${lastname}`, value: userId}))}
-            value={this.state.photographerId}
+            options={this.props.storytellers.map(({userId, firstname, lastname}) => ({label: `${firstname} ${lastname}`, value: userId}))}
+            value={this.state.storytellerId}
             onChange={this.onChange}
           />
           <button>Add</button>
@@ -108,14 +108,14 @@ class AdminPhotographerForm extends Component {
   }
 
   onChange (e) {
-    this.setState({photographerId: e.target.value})
+    this.setState({storytellerId: e.target.value})
   }
 
   onSubmit (e) {
     e.preventDefault()
-    Project.addPhotographer({userId: this.state.photographerId, projectId: this.props.projectId})
+    Project.addStoryteller({userId: this.state.storytellerId, projectId: this.props.projectId})
   }
 }
-const AddPhotographer = connect(({me, photographers}) => ({me, photographers}))(AdminPhotographerForm)
+const AddStoryteller = connect(({me, storytellers}) => ({me, storytellers}))(AdminStorytellerForm)
 
 export default connect(stateToProps)(ProjectView)

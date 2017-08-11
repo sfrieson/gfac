@@ -16,16 +16,16 @@ import Cause from './Cause'
 import Contact from './Contact'
 import Event from './Event'
 import Nonprofit from './Nonprofit'
-import Photographer from './Photographer'
+import Storyteller from './Storyteller'
 import Project from './Project'
 import Review from './Review'
 // import Task from './Task';
 import User from './User'
 import UserLogin from './UserLogin'
 
-Availability.belongsTo(Photographer)
+Availability.belongsTo(Storyteller)
 
-Cause.belongsToMany(Photographer, {through: 'interests'})
+Cause.belongsToMany(Storyteller, {through: 'interests'})
 Cause.belongsToMany(Nonprofit, {through: 'focuses'})
 
 Contact.belongsTo(Nonprofit)
@@ -39,17 +39,17 @@ Nonprofit.hasMany(Contact)
 Nonprofit.hasMany(Project)
 Nonprofit.belongsToMany(Cause, {through: 'focuses'})
 
-// Photographer.hasMany(Assignment);
-Photographer.belongsToMany(Cause, {through: 'interests'})
-Photographer.belongsToMany(Project, {through: 'assignments'})
-Photographer.hasMany(Availability)
-Photographer.belongsTo(User, {onDelete: 'cascade'})
+// Storyteller.hasMany(Assignment);
+Storyteller.belongsToMany(Cause, {through: 'interests'})
+Storyteller.belongsToMany(Project, {through: 'assignments'})
+Storyteller.hasMany(Availability)
+Storyteller.belongsTo(User, {onDelete: 'cascade'})
 
 Project.belongsTo(Nonprofit)
 // Project.belongsToMany(Contact, { through: Nonprofit }); // Not necessary?
 // Project.hasMany(Assignment);
 // Project.hasMany(Attachment);
-Project.belongsToMany(Photographer, {through: 'assignments'})
+Project.belongsToMany(Storyteller, {through: 'assignments'})
 Project.hasMany(Event)
 Project.hasMany(Review)
 
@@ -67,4 +67,4 @@ function sync (...args) {
 
 export default { sync }
 export { Availability, Cause, Contact, Event, Nonprofit,
-  Photographer, Project, Review, User, UserLogin }
+  Storyteller, Project, Review, User, UserLogin }

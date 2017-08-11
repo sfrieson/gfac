@@ -15,7 +15,7 @@ import {
 import {
   ContactController as ContactC,
   NonprofitController as NonprofitC,
-  PhotographerController as PhotographerC,
+  StorytellerController as StorytellerC,
   UserController as UserC,
   ProjectController as ProjectC
 } from '../controllers'
@@ -43,12 +43,12 @@ const User = new GraphQLInterfaceType({
           return Admin
         case 'contact':
           return Contact
-        case 'photographer':
-          return Photographer
+        case 'storyteller':
+          return Storyteller
       }
     } else {
       if (user.nonprofit) return Contact
-      if (user.instagram) return Photographer
+      if (user.instagram) return Storyteller
       if (!user.nonprofit && !user.instagram) return Admin
     }
   }
@@ -99,8 +99,8 @@ const Nonprofit = new Type({
   })
 })
 
-const Photographer = new Type({
-  name: 'Photographer',
+const Storyteller = new Type({
+  name: 'Storyteller',
   fields: () => ({
     ...userFields,
     availabilities: {type: new List(Str)},
@@ -133,8 +133,8 @@ const Project = new Type({
     name: {type: new NonNull(Str)},
     nonprofitId: {type: new NonNull(Str)},
     photoLink: {type: Str},
-    photographers: {type: new NonNull(new List(Photographer))},
-    photographersNeeded: {type: Int},
+    storytellers: {type: new NonNull(new List(Storyteller))},
+    storytellersNeeded: {type: Int},
     status: {type: Str}, // enum: prospective, planning, past, completed
     venueName: {type: Str},
     venueType: {type: Str},
@@ -154,8 +154,8 @@ const ContactInput = new Input({
   }
 })
 
-const PhotographerInput = new Input({
-  name: 'PhotographerInput',
+const StorytellerInput = new Input({
+  name: 'StorytellerInput',
   fields: {
     instagram: {type: Str},
     cameraPhone: {type: Bool},
@@ -240,12 +240,12 @@ const Query = new Type({
       },
       resolve: ({args: { id }}) => NonprofitC.get(id)
     },
-    getAllPhotographers: {
-      type: new List(Photographer),
-      resolve: (_, __, {user}) => user.role === 'admin' && PhotographerC.getAll()
+    getAllStorytellers: {
+      type: new List(Storyteller),
+      resolve: (_, __, {user}) => user.role === 'admin' && StorytellerC.getAll()
     },
-    getPhotographer: {
-      type: Photographer,
+    getStoryteller: {
+      type: Storyteller,
       args: {
         userId: {type: Id}
       },
@@ -268,7 +268,7 @@ const Query = new Type({
       resolve: ({args: query}) => UserC.get(query)
     },
     searchStorytellers: {
-      type: new List(Photographer),
+      type: new List(Storyteller),
       args: {
         queries: {type: Str}
       },
@@ -289,14 +289,14 @@ const Query = new Type({
 const Mutation = new Type({
   name: 'Mutation',
   fields: () => ({
-    updateProjectPhotographer: {
+    updateProjectStoryteller: {
       type: Project,
       args: {
         id: {type: Int},
-        photographerUserId: {type: Id},
+        storytellerUserId: {type: Id},
         action: {type: Str}
       },
-      resolve: (_, {id, photographerUserId, action}) => ProjectC.updatePhotographer(id, photographerUserId, action)
+      resolve: (_, {id, storytellerUserId, action}) => ProjectC.updateStoryteller(id, storytellerUserId, action)
     },
     createProject: {
       type: Project,
@@ -335,12 +335,12 @@ const Mutation = new Type({
       },
       resolve: ({ args: {id, updates} }) => ProjectC.update(id, updates)
     },
-    updatePhotographerMe: {
-      type: Photographer,
+    updateStorytellerMe: {
+      type: Storyteller,
       args: {
-        updates: {type: PhotographerInput}
+        updates: {type: StorytellerInput}
       },
-      resolve: ({ args: { updates }, req: { user: { id } } }) => PhotographerC.update({id}, updates)
+      resolve: ({ args: { updates }, req: { user: { id } } }) => StorytellerC.update({id}, updates)
     }
   })
 })
@@ -354,9 +354,9 @@ export default new GraphQLSchema({
     Contact,
     Project,
     Nonprofit,
-    Photographer,
+    Storyteller,
     ContactInput,
-    PhotographerInput,
+    StorytellerInput,
     ProjectInput,
     NonprofitInput,
     SearchQueries,

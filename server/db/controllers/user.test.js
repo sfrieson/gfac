@@ -13,7 +13,7 @@ describe('Controller: User', () => {
       firstname: 'Phil',
       lastname: 'Photogs',
       email: 'phil@pho.to',
-      role: 'photographer',
+      role: 'storyteller',
       phoneType: 'mobile',
       phone: '6106106100',
       password: 'password1234',

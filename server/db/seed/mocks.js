@@ -30,11 +30,11 @@ casual.define('user', () => {
   }
 })
 
-casual.define('photographer', () => {
+casual.define('storyteller', () => {
   const user = casual.user
   return {
     ...user,
-    role: 'photographer', // from user model
+    role: 'storyteller', // from user model
     instagram: casual.username,
     cameraPhone: casual.random_element([true, true, false]),
     cameraDSLR: casual.coin_flip,
@@ -80,12 +80,12 @@ casual.define('nonprofit', () => ({
   projects: casual.projects
 }))
 
-export function Photographer (num = 1) {
-  const photographers = []
+export function Storyteller (num = 1) {
+  const storytellers = []
   let i = 0
-  while (i++ < num) photographers.push(casual.photographer)
+  while (i++ < num) storytellers.push(casual.storyteller)
 
-  return photographers
+  return storytellers
 }
 
 export function Contact (num = 1) {
