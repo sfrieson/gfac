@@ -1,14 +1,14 @@
 import fs from 'fs'
 
-import models, {Storyteller, Project} from './models'
+import models, {Storyteller, Project} from '../models'
 
-import seedCauses from './seed/causes'
-import seedStorytellers from './seed/storytellers'
-import seedContacts from './seed/contacts'
+import seedCauses from '../seed/causes'
+import seedStorytellers from '../seed/storytellers'
+import seedContacts from '../seed/contacts'
 
 let emailList = []
 
-export default function (dataType) {
+module.exports = function (dataType) {
   if (dataType === 'causes') return models.sync({force: false}).then(seedCauses)
   return models.sync({force: true})
   .then(seedCauses)

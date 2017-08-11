@@ -4,8 +4,7 @@
   "description": "The adminitistrative site for Gramforacause",
   "main": "index.js",
   "scripts": {
-    "db": "babel-node ./server/db/tasks.js",
-    "db:seed": "yarn db seed",
+    "db": "babel-node ./server/db/tasks",
     "lint": "standard",
     "create": "babel-node ./.bin/create --",
     "node": "babel-node",
