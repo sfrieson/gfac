@@ -22,6 +22,7 @@ export default {
         <div className='login__container'>
           <h2>Login!</h2>
           <form action='/login' method='POST'>
+
             {loginFields.map((data, key) => <InputGroup key={key} {...data} />)}
 
             <button className='btn'>Login</button>

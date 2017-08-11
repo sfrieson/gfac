@@ -119,6 +119,11 @@
         "name": "instagram",
         "type": "text"
       },
+      "jobTitle": {
+        "label": "Position",
+        "name": "jobTitle",
+        "type": "text"
+      },
       "lastname": {
         "label": "Last Name",
         "name": "lastname",
@@ -132,6 +137,16 @@
       "name": {
         "label": "Name",
         "name": "name",
+        "type": "text"
+      },
+      "nonprofitName": {
+        "label": "Nonprofit Name",
+        "name": "nonprofitName",
+        "type": "text"
+      },
+      "nonprofitWebsite": {
+        "label": "Nonprofit Website",
+        "name": "nonprofitWebsite",
         "type": "text"
       },
       "password": {
