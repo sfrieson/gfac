@@ -50,8 +50,7 @@ const browserConfig = {
           {
             loader: 'file-loader',
             options: {
-              name: '[path][name].[ext]',
-              useRelativePath: process.env.NODE_ENV === 'production'
+              name: '[path][name].[ext]'
             }
           }
         ]

@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 import { Input } from 'common'
 import { Project, Nonprofit } from 'models'
 
+import config from 'client-config'
+const { fields, fieldsets: { createProject } } = config
+const formFields = createProject.map(name => fields[name])
+
 // TODO Set up redirect when form is complete
 // TODO Set up sharing of information with the Projects Store when complete
 const stateToProps = ({ me, projectForm, nonprofits }) => ({me, projectForm, nonprofits})
@@ -40,6 +44,7 @@ class ProjectForm extends Component {
         New Project Form
         <form onSubmit={this.onSubmit}>
           {isAdmin && <Input label='Nonprofit' type='select' name='nonprofitId' value={form.nonprofitId} options={npOptions} onChange={this.onChange} />}
+          {formFields.map(props => <Input {...props} value={form[props.name]} onChange={this.onChange} />)}
           <Input label='Name' type='text' name='name' value={form.name} onChange={this.onChange} />
           <Input label='Date' type='date' name='date' value={form.date} onChange={this.onChange} />
           <Input label='Date is approximate' type='checkbox' name='dateIsApprox' value={form.dateIsApprox} onChange={this.onChange} />

@@ -25,7 +25,7 @@
   },
   "client": {
     "fieldsets": {
-      "createProject": ["name", "description", "date", "dateIsApprox", "location", "photoLink"],
+      "createProject": ["name", "date", "dateIsApprox", "description", "location", "photoLink"],
       "editContact": ["phoneSecondary", "phoneSecondaryType"],
       "editStoryteller": ["instagram", "cameraType", "cameraOther", "preferredContactMethod", "causes", "availabilities"],
       "editUser": ["email", "firstname", "lastname", "phone", "phoneType"],

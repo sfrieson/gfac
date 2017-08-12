@@ -6,7 +6,7 @@ import config from 'config'
 const app = config.get('app')
 // const isDev = process.env.NODE_ENV === 'development'
 // const isTest = process.env.NODE_ENV === 'test'
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production'
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 
