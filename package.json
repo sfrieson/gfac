@@ -34,6 +34,7 @@
         "module-resolver",
         {
           "alias": {
+            "images": "./images",
             "client-config": "./client-config.json",
             "common": "./client/components/common",
             "models": "./client/models",

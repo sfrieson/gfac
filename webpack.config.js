@@ -26,21 +26,35 @@ const browserConfig = {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
-        include: [
-          path.resolve(__dirname, './client')
-        ],
-        options: {
-          presets: [
-            ['env', {targets: pkg.browserslist}],
-            'react',
-            'stage-0'
-          ]
+        exclude: /(node_modules|bower_components)/,
+        include: [path.resolve(__dirname, './client')],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['env', {targets: pkg.browserslist}],
+              'react',
+              'stage-0'
+            ],
+            cacheDirectory: true
+          }
         }
       },
       {
         test: /\.scss$/,
-        loader: extractCSS.extract(['css-loader', 'sass-loader'])
+        use: extractCSS.extract(['css-loader', 'sass-loader'])
+      },
+      {
+        test: /\.png$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+              useRelativePath: process.env.NODE_ENV === 'production'
+            }
+          }
+        ]
       }
     ]
   },
@@ -73,9 +87,12 @@ const serverConfig = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['react', 'stage-0', 'es2015']
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['react', 'stage-0', 'es2015'],
+            cacheDirectory: true
+          }
         }
       }
     ]
