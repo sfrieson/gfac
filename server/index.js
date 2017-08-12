@@ -1,6 +1,6 @@
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import Config from 'config'
+import config from 'config'
 import express from 'express'
 import expressGraphQL from 'express-graphql'
 import expressJWT from 'express-jwt'
@@ -15,7 +15,7 @@ import schema from './db/queries/schema'
 import models from './db/models'
 import { bulkIndex } from './db/elasticlunr'
 
-const config = Config.get('server')
+const server = config.get('server')
 const app = express()
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -29,7 +29,7 @@ app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
 app.use(expressJWT({
-  secret: config.auth.jwtSecret,
+  secret: server.auth.jwtSecret,
   credentialsRequired: false,
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}))

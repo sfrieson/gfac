@@ -18,8 +18,9 @@ const browserConfig = {
   target: 'web',
   entry: ['babel-polyfill', './client/scripts.js'],
   output: {
-    path: path.resolve(__dirname, './build/public'),
-    filename: 'scripts.js'
+    path: path.join(__dirname, 'build', 'public'),
+    filename: 'scripts.js',
+    publicPath: '/'
     // pathinfo: false, // TODO Add way to decide if this should have verbose path info or not (--verbose)
   }, // end output
   module: {
@@ -27,7 +28,7 @@ const browserConfig = {
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|bower_components)/,
-        include: [path.resolve(__dirname, './client')],
+        include: [path.join(__dirname, 'client')],
         use: {
           loader: 'babel-loader',
           options: {
@@ -50,6 +51,7 @@ const browserConfig = {
           {
             loader: 'file-loader',
             options: {
+              // relative: true,
               name: '[path][name].[ext]'
             }
           }
@@ -76,7 +78,7 @@ const serverConfig = {
 
   entry: ['babel-polyfill', './server/index.js'],
   output: {
-    path: path.resolve(__dirname, './build/server'),
+    path: path.join(__dirname, 'build', 'server'),
     filename: 'index.js',
     libraryTarget: 'commonjs'
   },
