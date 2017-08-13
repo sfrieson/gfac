@@ -33,7 +33,6 @@ function buildStorytellerIndex () {
     if (p.cameraDSLR) camera.push('DSLR')
     if (p.cameraPhone) camera.push('phone')
     if (p.cameraOther) camera.push(p.cameraOther)
-
     return {
       ...p,
       camera,
@@ -60,12 +59,12 @@ function buildNonprofitIndex () {
   })
 
   return NonprofitController.getAll()
-  .then(storytellers => storytellers.map((p) => {
+  .then(storytellers => storytellers.map((s) => {
     return {
-      ...p,
-      contacts: p.contacts.map(({firstname, lastname}) => `${firstname} ${lastname}`),
-      projects: p.projects.map(({name}) => name),
-      causes: p.causes.map(({id}) => 'cause_' + id)
+      ...s,
+      contacts: s.contacts.map(({firstname, lastname}) => `${firstname} ${lastname}`),
+      projects: s.projects.map(({name}) => name),
+      causes: s.causes.map(({id}) => 'cause_' + id)
     }
   }))
   .then(storytellers => storytellers.map(p => nonprofitIdx.addDoc(p)))

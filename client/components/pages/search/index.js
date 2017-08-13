@@ -64,7 +64,7 @@ export default connect(
     e.preventDefault()
     let queries = `${search}`
 
-    if (queryType === 'storyteller') {
+    if (queryType === 'searchStorytellers') {
       queries += ' ' + (availabilities || arr).join(' ')
 
       if (cameraDSLR) queries += ' DSLR'
