@@ -45,7 +45,7 @@ class ProjectForm extends Component {
         <form onSubmit={this.onSubmit}>
 
           {isAdmin && <Input label='Nonprofit' type='select' name='nonprofitId' value={form.nonprofitId} options={npOptions} onChange={this.onChange} />}
-          {formFields.map(props => <Input {...props} value={form[props.name]} onChange={this.onChange} />)}
+          {formFields.map((props, key) => <Input key={key} {...props} value={form[props.name]} onChange={this.onChange} />)}
 
           <button>Submit</button>
         </form>

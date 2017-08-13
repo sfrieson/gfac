@@ -1,5 +1,7 @@
 import { createStore, combineReducers } from 'redux'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 const accountForm = (state = {}, action) => {
   switch (action.type) {
     case 'ACCOUNT_FORM_CHANGE':
@@ -162,7 +164,10 @@ const mainReducer = combineReducers({
   storyteller
 })
 
-const store = createStore(mainReducer)
+const store = createStore(
+  mainReducer,
+  isDev && window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
 
 export default store
 export const dispatch = store.dispatch
