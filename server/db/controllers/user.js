@@ -12,7 +12,7 @@ const app = config.get('app')
 const { auth, email } = config.get('server')
 const SALT = bcrypt.genSaltSync(auth.salt)
 
-const User = {
+export default {
   changePassword: function (user, password, confirm) {
     if (password !== confirm) return Promise.reject(new Error('Password and confirmation did not match.'))
     return Model.findOne({where: {id: user.id}})
@@ -75,6 +75,7 @@ const User = {
     .then(user => {
       if (join && user.role === 'storyteller') return this.getStoryteller(user)
       if (join && user.role === 'contact') return this.getContact(user)
+      console.log(user.get())
       return user.get()
     })
   },
@@ -238,8 +239,6 @@ const User = {
     })
   }
 }
-
-export default User
 
 const possible = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!$^-+_'.split('')
 function generateToken (length) {

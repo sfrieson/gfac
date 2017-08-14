@@ -2,7 +2,6 @@ import express from 'express'
 import jwt from 'jsonwebtoken'
 
 import config from 'config'
-import sequelize from '../db/sequelize'
 import User from '../db/controllers/user'
 import { ValidationError } from '../errors'
 
@@ -97,13 +96,8 @@ Router.get('verify', ({query}, res) => {
 Router.get('*', (req, res) => {
   if (!req.user) return res.redirect('/login')
 
-  sequelize.authenticate()
-  .then(() => User.get({id: req.user.id}))
-  .then(user => {
-    if (user.email) res.send(renderSpa())
-    else throw new Error('No user')
-  })
-  .catch(_err => res.redirect('/login'))
+  if (req.user.id) res.send(renderSpa())
+  else res.redirect('/login')
 })
 
 export default Router

@@ -2,6 +2,7 @@ import DataType from 'sequelize'
 import Model from '../sequelize'
 
 import config from 'config'
+import { storytellerIdx } from '../elasticlunr'
 
 const app = config.get('app')
 // const isDev = process.env.NODE_ENV === 'development'
@@ -71,7 +72,18 @@ const User = Model.define('user',
   // https://github.com/sequelize/sequelize/blob/3e5b8772ef75169685fc96024366bca9958fee63/lib/model.js#L26
   {
     indexes: [{ fields: ['email', 'id'] }],
-    paranoid: isProd
+    paranoid: isProd,
+    hooks: {
+      afterCreate: function (user) {
+        if (storytellerIdx && user.role === 'storyteller') storytellerIdx.addDoc(user)
+      },
+      afterupdate: function (user) {
+        if (storytellerIdx && user.role === 'storyteller') storytellerIdx.updateDoc(user)
+      },
+      afterDestroy: function (user) {
+        if (storytellerIdx && user.role === 'storyteller') storytellerIdx.removeDoc(user)
+      }
+    }
   }
 )
 

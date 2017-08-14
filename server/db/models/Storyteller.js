@@ -2,6 +2,7 @@ import DataType from 'sequelize'
 import Model from '../sequelize'
 
 import User from './User'
+import { storytellerIdx, formatStorytellerForIndex } from '../elasticlunr'
 
 // http://docs.sequelizejs.com/en/latest/docs/models-definition/#data-types
 const Storyteller = Model.define('storyteller',
@@ -48,7 +49,16 @@ const Storyteller = Model.define('storyteller',
   // Options
   // https://github.com/sequelize/sequelize/blob/3e5b8772ef75169685fc96024366bca9958fee63/lib/model.js#L26
   {
-    paranoid: true
+    paranoid: true,
+    hooks: {
+      afterCreate: function (user) {
+        if (storytellerIdx) storytellerIdx.updateDoc(formatStorytellerForIndex(user))
+      },
+      afterupdate: function (user) {
+        if (storytellerIdx) storytellerIdx.updateDoc(formatStorytellerForIndex(user))
+      }
+      // Destroy may already be taken care of by User
+    }
   }
 )
 
