@@ -75,13 +75,19 @@ const User = Model.define('user',
     paranoid: isProd,
     hooks: {
       afterCreate: function (user) {
-        if (storytellerIdx && user.role === 'storyteller') storytellerIdx.addDoc(user)
+        if (storytellerIdx && user.role === 'storyteller') storytellerIdx.addDoc(user.get({plain: true}))
       },
       afterupdate: function (user) {
-        if (storytellerIdx && user.role === 'storyteller') storytellerIdx.updateDoc(user)
+        if (storytellerIdx && user.role === 'storyteller') {
+          const userObj = user.get({plain: true})
+          storytellerIdx.updateDoc({
+            ...storytellerIdx.documentStore.getDoc(userObj.id),
+            ...userObj
+          })
+        }
       },
       afterDestroy: function (user) {
-        if (storytellerIdx && user.role === 'storyteller') storytellerIdx.removeDoc(user)
+        if (storytellerIdx && user.role === 'storyteller') storytellerIdx.removeDocByRef(user.get({plain: true}).id)
       }
     }
   }

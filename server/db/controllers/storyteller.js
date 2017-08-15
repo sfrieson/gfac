@@ -10,6 +10,7 @@ export default {
       if (prop in d) d[prop] = true
     })
 
+    data.availability = data.availability || []
     d.availabilities = (typeof data.availability === 'string' ? [data.availability] : data.availability)
     .map((a) => {
       const match = a.match(AvailabilityRE)
@@ -17,12 +18,6 @@ export default {
     })
 
     return Model.create(d, {include: [Availability]})
-    .then(storyteller => {
-      return storyteller.setCauses(data.causes)
-      .then(() => ({
-        ...storyteller.get()
-      }))
-    })
   },
   getAll () {
     return Model.findAll({include: ['user', 'availabilities', 'causes']})

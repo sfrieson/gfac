@@ -9,6 +9,7 @@ import Email from '../../email'
 import { ValidationError } from '../../errors'
 
 const app = config.get('app')
+const userFields = config.get('client.fieldsets.registerUser')
 const { auth, email } = config.get('server')
 const SALT = bcrypt.genSaltSync(auth.salt)
 
@@ -29,15 +30,23 @@ export default {
     })
   },
   create: function (data) {
-    const d = whitelist(data, ['firstname', 'lastname', 'email', 'role', 'phone', 'phoneType'])
-    if (d.role === 'admin') throw new Error('Bad Value') // TODO Should log this attempt somehwere
+    const d = whitelist(data, userFields)
+    if (/contact|storyteller/.test(data.role)) d.role = data.role
+    else throw new Error('Bad Value') // TODO This attempt should be logged somehwere
+
     d.hashPassword = hashPassword(data.password)
     d.loginToken = generateToken(app.tokenLength)
 
     return Model.create(d)
     .then((user) => {
-      if (user.role === 'storyteller') return this.createStoryteller(user, data)
-      if (user.role === 'contact') return this.createContact(user, data)
+      if (user.role === 'contact') {
+        data.location = data.location[0]
+        return this.createContact(user, data)
+      }
+      if (user.role === 'storyteller') {
+        data.location = data.location[1]
+        return this.createStoryteller(user, data)
+      }
     })
     .then((user) => (
       Email.verify({
@@ -75,7 +84,6 @@ export default {
     .then(user => {
       if (join && user.role === 'storyteller') return this.getStoryteller(user)
       if (join && user.role === 'contact') return this.getContact(user)
-      console.log(user.get())
       return user.get()
     })
   },

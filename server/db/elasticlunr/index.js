@@ -20,26 +20,22 @@ const storytellerFields = [
 ]
 
 export function formatStorytellerForIndex (s) {
-  const camera = []
-  if (s.cameraFilm) camera.push('film')
-  if (s.cameraDSLR) camera.push('DSLR')
-  if (s.cameraPhone) camera.push('phone')
-  if (s.cameraOther) camera.push(s.cameraOther)
-  return {
-    ...s,
-    camera,
-    availabilities: s.availabilities.map(({day, time}) => `${day}_${time}`),
-    causes: s.causes.map(({id}) => 'cause_' + id)
-  }
+  const obj = {...s, id: s.userId, camera: []}
+  if (s.cameraFilm) obj.camera.push('film')
+  if (s.cameraDSLR) obj.camera.push('DSLR')
+  if (s.cameraPhone) obj.camera.push('phone')
+  if (s.cameraOther) obj.camera.push(s.cameraOther)
+  if (s.availabilities) obj.availabilities = s.availabilities.map(({day, time}) => `${day}_${time}`)
+  if (s.causes) obj.causes = s.causes.map(({id}) => 'cause_' + id)
+
+  return obj
 }
 
-export let storytellerIdx
+export const storytellerIdx = elasticLunr(function () {
+  this.setRef('id')
+  storytellerFields.forEach(field => this.addField(field))
+})
 function buildStorytellerIndex () {
-  storytellerIdx = elasticLunr(function () {
-    this.setRef('id')
-    storytellerFields.forEach(field => this.addField(field))
-  })
-
   return StorytellerController.getAll()
   .then(storytellers => storytellers.map(formatStorytellerForIndex))
   .then(storytellers => storytellers.map(s => storytellerIdx.addDoc(s)))
@@ -53,13 +49,12 @@ const nonprofitFields = [
   'causes'
 ]
 
-export let nonprofitIdx
-function buildNonprofitIndex () {
-  nonprofitIdx = elasticLunr(function () {
-    this.setRef('id')
-    nonprofitFields.forEach(field => this.addField(field))
-  })
+export const nonprofitIdx = elasticLunr(function () {
+  this.setRef('id')
+  nonprofitFields.forEach(field => this.addField(field))
+})
 
+function buildNonprofitIndex () {
   return NonprofitController.getAll()
   .then(storytellers => storytellers.map((s) => {
     return {

@@ -23,12 +23,10 @@ const isDev = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
 // const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'heroku'
 
-console.log('morgan')
 app.use(morgan(isDev ? 'dev' : 'tiny'))
 app.use(express.static('./build/public'))
 if (isDev) app.use(webpackDevMiddleware(webpack(webpackConfig)))
 
-console.log('cookieParser')
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
@@ -38,7 +36,6 @@ app.use(expressJWT({
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}))
 
-console.log('graphql')
 app.use('/api', expressGraphQL((req) => ({
   schema,
   graphiql: isDev,
@@ -46,10 +43,8 @@ app.use('/api', expressGraphQL((req) => ({
   pretty: isDev
 })))
 
-console.log('main router')
 app.use(mainRouter)
 
-console.log('authenticate')
 sequelize.authenticate()
 .then(() => models.sync({force: isTest}))
 .then(bulkIndex)

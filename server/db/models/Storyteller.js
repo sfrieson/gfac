@@ -38,6 +38,9 @@ const Storyteller = Model.define('storyteller',
     cameraOther: {
       type: DataType.STRING(30)
     },
+    location: {
+      type: DataType.STRING(255)
+    },
     // TODO add Porfolio elsewhere
     portfolio: {
       type: DataType.STRING
@@ -51,11 +54,23 @@ const Storyteller = Model.define('storyteller',
   {
     paranoid: true,
     hooks: {
-      afterCreate: function (user) {
-        if (storytellerIdx) storytellerIdx.updateDoc(formatStorytellerForIndex(user))
+      afterCreate: function (instance) {
+        if (storytellerIdx) {
+          const storyteller = instance.get({plain: true})
+          storytellerIdx.updateDoc({
+            ...storytellerIdx.documentStore.getDoc(storyteller.userId),
+            ...formatStorytellerForIndex(storyteller)
+          })
+        }
       },
-      afterupdate: function (user) {
-        if (storytellerIdx) storytellerIdx.updateDoc(formatStorytellerForIndex(user))
+      afterupdate: function (instance) {
+        if (storytellerIdx) {
+          const storyteller = instance.get({plain: true})
+          storytellerIdx.updateDoc({
+            ...storytellerIdx.documentStore.getDoc(storyteller.userId),
+            ...formatStorytellerForIndex(storyteller)
+          })
+        }
       }
       // Destroy may already be taken care of by User
     }
