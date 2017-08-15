@@ -26,7 +26,7 @@ const Project = {
   },
   get: (id) => {
     ajaxDispatch('NONPROFIT',
-      api(`query GetNonprofit ($id: String) {
+      api(`query GetNonprofit ($id: ID) {
         getNonprofit (id: $id) {
           name
           description
@@ -47,7 +47,7 @@ const Project = {
   },
   update: (id, updates) => {
     ajaxDispatch('NONPROFIT_UPDATE',
-      api(`mutation UpdateNonprofit ($id: String, $updates: NonprofitInput) {
+      api(`mutation UpdateNonprofit ($id: ID, $updates: NonprofitInput) {
         updateNonprofit (id: $id, updates: $updates) {
           name
           description
