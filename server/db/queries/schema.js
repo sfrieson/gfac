@@ -227,7 +227,7 @@ const Query = new Type({
   fields: () => ({
     getMe: {
       type: User,
-      resolve: ({req: {user: {id}}}) => UserC.get({id})
+      resolve: ({req: {user: {id}, res}}) => UserC.get({id}).catch(err => err.message === 'No user' && res.redirect('/logout'))
     },
     getNonprofits: {
       type: new List(Nonprofit),

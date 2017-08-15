@@ -8,8 +8,8 @@ export default {
     if ('nonprofitId' in data) getNp = Promise.resolve({id: data.nonprofitId})
     else {
       getNp = Nonprofit.create({
-        name: data.nonprofit_name,
-        description: data.nonprofit_description
+        name: data.nonprofitName,
+        website: data.nonprofitWebsite
       })
     }
     const d = pick(Object.assign({}, data, user), Object.keys(Model.attributes))
