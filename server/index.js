@@ -24,6 +24,7 @@ const isTest = process.env.NODE_ENV === 'test'
 // const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'heroku'
 
 app.use(morgan(isDev ? 'dev' : 'tiny'))
+app.disable('x-powered-by')
 app.use(express.static('./build/public'))
 if (isDev) app.use(webpackDevMiddleware(webpack(webpackConfig)))
 
