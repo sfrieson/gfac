@@ -27,7 +27,8 @@
     "fieldsets": {
       "createProject": ["name", "date", "dateIsApprox", "description", "location", "photoLink"],
       "editContact": ["phoneSecondary", "phoneSecondaryType"],
-      "editStoryteller": ["instagram", "cameraType", "cameraOther", "preferredContactMethod", "causes", "availabilities"],
+      "editNonprofit": ["name", "description", "website"],
+      "editStoryteller": ["instagram", "cameraDSLR", "cameraPhone", "cameraFilm", "cameraOther", "preferredContactMethod", "portfolio", "causes", "availabilities"],
       "editUser": ["email", "firstname", "lastname", "phone", "phoneType"],
       "login": ["email", "password"],
       "registerContact": ["nonprofitName", "nonprofitWebsite", "jobTitle", "locationPersonal"],
@@ -41,28 +42,29 @@
         "inputType": "AvailabilityGroup"
       },
       "cameraOther": {
-        "label": "Other",
+        "label": "Other cameras I use",
         "name": "cameraOther",
         "type": "text"
       },
       "cameraFilm": {
-        "label": "Film",
+        "label": "I use film cameras",
         "type": "checkbox",
         "name": "cameraFilm"
       },
       "cameraPhone": {
-        "label": "Phone",
+        "label": "I use phone cameras",
         "type": "checkbox",
         "name": "cameraPhone"
       },
       "cameraDSLR": {
-        "label": "DSLR",
+        "label": "I use DSLR cameras",
         "type": "checkbox",
         "name": "cameraDSLR"
       },
       "cameraType": {
         "label": "Camera Type",
         "inputType": "CameraTypeGroup",
+        "name": "cameraType",
         "options": [
           {"label": "Film", "name": "cameraFilm"},
           {"label": "Phone", "name": "cameraPhone"},
@@ -70,7 +72,7 @@
         ]
       },
       "cameraTypeRegistration": {
-        "label": "I generally shoot with...",
+        "label": "I generally take photos with...",
         "inputType": "CameraTypeGroup"
       },
       "causes": {
@@ -201,6 +203,11 @@
         "name": "photoLink",
         "type": "text"
       },
+      "portfolio": {
+        "label": "Portfolio/Website URL",
+        "name": "portfolio",
+        "type": "text"
+      },
       "preferredContactMethod": {
         "label": "Preferred Contact Method",
         "name": "preferredContactMethod",
@@ -219,6 +226,11 @@
           {"label": "Storyteller", "value": "storyteller"},
           {"label": "Nonprofit Contact", "value": "contact"}
         ]
+      },
+      "website": {
+        "label": "Website URL",
+        "name": "website",
+        "type": "text"
       }
     }
   }

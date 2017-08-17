@@ -3,10 +3,22 @@ import { connect } from 'react-redux'
 import { Form } from 'common'
 
 import { Nonprofit, User } from 'models'
+import config from 'client-config'
+const {
+  fieldsets: {
+    editContact,
+    editNonprofit,
+    editStoryteller,
+    editUser
+  }
+} = config
 
 export default connect(({ me, accountForm, nonprofitForm }) => ({me, accountForm, nonprofitForm}))(
   function Account ({ dispatch, me, accountForm, nonprofitForm }) {
-    const { nonprofit } = me
+    const { nonprofit, role } = me
+    let userFields = [...editUser]
+    if (role === 'storyteller') userFields = userFields.concat(editStoryteller)
+    if (role === 'contact') userFields = userFields.concat(editContact)
     const accountSubmit = function (e) {
       e.preventDefault()
       User.updateMe(accountForm)
@@ -19,9 +31,9 @@ export default connect(({ me, accountForm, nonprofitForm }) => ({me, accountForm
     return (
       <div>
         <h2>Account Information</h2>
-        <Form base={me} changes={accountForm} changeAction='ACCOUNT_FORM_CHANGE' onSubmit={accountSubmit} />
+        <Form fields={userFields} base={me} changes={accountForm} changeAction='ACCOUNT_FORM_CHANGE' onSubmit={accountSubmit} />
         {nonprofit && <h3>Nonprofit Information</h3>}
-        {nonprofit && <Form base={nonprofit} changes={nonprofitForm} changeAction='NONPROFIT_FORM_CHANGE' onSubmit={nonprofitSubmit} />}
+        {nonprofit && <Form fields={editNonprofit} base={nonprofit} changes={nonprofitForm} changeAction='NONPROFIT_FORM_CHANGE' onSubmit={nonprofitSubmit} />}
       </div>
     )
   }

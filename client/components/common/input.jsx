@@ -30,7 +30,7 @@ export default function Input (props) {
 }
 
 Input.propTypes = {
-  type: PropTypes.oneOf(['availability', 'causes', 'checkbox', 'checkboxes', 'date', 'hidden', 'radio', 'select', 'text', 'tel', 'textarea']),
+  type: PropTypes.oneOf(['availability', 'causes', 'checkbox', 'checkboxes', 'date', 'email', 'hidden', 'radio', 'select', 'text', 'tel', 'textarea']),
   onChange: PropTypes.func,
   name: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.array, PropTypes.bool])

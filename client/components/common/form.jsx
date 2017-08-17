@@ -3,12 +3,12 @@ import PT from 'prop-types'
 import { fields } from 'client-config'
 import { Input } from '../common'
 
-export default function Form ({ base, changes, changeAction, onSubmit }, { store }) {
-  const obj = {...base, ...changes}
+export default function Form ({ fields, base, changes, changeAction, onSubmit }, { store }) {
+  const values = {...base, ...changes}
   const { dispatch } = store
   return (
     <form onSubmit={onSubmit}>
-      {renderInputs(makeFieldInfos(obj, onChange.bind(null, dispatch, changeAction)))}
+      {renderInputs(makeFieldProps(fields, values, onChange.bind(null, dispatch, changeAction)))}
       <button className='btn'>Update</button>
     </form>
   )
@@ -25,25 +25,21 @@ Form.contextTypes = {
   store: PT.object.isRequired
 }
 
-function makeFieldInfos (inputs, onChange) {
-  return Object.keys(inputs).map(key => {
-    if (key === 'nonprofit') return null
-    const info = {
-      key,
-      ...fields[key],
+function makeFieldProps (formFields, values, onChange) {
+  return formFields.map(fieldName => {
+    const props = {
+      key: fieldName,
+      ...fields[fieldName],
       onChange,
-      value: inputs[key]
+      value: values[fieldName] || ''
     }
 
-    return info
+    return props
   })
 }
 
 function renderInputs (infos) {
-  return infos.map(info => {
-    if (info === null) return info
-    return <Input key={info.name} {...info} />
-  })
+  return infos.map(info => <Input {...info} />)
 }
 
 function onChange (dispatch, type, { target }) {
