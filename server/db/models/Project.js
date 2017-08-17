@@ -10,7 +10,7 @@ const Project = Model.define('project',
       primaryKey: true
     },
     attendance: {
-      type: DataType.INTEGER
+      type: DataType.STRING(15)
     },
     date: {
       type: DataType.DATE,
@@ -28,7 +28,7 @@ const Project = Model.define('project',
       type: DataType.INTEGER
     },
     // Google's place_id will maybe take the place of location
-    // gPlaceId: {
+    // googlePlaceId: {
     //   type: DataType.STRING(255)
     // },
     location: {

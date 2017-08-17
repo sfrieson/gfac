@@ -25,7 +25,7 @@
   },
   "client": {
     "fieldsets": {
-      "createProject": ["name", "date", "dateIsApprox", "description", "location", "photoLink"],
+      "createProject": ["name", "date", "dateIsApprox", "description", "attendance", "duration", "venueName", "venueType", "location", "storytellersNeeded", "website", "photoLink"],
       "editContact": ["phoneSecondary", "phoneSecondaryType"],
       "editNonprofit": ["name", "description", "website"],
       "editStoryteller": ["instagram", "cameraDSLR", "cameraPhone", "cameraFilm", "cameraOther", "preferredContactMethod", "portfolio", "causes", "availabilities"],
@@ -36,6 +36,16 @@
       "registerUser": ["firstname", "lastname", "email", "password", "confirm"]
     },
     "fields": {
+      "attendance": {
+        "label": "Number of expected attendees",
+        "name": "attendance",
+        "type": "radio",
+        "options": [
+          {"label": "Less than 50", "value": "< 50"},
+          {"label": "from 50 to 200", "value": "50 - 200"},
+          {"label": "above 200", "value": "> 200"}
+        ]
+      },
       "availabilities": {
         "label": "General Availability",
         "name": "availabilities",
@@ -100,6 +110,11 @@
         "label": "Date",
         "name": "date",
         "type": "date"
+      },
+      "duration": {
+        "label": "Duration (in hours, ex. 1.5)",
+        "name": "duration",
+        "type": "number"
       },
       "email": {
         "label": "Email",
@@ -225,6 +240,26 @@
         "options": [
           {"label": "Storyteller", "value": "storyteller"},
           {"label": "Nonprofit Contact", "value": "contact"}
+        ]
+      },
+      "storytellersNeeded": {
+        "label": "Number of Storytellers needed",
+        "name": "storytellersNeeded",
+        "type": "number"
+      },
+      "venueName": {
+        "label": "Venue Name",
+        "name": "venueName",
+        "type": "text"
+      },
+      "venueType": {
+        "label": "Venue Type",
+        "name": "venueType",
+        "type": "radio",
+        "options": [
+          {"label": "Indoor", "value": "indoor"},
+          {"label": "Oudoor", "value": "outdoor"},
+          {"label": "Both", "value": "both"}
         ]
       },
       "website": {
