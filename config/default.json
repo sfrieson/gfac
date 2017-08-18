@@ -33,7 +33,8 @@
       "login": ["email", "password"],
       "registerContact": ["nonprofitName", "nonprofitWebsite", "jobTitle", "locationPersonal"],
       "registerStoryteller": ["instagram", "cameraTypeRegistration", "location", "availabilities"],
-      "registerUser": ["firstname", "lastname", "email", "password", "confirm"]
+      "registerUser": ["firstname", "lastname", "email", "password", "confirm"],
+      "registerAdmin": ["firstname", "lastname", "email", "password", "confirm", "phone", "phoneType"]
     },
     "fields": {
       "attendance": {

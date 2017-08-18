@@ -28,7 +28,7 @@ export default {
     }
     </style>
   `,
-  body: function ({err, responses}) {
+  body: function ({err = [], responses}) {
     return (
       <div>
         {err.length
