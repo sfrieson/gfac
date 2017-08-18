@@ -13,7 +13,7 @@ export default {
           <label for='email'>Email:</label>
           <input id='email' type='text' name='email' />
 
-          <button className='btn'>Login</button>
+          <button className='btn'>Get reset link.</button>
         </form>
       </body>
     )

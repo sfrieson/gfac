@@ -28,6 +28,7 @@
       "createProject": ["name", "date", "dateIsApprox", "description", "attendance", "duration", "venueName", "venueType", "location", "storytellersNeeded", "website", "photoLink"],
       "editContact": ["phoneSecondary", "phoneSecondaryType"],
       "editNonprofit": ["name", "description", "location", "website"],
+      "editProject": ["name", "date", "dateIsApprox", "description", "attendance", "duration", "venueName", "venueType", "location", "storytellersNeeded", "website", "photoLink"],
       "editStoryteller": ["instagram", "cameraDSLR", "cameraPhone", "cameraFilm", "cameraOther", "preferredContactMethod", "portfolio", "causes", "availabilities"],
       "editUser": ["email", "firstname", "lastname", "phone", "phoneType"],
       "login": ["email", "password"],
