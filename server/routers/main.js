@@ -57,7 +57,7 @@ Router.route('/login')
 .post(({ body }, res) => {
   User.checkPassword(body.email, body.password)
   .then(user => {
-    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwtSecret))
+    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId, exp: Date.now() / 1000 + 10 * 60}, auth.jwtSecret))
     res.redirect('/')
   }).catch(err => {
     // TODO Show error to user

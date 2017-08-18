@@ -28,14 +28,15 @@ app.disable('x-powered-by')
 app.use(express.static('./build/public'))
 if (isDev) app.use(webpackDevMiddleware(webpack(webpackConfig)))
 
-app.use(cookieParser())
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
 app.use(expressJWT({
   secret: server.auth.jwtSecret,
   credentialsRequired: false,
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}))
+
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
 app.use('/api', expressGraphQL((req) => ({
   schema,
