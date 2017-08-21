@@ -4,6 +4,9 @@ import { connect } from 'react-redux'
 import { Form, Input } from 'common'
 import { Project, User } from 'models'
 
+import config from 'client-config'
+const { fieldsets: { editProject } } = config
+
 const stateToProps = ({ projects, projectUpdate, me }) => ({projects, projectUpdate, me})
 class ProjectView extends Component {
   constructor (props) {
@@ -30,6 +33,7 @@ class ProjectView extends Component {
       <div>
         <h2>Edit Project</h2>
         <Form
+          fields={editProject}
           base={base}
           changes={updates}
           changeAction={'PROJECT_UPDATE_' + project.id}
