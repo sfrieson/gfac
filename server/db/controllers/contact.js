@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import pick from 'lodash/pick'
 import { Contact as Model, Nonprofit } from '../models'
 
 export default {

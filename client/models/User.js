@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import pick from 'lodash/pick'
 
 import ajaxDispatch from 'utils/ajax-dispatch'
 import api from 'utils/api'

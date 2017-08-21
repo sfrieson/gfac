@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs'
-import { pick as whitelist } from 'lodash'
+import whitelist from 'lodash/pick'
 import config from 'config'
 import { User as Model, Storyteller as StorytellerModel } from '../models'
 import Contact from './contact'

@@ -5,10 +5,9 @@ import express from 'express'
 import expressGraphQL from 'express-graphql'
 import expressJWT from 'express-jwt'
 import morgan from 'morgan'
-import webpack from 'webpack'
 
+// Webpack config sets environment vairable
 import webpackConfig from '../webpack.config'
-import webpackDevMiddleware from 'webpack-dev-middleware'
 
 import sequelize from './db/sequelize'
 import schema from './db/queries/schema'
@@ -26,17 +25,17 @@ const isTest = process.env.NODE_ENV === 'test'
 app.use(morgan(isDev ? 'dev' : 'tiny'))
 app.disable('x-powered-by')
 app.use(express.static('./build/public'))
-if (isDev) app.use(webpackDevMiddleware(webpack(webpackConfig)))
+if (isDev) app.use(require('webpack-dev-middleware')(require('webpack')(webpackConfig)))
+
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
 app.use(expressJWT({
   secret: server.auth.jwtSecret,
   credentialsRequired: false,
   getToken: req => req.cookies.id_token
 }).unless({path: ['/login']}))
-
-app.use(cookieParser())
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
 
 app.use('/api', expressGraphQL((req) => ({
   schema,

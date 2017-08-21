@@ -1,4 +1,4 @@
-import { pick } from 'lodash'
+import pick from 'lodash/pick'
 import { Availability, Storyteller as Model } from '../models'
 const AvailabilityRE = new RegExp('(\\w{2})_(\\w*)')
 export default {
