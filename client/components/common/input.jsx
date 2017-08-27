@@ -54,13 +54,13 @@ function DateInput ({ label, name, value, ...props }) {
         name={name} {...props}
         type='datetime-local'
         min={getDate()}
-        value={getDate(value)}
+        value={value || getDate()}
       />
     </div>
   )
 
-  function getDate (when = Date.now()) {
-    const d = new Date(when)
+  function getDate () {
+    const d = new Date(Date.now())
     const date = {
       year: d.toLocaleString('en-US', {year: 'numeric'}),
       month: d.toLocaleString('en-US', {month: '2-digit'}),

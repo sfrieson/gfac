@@ -1,4 +1,5 @@
-import { Project as Model, Contact, Storyteller } from '../models'
+import { Project as Model, Contact, Nonprofit, Storyteller } from '../models'
+import Email from '../../email'
 
 const storytellerInclude = {model: Storyteller, include: ['user']}
 function flattenInstance (i) {
@@ -24,12 +25,12 @@ export default {
     .then(flattenInstance)
   },
   create (data, user) {
+    console.log('Project.create')
     return new Promise((resolve, reject) => {
       // add +0000 for "no" timezone
       data.date = new Date(data.date + '+0000').toString()
-
       // Created by admin or nonprofitId already on Contact
-      if ('nonprofitId' in data) resolve(data)
+      if ('nonprofitId' in data) resolve([data, {id: data.nonprofitId}])
 
       // Created by Nonprofit Contact
       else {
@@ -37,10 +38,21 @@ export default {
         .then(c => c.getNonprofit())
         .then(np => {
           data.nonprofitId = np.id
-          resolve(data)
+          resolve([data, np])
         })
+        .catch(reject)
       }
-    }).then(data => Model.create(data))
+    }).then(([data, np]) => Promise.all([Model.create(data), Promise.resolve(np)]))
+    .then(([project, np]) => {
+      if ('name' in np === false) {
+        Nonprofit.find({where: np})
+        .then(np => Email.newProjectAlert(project, np.get({plain: true})))
+      } else {
+        Email.newProjectAlert(project, np)
+      }
+
+      return project
+    })
   },
   get (args, user) {
     const options = {

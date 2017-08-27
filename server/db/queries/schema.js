@@ -124,7 +124,7 @@ const Project = new Type({
   fields: () => ({
     id: {type: new NonNull(Str)},
     // attachments: {type: new List(Attachment)},
-    attendance: {type: Int},
+    attendance: {type: Str},
     date: {type: new NonNull(Str)},
     dateIsApprox: {type: new NonNull(Bool)},
     description: {type: new NonNull(Str)},
@@ -171,12 +171,21 @@ const StorytellerInput = new Input({
 const ProjectInput = new Input({
   name: 'ProjectInput',
   fields: {
-    name: {type: Str},
-    description: {type: Str},
-    nonprofitId: {type: Str},
-    date: {type: Str},
-    dateIsApprox: {type: Str},
-    location: {type: Str}
+    // attachments: {type: new List(Attachment)},
+    attendance: {type: Str},
+    date: {type: new NonNull(Str)},
+    dateIsApprox: {type: new NonNull(Bool)},
+    description: {type: new NonNull(Str)},
+    duration: {type: Int},
+    location: {type: Str},
+    name: {type: new NonNull(Str)},
+    nonprofitId: {type: new NonNull(Str)},
+    photoLink: {type: Str},
+    storytellersNeeded: {type: Int},
+    status: {type: Str}, // enum: prospective, planning, past, completed
+    venueName: {type: Str},
+    venueType: {type: Str},
+    website: {type: Str}
   }
 })
 

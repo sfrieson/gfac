@@ -31,11 +31,11 @@ class ProjectForm extends Component {
     const form = this.addDefaults(projectForm)
     const isAdmin = me.role === 'admin'
 
-    let npOptions
+    let nonprofitOptions
     if (isAdmin) {
       if (!nonprofits) return <div>Loading...</div>
       else {
-        npOptions = nonprofits.map(({id, name}) => ({value: id, label: name}))
+        nonprofitOptions = nonprofits.map(({id, name}) => ({value: id, label: name}))
       }
     }
 
@@ -44,7 +44,7 @@ class ProjectForm extends Component {
         <h2>New Project</h2>
         <form onSubmit={this.onSubmit}>
 
-          {isAdmin && <Input label='Nonprofit' type='select' name='nonprofitId' value={form.nonprofitId} options={npOptions} onChange={this.onChange} />}
+          {isAdmin && <Input label='Nonprofit' type='select' name='nonprofitId' value={form.nonprofitId} options={nonprofitOptions} onChange={this.onChange} />}
           {formFields.map((props, key) => <Input key={key} {...props} value={form[props.name]} onChange={this.onChange} />)}
 
           <button>Submit</button>
@@ -55,7 +55,6 @@ class ProjectForm extends Component {
   addDefaults (projectForm) {
     return Object.assign({
       name: '',
-      // date: '', // Automatically sets itself (?) TODO is this browser specific?
       dateIsApprox: false,
       description: '',
       location: '',
@@ -73,7 +72,10 @@ class ProjectForm extends Component {
   onSubmit (e) {
     e.preventDefault()
     const {projectForm, me} = this.props
-    Project.create(Object.assign(projectForm, {nonprofitId: me.nonprofit.id}))
+    const data = 'nonprofitId' in projectForm
+      ? this.addDefaults(projectForm)
+      : this.addDefaults(Object.assign(projectForm, {nonprofitId: me.nonprofit.id}))
+    Project.create(data)
   }
 }
 export default connect(stateToProps)(ProjectForm)

@@ -3,6 +3,7 @@ import mailer from 'nodemailer'
 
 import emitter from 'emitter'
 import invite from './invite'
+import newProjectAlert from './newProjectAlert'
 import reset from './reset'
 import verify from './verify'
 
@@ -61,6 +62,12 @@ export default {
       ...invite(options)
     })
   },
+  newProjectAlert: async function (project, nonprofit) {
+    return this.send({
+      to: getAdminList(),
+      ...newProjectAlert({project, nonprofit})
+    })
+  },
   reset: async function ({email, link}) {
     return this.send({
       to: email,
@@ -73,4 +80,11 @@ export default {
       ...verify({link})
     })
   }
+}
+
+function getAdminList () {
+  // TODO Call to Model to get all admin emails to stay up to date
+  return [
+    'admin@gmail.com'
+  ]
 }
