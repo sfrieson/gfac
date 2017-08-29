@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser'
 import config from 'config'
 import express from 'express'
 import expressGraphQL from 'express-graphql'
-import expressJWT from 'express-jwt'
+import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
 
 // Webpack config sets environment vairable
@@ -30,12 +30,19 @@ if (isDev) app.use(require('webpack-dev-middleware')(require('webpack')(webpackC
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
+app.get('/robots.txt', (req, res) => res.sendStatus(404))
+app.get('/images/favicon.png', (req, res) => res.sendStatus(404))
 
-app.use(expressJWT({
-  secret: server.auth.jwtSecret,
-  credentialsRequired: false,
-  getToken: req => req.cookies.id_token
-}).unless({path: ['/login']}))
+app.use((req, res, next) => {
+  req.user = jwt.verify(
+    req.cookies.id_token,
+    server.auth.jwtSecret,
+    (err, decoded) => {
+      if (!err) req.user = decoded
+      next()
+    }
+  )
+})
 
 app.use('/api', expressGraphQL((req) => ({
   schema,

@@ -1,3 +1,4 @@
+import qs from 'querystring'
 import express from 'express'
 import jwt from 'jsonwebtoken'
 
@@ -12,6 +13,10 @@ const app = config.get('app')
 const { auth, email } = config.get('server')
 
 const Router = express.Router()
+
+Router.use((err, req, res, nex) => {
+  if (err.name === 'UnauthorizedError') console.log('\n\nFOUND THE ERROR\n\n')
+})
 
 Router.route('/admin-invite')
 .get(({ query }, res) => {
@@ -52,20 +57,6 @@ Router.route('/forgot-password')
   .catch(err => res.send(err.message))
 })
 
-Router.route('/login')
-.get((_, res) => res.send(renderStatic('login')))
-.post(({ body }, res) => {
-  User.checkPassword(body.email, body.password)
-  .then(user => {
-    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId, exp: Date.now() / 1000 + 10 * 60}, auth.jwtSecret))
-    res.redirect('/')
-  }).catch(err => {
-    // TODO Show error to user
-    console.log(err)
-    res.redirect('/login')
-  })
-})
-
 Router.get('/logout', (req, res) => {
   res.clearCookie('id_token')
   res.redirect('/login')
@@ -86,16 +77,37 @@ Router.route('/register')
   })
 })
 
-Router.get('verify', ({query}, res) => {
+Router.get('/verify', ({query}, res) => {
   User.verify(query.t)
   .then(user => login(user, res))
   .catch(() => res.redirect('/login'))
 })
 
+Router.route('/login')
+.get((_, res) => res.send(renderStatic('login')))
+.post(({ body, query }, res) => {
+  console.log('login attempt, to:', 'next' in query ? qs.unescape(query.next) : '/')
+  User.checkPassword(body.email, body.password)
+  .then(user => {
+    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwtSecret, {expiresIn: '1h'}))
+    res.redirect('next' in query ? qs.unescape(query.next) : '/')
+  }).catch(err => {
+    // TODO Show error to user
+    console.log(err)
+    res.redirect('/login' + qs.stringify(query))
+  })
+})
+
+Router.use(function (req, res, next) {
+  if (!req.user) {
+    let query = ''
+    if (req.originalUrl.length > 1) query = `?next=${qs.escape(req.originalUrl)}`
+    res.redirect(`/login${query}`)
+  } else next()
+})
+
 // React Router takes over from here (in the client)
 Router.get('*', (req, res) => {
-  if (!req.user) return res.redirect('/login')
-
   if (req.user.id) res.send(renderSpa())
   else res.redirect('/login')
 })

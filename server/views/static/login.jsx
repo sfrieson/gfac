@@ -21,7 +21,7 @@ export default {
         <h1>Welcome to Gramforacause</h1>
         <div className='login__container'>
           <h2>Login!</h2>
-          <form action='/login' method='POST'>
+          <form method='POST'>
 
             {loginFields.map((data, key) => <InputGroup key={key} {...data} />)}
 
