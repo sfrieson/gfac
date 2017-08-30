@@ -1,16 +1,16 @@
 import qs from 'querystring'
 import express from 'express'
-import jwt from 'jsonwebtoken'
 
 import config from 'config'
 import User from '../db/controllers/user'
 import { ValidationError } from '../errors'
+import { sign as createToken } from '../utils/token-utils'
 
 import renderSpa from '../views'
 import renderStatic from '../views/static'
 
 const app = config.get('app')
-const { auth, email } = config.get('server')
+const { email } = config.get('server')
 
 const Router = express.Router()
 
@@ -79,6 +79,7 @@ Router.route('/register')
 
 Router.get('/verify', ({query}, res) => {
   User.verify(query.t)
+  // TODO add redirect url ?next=
   .then(user => login(user, res))
   .catch(() => res.redirect('/login'))
 })
@@ -88,7 +89,7 @@ Router.route('/login')
 .post(({ body, query }, res) => {
   User.checkPassword(body.email, body.password)
   .then(user => {
-    res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwtSecret, {expiresIn: '1h'}))
+    res.cookie('id_token', createToken({id: user.id, role: user.role, nonprofitId: user.nonprofitId}))
     res.redirect('next' in query ? qs.unescape(query.next) : '/')
   }).catch(err => {
     // TODO Show error to user
@@ -114,6 +115,6 @@ Router.get('*', (req, res) => {
 export default Router
 
 function login (user, res, redirect = '/') {
-  res.cookie('id_token', jwt.sign({id: user.id, role: user.role}, auth.jwtSecret))
+  res.cookie('id_token', createToken({id: user.id, role: user.role, nonprofitId: user.nonprofitId}))
   res.redirect(redirect)
 }
