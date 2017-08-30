@@ -86,7 +86,6 @@ Router.get('/verify', ({query}, res) => {
 Router.route('/login')
 .get((_, res) => res.send(renderStatic('login')))
 .post(({ body, query }, res) => {
-  console.log('login attempt, to:', 'next' in query ? qs.unescape(query.next) : '/')
   User.checkPassword(body.email, body.password)
   .then(user => {
     res.cookie('id_token', jwt.sign({id: user.id, role: user.role, nonprofitId: user.nonprofitId}, auth.jwtSecret, {expiresIn: '1h'}))

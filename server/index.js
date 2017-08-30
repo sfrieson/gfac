@@ -1,13 +1,12 @@
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import config from 'config'
 import express from 'express'
 import expressGraphQL from 'express-graphql'
-import jwt from 'jsonwebtoken'
 import morgan from 'morgan'
 
 // Webpack config sets environment vairable
 import webpackConfig from '../webpack.config'
+import { tokenMiddleware } from './utils/token-utils'
 
 import sequelize from './db/sequelize'
 import schema from './db/queries/schema'
@@ -15,12 +14,11 @@ import models from './db/models'
 import { bulkIndex } from './db/elasticlunr'
 import mainRouter from './routers/main'
 
-const server = config.get('server')
-const app = express()
-
 const isDev = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
 // const isProd = process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'heroku'
+
+const app = express()
 
 app.use(morgan(isDev ? 'dev' : 'tiny'))
 app.disable('x-powered-by')
@@ -33,16 +31,7 @@ app.use(bodyParser.json())
 app.get('/robots.txt', (req, res) => res.sendStatus(404))
 app.get('/images/favicon.png', (req, res) => res.sendStatus(404))
 
-app.use((req, res, next) => {
-  req.user = jwt.verify(
-    req.cookies.id_token,
-    server.auth.jwtSecret,
-    (err, decoded) => {
-      if (!err) req.user = decoded
-      next()
-    }
-  )
-})
+app.use(tokenMiddleware)
 
 app.use('/api', expressGraphQL((req) => ({
   schema,
