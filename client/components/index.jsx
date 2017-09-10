@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
+
 import store from '../store/index'
 import { Project as ProjectModel, User } from '../models'
+import 'images/favicon.png'
 
 import {
   Account,
