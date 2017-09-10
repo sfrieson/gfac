@@ -4,6 +4,7 @@ import Email from '../../email'
 const storytellerInclude = {model: Storyteller, include: ['user']}
 function flattenInstance (i) {
   const instance = i.get({plain: true})
+  console.log('instance in flattening', instance)
   instance.storytellers = (instance.storytellers || [])
   .map(p => {
     if ('user' in p) {
@@ -11,7 +12,7 @@ function flattenInstance (i) {
       return {...storyteller, ...user, userId: user.id}
     } else return p
   })
-
+  console.log('instance after map', instance)
   return instance
 }
 
@@ -73,8 +74,10 @@ export default {
     .then(instances => instances.map(flattenInstance))
   },
   update (id, updates) {
-    return Model.findOne({query: {id}})
+    return Model.findOne({where: {id}, include: [storytellerInclude]})
     .then(instance => instance.update(updates))
-    .then(instance => instance.get())
+    // ID is currently not returning.  Not sure if this is a bug or something else
+    .then(instance => instance.reload())
+    .then(flattenInstance)
   }
 }

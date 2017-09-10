@@ -2,20 +2,20 @@ import ajaxDispatch from 'utils/ajax-dispatch'
 import api from 'utils/api'
 
 const Project = {
-  create: (d) => {
+  create: (data) => {
     ajaxDispatch('CREATE_PROJECT',
-      api(`mutation CreateProject ($update: ProjectInput){
+      api(`mutation CreateProject ($update: ProjectCreation){
           createProject (project: $update) {
             name
           }
-        }`, {update: d}
+        }`, {update: data}
       )
     )
   },
-  get: () => {
-    ajaxDispatch('PROJECTS',
-      api(`query {
-        getProjects {
+  get: (id) => {
+    ajaxDispatch(`PROJECT_${id}`,
+      api(`query getProject ($id: ID) {
+        getProjects(id: $id) {
           name
           date
           dateIsApprox
@@ -30,12 +30,23 @@ const Project = {
             }
           }
         }
+      }`, {id})
+    )
+  },
+  getAll: () => {
+    ajaxDispatch('PROJECTS',
+      api(`query {
+        getProjects {
+          name
+          date
+          id
+        }
       }`)
     )
   },
   update: function (id, updates) {
     ajaxDispatch('PROJECT_UPDATE',
-      api(`mutation UpdateProject($id: Int, $updates: ProjectInput){
+      api(`mutation UpdateProject($id: ID, $updates: ProjectUpdates){
         updateProject (id: $id, updates: $updates) {
           name
           date
@@ -69,8 +80,9 @@ const Project = {
           dateIsApprox
           location
           description
+          id
           storytellers {
-            id
+            userId
             ... on UserInterface {
               firstname
               lastname

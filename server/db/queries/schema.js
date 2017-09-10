@@ -168,8 +168,8 @@ const StorytellerInput = new Input({
   }
 })
 
-const ProjectInput = new Input({
-  name: 'ProjectInput',
+const ProjectCreation = new Input({
+  name: 'ProjectCreation',
   fields: {
     // attachments: {type: new List(Attachment)},
     attendance: {type: Str},
@@ -180,6 +180,26 @@ const ProjectInput = new Input({
     location: {type: Str},
     name: {type: new NonNull(Str)},
     nonprofitId: {type: new NonNull(Str)},
+    photoLink: {type: Str},
+    storytellersNeeded: {type: Int},
+    status: {type: Str}, // enum: prospective, planning, past, completed
+    venueName: {type: Str},
+    venueType: {type: Str},
+    website: {type: Str}
+  }
+})
+const ProjectUpdates = new Input({
+  name: 'ProjectUpdates',
+  fields: {
+    // attachments: {type: new List(Attachment)},
+    attendance: {type: Str},
+    date: {type: Str},
+    dateIsApprox: {type: Bool},
+    description: {type: Str},
+    duration: {type: Int},
+    location: {type: Str},
+    name: {type: Str},
+    nonprofitId: {type: Str},
     photoLink: {type: Str},
     storytellersNeeded: {type: Int},
     status: {type: Str}, // enum: prospective, planning, past, completed
@@ -310,7 +330,7 @@ const Mutation = new Type({
     createProject: {
       type: Project,
       args: {
-        project: {type: ProjectInput}
+        project: {type: ProjectCreation}
       },
       resolve: ({req}, {project}) => ProjectC.create(project, req.user)
     },
@@ -339,10 +359,10 @@ const Mutation = new Type({
     updateProject: {
       type: Project,
       args: {
-        id: {type: Int},
-        updates: {type: ProjectInput}
+        id: {type: Id},
+        updates: {type: ProjectUpdates}
       },
-      resolve: ({ args: {id, updates} }) => ProjectC.update(id, updates)
+      resolve: (_, {id, updates}) => ProjectC.update(id, updates)
     },
     updateStorytellerMe: {
       type: Storyteller,
@@ -366,7 +386,8 @@ export default new GraphQLSchema({
     Storyteller,
     ContactInput,
     StorytellerInput,
-    ProjectInput,
+    ProjectCreation,
+    ProjectUpdates,
     NonprofitInput,
     SearchQueries,
     UserInput

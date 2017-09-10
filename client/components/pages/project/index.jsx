@@ -7,12 +7,12 @@ import { Project } from 'models'
 import { FormattedDate } from 'common'
 import { Link } from 'react-router-dom'
 
-const stateToProps = ({ me, projects }) => ({me, projects})
+const stateToProps = ({ me, projects }) => ({me, projects: projects.all})
 
 class ProjectList extends Component {
   constructor (props) {
     super(props)
-    Project.get()
+    Project.getAll()
   }
   render () {
     const projects = this.props.projects || []

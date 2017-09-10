@@ -7,14 +7,22 @@ import { Project, User } from 'models'
 import config from 'client-config'
 const { fieldsets: { editProject } } = config
 
-const stateToProps = ({ projects, projectUpdate, me }) => ({projects, projectUpdate, me})
+const stateToProps = ({ projects, projectUpdate, me }, {match}) => {
+  return {
+    projectUpdate,
+    me,
+    project: projects[match.params.id]
+  }
+}
+
 class ProjectView extends Component {
   constructor (props) {
     super(props)
     this.state = {loading: true}
     this._projects = []
-    Project.get({id: props.match.params.id})
+    Project.get(props.match.params.id)
   }
+
   componentWillReceiveProps (nextProps) {
     if (this.props.match.params.id !== nextProps.match.params.id) {
       // get new Project?
@@ -23,8 +31,7 @@ class ProjectView extends Component {
   }
 
   render () {
-    const { projects = [], projectUpdate, dispatch, match } = this.props
-    const project = this.getProject(projects, match.params.id)
+    const { project, projectUpdate, dispatch, match } = this.props
     if (!project) return <div>Loading?</div>
     const updates = projectUpdate[match.params.id] || {}
     const isAdmin = this.props.me.role === 'admin'
@@ -74,11 +81,6 @@ class ProjectView extends Component {
 
   removeStoryteller (storytellerUserId, projectId) {
     Project.removeStoryteller({userId: storytellerUserId, projectId: projectId})
-  }
-
-  getProject (projects, id) {
-    if (!this._projects[id]) this._projects[id] = projects.filter((p) => p.id === id)[0]
-    return this._projects[id]
   }
 }
 
