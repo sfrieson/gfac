@@ -116,7 +116,6 @@ const projectFetchRE = new RegExp('^FETCH_PROJECT_(\\d+)')
 const projects = (state = {}, action) => {
   const match = action.type.match(projectFetchRE)
   if (match) {
-    console.log('match', match)
     if (/START/.test(action.type)) {
       const id = match[1]
       return Object.assign(
@@ -125,8 +124,10 @@ const projects = (state = {}, action) => {
         {[id]: state.all && state.all.filter(p => p.id === id)[0]}
       )
     }
+
     if (/END/.test(action.type)) {
-      const project = action.res.data.getProjects[0]
+      const { project } = action.res.data
+
       return Object.assign({}, state, {[project.id]: project})
     }
   }

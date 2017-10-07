@@ -1,16 +1,28 @@
-query getProject ($id: ID) {
-  getProjects(id: $id) {
+query project ($id: ID!) {
+  project (id: $id) {
     name
     date
     dateIsApprox
     location
     description
     id
+    causes {
+      name
+    }
     storytellers {
       userId
       ... on UserInterface {
         firstname
         lastname
+      }
+    }
+    nonprofit {
+      name
+      description
+      primaryContact {
+        firstname
+        lastname
+        role
       }
     }
   }

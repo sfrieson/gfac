@@ -1,0 +1,9 @@
+@import 'client/styles/variables.scss';
+
+.nonprofit-mini {
+  background-color: $color-gray-light;
+  border: 1px solid $color-black;
+  box-sizing: border-box;
+  display: flex;
+  padding: .5em;
+}

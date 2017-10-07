@@ -5,6 +5,7 @@ import { Button } from 'antd'
 import Model from 'models/project'
 
 import Details from 'components/Project/Details'
+import NonprofitMini from 'components/Nonprofit/Mini'
 import PrimaryInfo from 'components/Project/PrimaryInfo'
 import UserMini from 'components/User/Mini'
 
@@ -17,6 +18,7 @@ export function ProjectPage ({loading, error, data}) {
     // causes,
     location,
     name,
+    nonprofit,
     storytellers
   } = data
   return [
@@ -41,7 +43,7 @@ export function ProjectPage ({loading, error, data}) {
         </Button>
       </div>
       <div className='col-sm-12 col-md-6'>
-        {/* Nonprofit view */}
+        <NonprofitMini {...nonprofit} />
         {/* Event History */}
       </div>
     </div>

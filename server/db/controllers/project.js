@@ -2,16 +2,27 @@ import { Project as Model, Contact, Nonprofit, Storyteller } from '../models'
 import Email from '../../email'
 
 const storytellerInclude = {model: Storyteller, include: ['user']}
+const nonprofitInclude = {model: Nonprofit, include: [{model: Contact, include: ['user']}]}
 function flattenInstance (i) {
   const instance = i.get({plain: true})
   console.log('instance in flattening', instance)
-  instance.storytellers = (instance.storytellers || [])
-  .map(p => {
-    if ('user' in p) {
-      const {user, ...storyteller} = p
-      return {...storyteller, ...user, userId: user.id}
-    } else return p
-  })
+  if ('storytellers' in instance) {
+    instance.storytellers = instance.storytellers.map(p => {
+      if ('user' in p) {
+        const {user, ...storyteller} = p
+        return {...storyteller, ...user, userId: user.id}
+      } else return p
+    })
+  }
+  if ('nonprofit' in instance && 'contacts' in instance.nonprofit) {
+    instance.nonprofit.contacts = instance.nonprofit.contacts.map(c => {
+      if ('user' in c) {
+        const {user, ...contact} = c
+        return {...contact, ...user, userId: user.id}
+      } else return c
+    })
+  }
+
   console.log('instance after map', instance)
   return instance
 }
@@ -61,7 +72,7 @@ export default {
       where: args || {},
       include: [storytellerInclude]
     }
-    console.log('ProjectController#get, args:', args, 'user:', user)
+
     if (user.role === 'contact') options.where.nonprofitId = user.nonprofitId
     if (user.role === 'storyteller') {
       options.include = [{
@@ -72,6 +83,16 @@ export default {
 
     return Model.findAll(options)
     .then(instances => instances.map(flattenInstance))
+  },
+  getOne (id, user) {
+    console.log('getOne', id, user)
+    const options = {
+      where: {id},
+      include: [storytellerInclude, nonprofitInclude]
+    }
+
+    return Model.findOne(options)
+    .then(flattenInstance)
   },
   update (id, updates) {
     return Model.findOne({where: {id}, include: [storytellerInclude]})

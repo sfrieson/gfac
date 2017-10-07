@@ -25,8 +25,9 @@ import UserLogin from './UserLogin'
 
 Availability.belongsTo(Storyteller)
 
-Cause.belongsToMany(Storyteller, {through: 'interests'})
 Cause.belongsToMany(Nonprofit, {through: 'focuses'})
+Cause.belongsToMany(Project, {through: 'project_focuses'})
+Cause.belongsToMany(Storyteller, {through: 'interests'})
 
 Contact.belongsTo(Nonprofit)
 Contact.belongsTo(User, {onDelete: 'cascade'})
@@ -50,6 +51,7 @@ Project.belongsTo(Nonprofit)
 // Project.hasMany(Assignment);
 // Project.hasMany(Attachment);
 Project.belongsToMany(Storyteller, {through: 'assignments'})
+Project.belongsToMany(Cause, {through: 'project_focuses'})
 Project.hasMany(Event)
 Project.hasMany(Review)
 

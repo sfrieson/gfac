@@ -91,11 +91,17 @@ const Nonprofit = new Type({
   name: 'Nonprofit',
   fields: () => ({
     id: {type: Str},
-    name: {type: Str},
+    causes: {type: new List(Cause)},
+    contacts: {type: new NonNull(new List(Contact))},
     description: {type: Str},
-    contacts: {type: new List(Contact)},
+    name: {type: Str},
     projects: {type: new List(Project)},
-    causes: {type: new List(Cause)}
+    primaryContact: {
+      type: new NonNull(Contact),
+      resolve ({ contacts }) {
+        return contacts[0]
+      }
+    }
   })
 })
 
@@ -125,6 +131,7 @@ const Project = new Type({
     id: {type: new NonNull(Str)},
     // attachments: {type: new List(Attachment)},
     attendance: {type: Str},
+    causes: {type: new List(Cause)},
     date: {type: new NonNull(Str)},
     dateIsApprox: {type: new NonNull(Bool)},
     description: {type: new NonNull(Str)},
@@ -132,6 +139,7 @@ const Project = new Type({
     location: {type: Str},
     name: {type: new NonNull(Str)},
     nonprofitId: {type: new NonNull(Str)},
+    nonprofit: {type: new NonNull(Nonprofit)},
     photoLink: {type: Str},
     storytellers: {type: new NonNull(new List(Storyteller))},
     storytellersNeeded: {type: Int},
@@ -287,6 +295,13 @@ const Query = new Type({
         nonprofitId: {type: Id}
       },
       resolve: (_, args, {user}) => ProjectC.get(args, user)
+    },
+    project: {
+      type: Project,
+      args: {
+        id: {type: new NonNull(Id)}
+      },
+      resolve: (_, args, {user}) => ProjectC.getOne(args.id, user)
     },
     getUser: {
       type: User,
