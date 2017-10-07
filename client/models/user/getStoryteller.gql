@@ -1,0 +1,22 @@
+query GetStoryteller ($userId: ID) {
+  getStoryteller (userId: $userId) {
+    firstname
+    lastname
+    email
+    instagram
+    phone
+    phoneType
+    preferredContactMethod
+    portfolio
+    causes {
+      name
+    }
+    projects {
+      id
+      name
+      date
+      dateIsApprox
+    }
+    availabilities
+  }
+}

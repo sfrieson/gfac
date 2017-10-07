@@ -1,0 +1,17 @@
+mutation UpdateStorytellerToProject ($userId: ID, $projectId: Int, $action: String) {
+  updateProjectStoryteller(id: $projectId, storytellerUserId: $userId, action: $action) {
+    name
+    date
+    dateIsApprox
+    location
+    description
+    id
+    storytellers {
+      userId
+      ... on UserInterface {
+        firstname
+        lastname
+      }
+    }
+  }
+}

@@ -3,91 +3,23 @@ import pick from 'lodash/pick'
 import ajaxDispatch from 'utils/ajax-dispatch'
 import api from 'utils/api'
 
+import GET_ME from './getMe.gql'
+import GET_STORYTELLER from './getStoryteller.gql'
+import GET_ALL_STORYTELLERS from './getAllStorytellers.gql'
+
 const User = {
-  getAllStorytellers: () => (
-    ajaxDispatch('ALL_PHOTOGRAPHERS',
-      api(`
-        query GetAllStorytellers {
-          getAllStorytellers {
-            userId
-            ...on UserInterface{
-              firstname
-              lastname
-            }
-          }
-        }
-      `)
-    )
-  ),
+  getAllStorytellers: () => ajaxDispatch('ALL_PHOTOGRAPHERS', api(GET_ALL_STORYTELLERS)),
   getMe: () => {
     return new Promise((resolve) => {
       ajaxDispatch('ME',
-        api(`
-          query GetMe {
-            getMe {
-              email
-              firstname
-              lastname
-              phone
-              phoneType
-              role
-              ... on Storyteller {
-                instagram
-                cameraPhone
-                cameraFilm
-                cameraDSLR
-                cameraOther
-                preferredContactMethod
-                causes {
-                  name
-                }
-                availabilities
-              }
-              ... on Contact {
-                phoneSecondary
-                phoneSecondaryType
-                nonprofit {
-                  id
-                  name
-                  description
-                }
-              }
-            }
-          }
-        `
-      ).then(({ data }) => {
-        let me = {...data.getMe}
-        resolve(me)
-        return me
-      }))
+        api(GET_ME).then(({ data: { getMe: me } }) => {
+          resolve(me)
+          return me
+        })
+      )
     })
   },
-  getStoryteller: function (userId) {
-    ajaxDispatch('STORYTELLER',
-      api(`query GetPhotogapher($userId: ID) {
-        getStoryteller(userId: $userId) {
-          firstname
-          lastname
-          email
-          instagram
-          phone
-          phoneType
-          preferredContactMethod
-          portfolio
-          causes {
-            name
-          }
-          projects {
-            id
-            name
-            date
-            dateIsApprox
-          }
-          availabilities
-        }
-      }`, {userId})
-    )
-  },
+  getStoryteller: (userId) => ajaxDispatch('STORYTELLER', api(GET_STORYTELLER, {userId})),
   updateMe: (updates) => {
     const mutationVariables = []
     const query = []

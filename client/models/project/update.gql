@@ -1,0 +1,17 @@
+mutation UpdateProject($id: ID, $updates: ProjectUpdates){
+  updateProject (id: $id, updates: $updates) {
+    name
+    date
+    dateIsApprox
+    location
+    description
+    id
+    storytellers {
+      userId
+      ... on UserInterface {
+        firstname
+        lastname
+      }
+    }
+  }
+}

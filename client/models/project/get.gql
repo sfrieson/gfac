@@ -1,0 +1,17 @@
+query getProject ($id: ID) {
+  getProjects(id: $id) {
+    name
+    date
+    dateIsApprox
+    location
+    description
+    id
+    storytellers {
+      userId
+      ... on UserInterface {
+        firstname
+        lastname
+      }
+    }
+  }
+}

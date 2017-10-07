@@ -1,60 +1,24 @@
 import ajaxDispatch from 'utils/ajax-dispatch'
 import api from 'utils/api'
 
+import GET from './get.gql'
+import GET_ALL_DEFAULT from './getAllDefault.gql'
+import UPDATE from './update.gql'
+
 const Project = {
   getAll: (fields) => {
-    const defaultFields = `
-      id
-      name
-      description
-      causes {
-        name
+    const query = fields
+    ? `query GetAllNonprofits {
+      getNonprofits {
+        ${fields}
       }
-      projects {
-        name
-        date
-        dateIsApprox
-      }
-    `
-    ajaxDispatch('NONPROFITS',
-      api(`query GetAllNonprofits {
-        getNonprofits {
-          ${fields || defaultFields}
-        }
-      }`)
-    )
+    }`
+    : GET_ALL_DEFAULT
+
+    ajaxDispatch('NONPROFITS', api(query))
   },
-  get: (id) => {
-    ajaxDispatch('NONPROFIT',
-      api(`query GetNonprofit ($id: ID) {
-        getNonprofit (id: $id) {
-          name
-          description
-          contacts {
-            phoneSecondary
-          }
-          causes {
-            name
-          }
-          projects {
-            name
-            date
-            dateIsApprox
-          }
-        }
-      }`, {id})
-    )
-  },
-  update: (id, updates) => {
-    ajaxDispatch('NONPROFIT_UPDATE',
-      api(`mutation UpdateNonprofit ($id: ID, $updates: NonprofitInput) {
-        updateNonprofit (id: $id, updates: $updates) {
-          name
-          description
-        }
-      }`, {id, updates})
-    )
-  }
+  get: (id) => ajaxDispatch('NONPROFIT', api(GET, {id})),
+  update: (id, updates) => ajaxDispatch('NONPROFIT_UPDATE', api(UPDATE, {id, updates}))
 }
 
 export default Project

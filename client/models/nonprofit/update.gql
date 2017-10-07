@@ -1,0 +1,6 @@
+mutation UpdateNonprofit ($id: ID, $updates: NonprofitInput) {
+  updateNonprofit (id: $id, updates: $updates) {
+    name
+    description
+  }
+}

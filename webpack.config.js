@@ -27,7 +27,7 @@ const browserConfig = {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /node_modules/,
         include: [path.join(__dirname, 'client')],
         use: {
           loader: 'babel-loader',
@@ -43,6 +43,7 @@ const browserConfig = {
       },
       {
         test: /\.scss$/,
+        exclude: /node_modules/,
         use: extractCSS.extract(['css-loader', 'sass-loader'])
       },
       {
@@ -56,6 +57,13 @@ const browserConfig = {
             }
           }
         ]
+      },
+      {
+        test: /\.gql$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'raw-loader'
+        }
       }
     ]
   },

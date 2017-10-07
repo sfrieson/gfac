@@ -1,0 +1,31 @@
+query GetMe {
+  getMe {
+    email
+    firstname
+    lastname
+    phone
+    phoneType
+    role
+    ... on Storyteller {
+      instagram
+      cameraPhone
+      cameraFilm
+      cameraDSLR
+      cameraOther
+      preferredContactMethod
+      causes {
+        name
+      }
+      availabilities
+    }
+    ... on Contact {
+      phoneSecondary
+      phoneSecondaryType
+      nonprofit {
+        id
+        name
+        description
+      }
+    }
+  }
+}

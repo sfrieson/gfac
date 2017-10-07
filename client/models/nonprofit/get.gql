@@ -1,0 +1,17 @@
+query GetNonprofit ($id: ID) {
+  getNonprofit (id: $id) {
+    name
+    description
+    contacts {
+      phoneSecondary
+    }
+    causes {
+      name
+    }
+    projects {
+      name
+      date
+      dateIsApprox
+    }
+  }
+}

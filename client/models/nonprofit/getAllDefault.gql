@@ -1,0 +1,15 @@
+query GetAllNonprofits {
+  getNonprofits {
+    id
+    name
+    description
+    causes {
+      name
+    }
+    projects {
+      name
+      date
+      dateIsApprox
+    }
+  }
+}
