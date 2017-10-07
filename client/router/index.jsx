@@ -13,13 +13,12 @@ import Dashboard from 'pages/dashboard'
 import Nonprofit from 'pages/nonprofit'
 import Projects from 'pages/projects'
 import ProjectNew from 'pages/project/new'
-import ProjectView from 'pages/project/view'
+import ProjectView from 'pages/project'
 import Search from 'pages/search'
 import Storyteller from 'pages/storyteller'
 
 import Header from 'components/Header'
 import Footer from 'components/Footer'
-import Nav from 'components/Nav'
 
 class LoaderOrBody extends Component {
   constructor (props) {
@@ -43,7 +42,6 @@ class LoaderOrBody extends Component {
         <Header key='header' />
         <div className='container-fluid'>
           <div key='main' className='row'>
-            <Route path='/' component={Nav} />
             <div className='col-sm-12 col-md-9'>
               <Switch>
                 {/* TODO Figure out how to properly authenticate routes */}

@@ -1,6 +1,3 @@
-import NewProject from 'pages/project/new'
-import ViewProject from 'pages/project/view'
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Project from 'models/project'
@@ -39,4 +36,3 @@ class ProjectList extends Component {
 }
 
 export default connect(stateToProps)(ProjectList)
-export { NewProject, ViewProject }

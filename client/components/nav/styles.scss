@@ -1,13 +1,28 @@
+@import 'client/styles/variables.scss';
+
 .nav {
-  &__link {
-    color: blue;
+  &__list {
+    padding: 0;
+    margin: 0;
   }
+
+  &__item {
+    display: inline-block;
+    padding: 0 10px;
+  }
+
+  &__link {
+    color: $color-white;
+    text-transform: uppercase;
+  }
+
   &__link--active {
-    color: black;
+    color: $color-accent;
     text-decoration: none;
     cursor: default;
+
     &:focus {
-      color: black;
+      color: $color-accent;
       text-decoration: none;
     }
   }

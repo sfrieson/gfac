@@ -1,18 +1,13 @@
 @import 'client/styles/variables.scss';
 
 .header {
+  align-items: center;
   background-color: $color-black;
   color: $color-white;
+  display: flex;
+  justify-content: space-between;
   padding: 15px;
 
-  &__img, &__title {
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  &__{
-    padding: 0;
-  }
   &__img {
     box-sizing: border-box;
     height: 50px;
@@ -20,5 +15,9 @@
     img {
       height: 100%;
     }
+  }
+
+  &__profile-picture {
+
   }
 }

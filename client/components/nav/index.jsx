@@ -6,15 +6,18 @@ import './styles.scss'
 function NavLink (props) {
   return <RRNavLink className='nav__link' activeClassName='nav__link--active' {...props} />
 }
+function Item (props) {
+  return <li className='nav__item' {...props} />
+}
+
 export default connect(({me}) => ({me}))(function Nav ({ me }) {
   return (
-    <nav className='col-sm-12 col-md-3'>
-      Menu
-      <ul>
-        <li><NavLink exact to='/'>Home</NavLink></li>
-        <li><NavLink to='/account'>Account</NavLink></li>
+    <nav>
+      <ul className='nav__list'>
         {roleSpecificLinks(me.role)}
-        <li><a href='/logout'>Logout</a></li>
+        <Item>
+          <a className='nav__link' href='/logout'>Logout</a>
+        </Item>
       </ul>
     </nav>
   )
@@ -24,18 +27,18 @@ function roleSpecificLinks (role) {
   switch (role) {
     case 'contact':
       return [
-        <li key='projects'><NavLink to='/projects'>Your Projects</NavLink></li>,
-        <li key='new project'><NavLink to='/project/new'>New Project</NavLink></li>
+        <Item key='projects'><NavLink to='/projects'>Your Projects</NavLink></Item>,
+        <Item key='new project'><NavLink to='/project/new'>New Project</NavLink></Item>
       ]
     case 'storyteller':
       return [
-        <li key='projects'><NavLink to='/projects'>Your Projects</NavLink></li>
+        <Item key='projects'><NavLink to='/projects'>Your Projects</NavLink></Item>
       ]
     case 'admin':
       return [
-        <li key='projects'><NavLink to='/projects'>Projects</NavLink></li>,
-        <li key='new project'><NavLink to='/project/new'>New Project</NavLink></li>,
-        <li key='search'><NavLink to='/search'>Search</NavLink></li>
+        <Item key='projects'><NavLink to='/projects'>Projects</NavLink></Item>,
+        <Item key='new project'><NavLink to='/project/new'>New Project</NavLink></Item>,
+        <Item key='search'><NavLink to='/search'>Search</NavLink></Item>
       ]
     default:
       return null
