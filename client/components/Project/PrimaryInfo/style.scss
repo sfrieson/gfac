@@ -1,0 +1,17 @@
+@import 'client/styles/variables.scss';
+
+.project-primary-info {
+  font-family: $font-heading;
+
+  text-align: center;
+
+  &__name {
+    font-size: $fs-4;
+    font-weight: bold;
+  }
+
+  &__location,
+  &__date {
+    font-size: $fs-3;
+  }
+}

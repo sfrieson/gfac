@@ -52,6 +52,7 @@
   "author": "Steven Frieson",
   "license": "MIT",
   "dependencies": {
+    "antd": "^2.13.4",
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",

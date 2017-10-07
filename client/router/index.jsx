@@ -41,21 +41,17 @@ class LoaderOrBody extends Component {
       <div>
         <Header key='header' />
         <div className='container-fluid'>
-          <div key='main' className='row'>
-            <div className='col-sm-12 col-md-9'>
-              <Switch>
-                {/* TODO Figure out how to properly authenticate routes */}
-                <Route path='/account' component={Account} />
-                <Route path='/nonprofit/:id' component={Nonprofit} />
-                <Route path='/project/new' component={ProjectNew} />
-                <Route path='/project/:id' component={ProjectView} />
-                <Route path='/projects' component={Projects} />
-                <Route path='/search' component={Search} />
-                <Route path='/storyteller/:userId' component={Storyteller} />
-                <Route path='/' component={Dashboard} />
-              </Switch>
-            </div>
-          </div>
+          <Switch>
+            {/* TODO Figure out how to properly authenticate routes */}
+            <Route path='/account' component={Account} />
+            <Route path='/nonprofit/:id' component={Nonprofit} />
+            <Route path='/project/new' component={ProjectNew} />
+            <Route path='/project/:id' component={ProjectView} />
+            <Route path='/projects' component={Projects} />
+            <Route path='/search' component={Search} />
+            <Route path='/storyteller/:userId' component={Storyteller} />
+            <Route path='/' component={Dashboard} />
+          </Switch>
         </div>
         <Footer />
       </div>

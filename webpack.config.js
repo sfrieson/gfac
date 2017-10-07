@@ -47,6 +47,10 @@ const browserConfig = {
         use: extractCSS.extract(['css-loader', 'sass-loader'])
       },
       {
+        test: /\.css$/,
+        use: extractCSS.extract(['css-loader'])
+      },
+      {
         test: /\.png$/,
         use: [
           {
