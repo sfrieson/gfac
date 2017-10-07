@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { User } from 'models'
+import User from 'models/user'
 
-import { Availability } from '../../common'
+import Availability from 'components/Availability'
 
 const Display = connect(
   ({ storyteller }) => ({storyteller})

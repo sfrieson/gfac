@@ -1,7 +1,7 @@
 import React from 'react'
 import PT from 'prop-types'
 import { fields } from 'client-config'
-import { Input } from '../common'
+import Input from 'components/Input'
 
 export default function Form ({ fields, base, changes, changeAction, onSubmit }, { store }) {
   const values = {...base, ...changes}

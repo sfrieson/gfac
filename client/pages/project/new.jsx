@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Input } from 'common'
-import { Project, Nonprofit } from 'models'
+import Input from 'components/Input'
+
+import Nonprofit from 'models/nonprofit'
+import Project from 'models/project'
 
 import config from 'client-config'
 const { fields, fieldsets: { createProject } } = config

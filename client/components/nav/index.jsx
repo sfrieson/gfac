@@ -24,16 +24,16 @@ function roleSpecificLinks (role) {
   switch (role) {
     case 'contact':
       return [
-        <li key='projects'><NavLink to='/project'>Your Projects</NavLink></li>,
+        <li key='projects'><NavLink to='/projects'>Your Projects</NavLink></li>,
         <li key='new project'><NavLink to='/project/new'>New Project</NavLink></li>
       ]
     case 'storyteller':
       return [
-        <li key='projects'><NavLink to='/project'>Your Projects</NavLink></li>
+        <li key='projects'><NavLink to='/projects'>Your Projects</NavLink></li>
       ]
     case 'admin':
       return [
-        <li key='projects'><NavLink to='/project'>Projects</NavLink></li>,
+        <li key='projects'><NavLink to='/projects'>Projects</NavLink></li>,
         <li key='new project'><NavLink to='/project/new'>New Project</NavLink></li>,
         <li key='search'><NavLink to='/search'>Search</NavLink></li>
       ]

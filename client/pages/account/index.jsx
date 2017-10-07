@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Form } from 'common'
+import Form from 'components/Form'
 
-import { Nonprofit, User } from 'models'
+import Nonprofit from 'models/nonprofit'
+import User from 'models/user'
 import config from 'client-config'
 const {
   fieldsets: {

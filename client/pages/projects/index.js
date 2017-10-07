@@ -1,10 +1,10 @@
-import NewProject from './new'
-import ViewProject from './view'
+import NewProject from 'pages/project/new'
+import ViewProject from 'pages/project/view'
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Project } from 'models'
-import { FormattedDate } from 'common'
+import Project from 'models/project'
+import FormattedDate from 'components/FormattedDate'
 import { Link } from 'react-router-dom'
 
 const stateToProps = ({ me, projects }) => ({me, projects: projects.all})

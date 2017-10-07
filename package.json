@@ -34,13 +34,15 @@
         "module-resolver",
         {
           "alias": {
-            "images": "./images",
             "client-config": "./client-config.json",
-            "common": "./client/components/common",
-            "styles": "./client/styles",
+            "components": "./client/components",
+            "emitter": "./server/emitter.js",
+            "images": "./images",
             "models": "./client/models",
-            "utils": "./client/utils",
-            "emitter": "./server/emitter.js"
+            "pages": "./client/pages",
+            "store": "./client/store",
+            "styles": "./client/styles",
+            "utils": "./client/utils"
           }
         }
       ]

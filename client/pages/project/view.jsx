@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { Form, Input } from 'common'
-import { Project, User } from 'models'
+import Form from 'components/Form'
+import Input from 'components/Input'
+
+import Project from 'models/project'
+import User from 'models/user'
 
 import config from 'client-config'
 const { fieldsets: { editProject } } = config

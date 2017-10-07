@@ -2,23 +2,24 @@ import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Provider, connect } from 'react-redux'
 
-import store from '../store/index'
-import { Project as ProjectModel, User } from '../models'
+import store from 'store'
+
+import Project from 'models/project'
+import User from 'models/user'
 import 'images/favicon.png'
 
-import {
-  Account,
-  Dashboard,
-  NewProject,
-  Nonprofit,
-  Project,
-  Search,
-  Storyteller,
-  ViewProject
-} from './pages'
-import Header from './header'
-import Footer from './footer'
-import Nav from './nav'
+import Account from 'pages/account'
+import Dashboard from 'pages/dashboard'
+import Nonprofit from 'pages/nonprofit'
+import Projects from 'pages/projects'
+import ProjectNew from 'pages/project/new'
+import ProjectView from 'pages/project/view'
+import Search from 'pages/search'
+import Storyteller from 'pages/storyteller'
+
+import Header from 'components/Header'
+import Footer from 'components/Footer'
+import Nav from 'components/Nav'
 
 class LoaderOrBody extends Component {
   constructor (props) {
@@ -29,7 +30,7 @@ class LoaderOrBody extends Component {
   componentWillReceiveProps ({ me }) {
     if (!this.state.loading) return
     if ('firstname' in me) {
-      ProjectModel.get()
+      Project.get()
       this.setState({loading: false})
     }
   }
@@ -48,9 +49,9 @@ class LoaderOrBody extends Component {
                 {/* TODO Figure out how to properly authenticate routes */}
                 <Route path='/account' component={Account} />
                 <Route path='/nonprofit/:id' component={Nonprofit} />
-                <Route path='/project/new' component={NewProject} />
-                <Route path='/project/:id' component={ViewProject} />
-                <Route path='/project' component={Project} />
+                <Route path='/project/new' component={ProjectNew} />
+                <Route path='/project/:id' component={ProjectView} />
+                <Route path='/projects' component={Projects} />
                 <Route path='/search' component={Search} />
                 <Route path='/storyteller/:userId' component={Storyteller} />
                 <Route path='/' component={Dashboard} />

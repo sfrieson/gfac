@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import { Nonprofit as Model } from 'models'
+import Model from 'models/nonprofit'
 
 const Display = connect(
   ({ nonprofit }) => ({nonprofit})

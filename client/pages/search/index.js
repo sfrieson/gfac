@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom'
 
 import dispatchAjax from 'utils/ajax-dispatch'
 import api from 'utils/api'
-import {
-  Input
-} from 'common'
+import Input from 'components/Input'
 
 const arr = []
 
