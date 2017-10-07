@@ -1,4 +1,10 @@
+@import 'client/styles/variables.scss';
+
 .header {
+  background-color: $color-black;
+  color: $color-white;
+  padding: 15px;
+
   &__img, &__title {
     display: inline-block;
     vertical-align: middle;
@@ -9,7 +15,10 @@
   }
   &__img {
     box-sizing: border-box;
-    padding: 15px;
-    img { height: 50px; }
+    height: 50px;
+
+    img {
+      height: 100%;
+    }
   }
 }

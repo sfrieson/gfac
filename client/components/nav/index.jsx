@@ -8,9 +8,9 @@ function NavLink (props) {
 }
 export default connect(({me}) => ({me}))(function Nav ({ me }) {
   return (
-    <nav className='header col-sm-12 col-md-3'>
+    <nav className='col-sm-12 col-md-3'>
       Menu
-      <ul className='header'>
+      <ul>
         <li><NavLink exact to='/'>Home</NavLink></li>
         <li><NavLink to='/account'>Account</NavLink></li>
         {roleSpecificLinks(me.role)}

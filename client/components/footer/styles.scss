@@ -1,0 +1,30 @@
+@import 'client/styles/variables.scss';
+
+.footer {
+  margin-top: 50px;
+  text-align: center;
+
+  &__top {
+    background-color: $color-gray-light;
+    box-sizing: border-box;
+    color: $color-black;
+    height: 150px;
+    padding: 50px;
+  }
+  &__bottom {
+    background-color: $color-black;
+    box-sizing: border-box;
+    color: $color-white;
+    height: 275px;
+    padding: 50px;
+  }
+  &__link-list {
+    padding: 0;
+  }
+  &__link {
+    display: inline-block;
+    font-family: $font-heading;
+    margin: 0 22px;
+    text-transform: uppercase;
+  }
+}

@@ -17,6 +17,7 @@ import {
   ViewProject
 } from './pages'
 import Header from './header'
+import Footer from './footer'
 import Nav from './nav'
 
 class LoaderOrBody extends Component {
@@ -57,6 +58,7 @@ class LoaderOrBody extends Component {
             </div>
           </div>
         </div>
+        <Footer />
       </div>
     )
   }
