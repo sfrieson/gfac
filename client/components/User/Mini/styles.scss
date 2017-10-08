@@ -1,4 +1,4 @@
-@import 'client/styles/variables.scss';
+@import 'client/styles/variables';
 
 .user-mini {
   align-items: center;
@@ -6,13 +6,13 @@
   border: 1px solid $color-black;
   box-sizing: border-box;
   display: flex;
+  justify-content: flex-start;
   padding: {
     bottom: .5em;
     left: .5em;
     right: 1em;
     top: .5em;
   }
-  justify-content: flex-start;
 
   &__picture {
     margin-right: 1em;

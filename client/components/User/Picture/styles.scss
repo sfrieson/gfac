@@ -1,10 +1,12 @@
+@import 'client/styles/variables';
+
 .user-picture {
+  background-color: $color-lightblue;
   border-radius: 50%;
-  background-color: lightblue;
   height: 64px;
   width: 64px;
-}
 
-.user-picture__img {
-  height: 100%;
+  &__img {
+    height: 100%;
+  }
 }
