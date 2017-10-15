@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Button } from 'antd'
 
 import dispatchAjax from 'utils/ajax-dispatch'
 import api from 'utils/api'
@@ -31,7 +32,7 @@ export default connect(
         {isStoryteller && <Input name='cameraPhone' type='checkbox' value={cameraPhone || false} label='Phone' onChange={onChange} />}
         {isStoryteller && <Input name='cameraFilm' type='checkbox' value={cameraFilm || false} label='Film' onChange={onChange} />}
         {isStoryteller && <Input name='availabilities' type='availability' value={availabilities || arr} label='Availability' onChange={onChange} />}
-        <button className='btn'>Submit</button>
+        <Button type='primary'>Submit</Button>
       </form>
       {searchResults.length > 0 && renderResults(searchResults)}
     </div>

@@ -65,7 +65,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
-    "bootstrap": "^3.3.7",
     "config": "^1.26.2",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.7",
