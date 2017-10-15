@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Button } from 'antd'
+import { Link } from 'react-router-dom'
 
 import Model from 'models/project'
 
@@ -13,9 +14,10 @@ export function ProjectPage ({loading, error, data}) {
   if (!data) return <div>Loading...</div>
 
   const {
+    // causes,
     date,
     description,
-    // causes,
+    id,
     location,
     name,
     nonprofit,
@@ -25,6 +27,9 @@ export function ProjectPage ({loading, error, data}) {
     <div className='row' key='primary info'>
       <div className='col-sm-12'>
         <PrimaryInfo name={name} date={date} location={location} />
+        <Link to={`/project/${id}/edit`}>
+          <Button>Edit</Button>
+        </Link>
       </div>
     </div>,
     <div className='row' key='main info'>
@@ -38,7 +43,7 @@ export function ProjectPage ({loading, error, data}) {
             </li>
           ))}
         </ul>
-        <Button>
+        <Button type='primary'>
           Add Storyteller
         </Button>
       </div>
@@ -59,9 +64,16 @@ const Connected = connect(mapStateToProps)(ProjectPage)
 
 export default class ProjectPageQuery extends Component {
   componentWillMount () {
-    Model.get(this.props.match.params.id)
+    this.getProject(this.props.match.params.id)
   }
-
+  componentWillReceiveProps (nextProps) {
+    if (this.props.match.params.id !== nextProps.match.params.id) {
+      this.getProject(nextProps.match.params.id)
+    }
+  }
+  getProject (id) {
+    Model.get(id)
+  }
   render () {
     return <Connected {...this.props} id={this.props.match.params.id} />
   }

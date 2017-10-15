@@ -1,4 +1,4 @@
-@import 'client/styles/variables.scss';
+@import 'client/styles/variables';
 
 .header {
   align-items: center;
@@ -6,6 +6,7 @@
   color: $color-white;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
   padding: 15px;
 
   &__img {

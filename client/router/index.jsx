@@ -12,6 +12,7 @@ import Account from 'pages/account'
 import Dashboard from 'pages/dashboard'
 import Nonprofit from 'pages/nonprofit'
 import Projects from 'pages/projects'
+import ProjectEdit from 'pages/project/edit'
 import ProjectNew from 'pages/project/new'
 import ProjectView from 'pages/project'
 import Search from 'pages/search'
@@ -46,6 +47,7 @@ class LoaderOrBody extends Component {
             <Route path='/account' component={Account} />
             <Route path='/nonprofit/:id' component={Nonprofit} />
             <Route path='/project/new' component={ProjectNew} />
+            <Route path='/project/:id/edit' component={ProjectEdit} />
             <Route path='/project/:id' component={ProjectView} />
             <Route path='/projects' component={Projects} />
             <Route path='/search' component={Search} />

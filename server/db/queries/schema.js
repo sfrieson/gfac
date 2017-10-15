@@ -12,6 +12,8 @@ import {
   GraphQLString as Str
 } from 'graphql'
 
+import { GraphQLDateTime as ISODateTime } from 'graphql-iso-date'
+
 import {
   ContactController as ContactC,
   NonprofitController as NonprofitC,
@@ -132,7 +134,7 @@ const Project = new Type({
     // attachments: {type: new List(Attachment)},
     attendance: {type: Str},
     causes: {type: new List(Cause)},
-    date: {type: new NonNull(Str)},
+    date: {type: new NonNull(ISODateTime)},
     dateIsApprox: {type: new NonNull(Bool)},
     description: {type: new NonNull(Str)},
     duration: {type: Int},
@@ -181,7 +183,7 @@ const ProjectCreation = new Input({
   fields: {
     // attachments: {type: new List(Attachment)},
     attendance: {type: Str},
-    date: {type: new NonNull(Str)},
+    date: {type: new NonNull(ISODateTime)},
     dateIsApprox: {type: new NonNull(Bool)},
     description: {type: new NonNull(Str)},
     duration: {type: Int},
@@ -201,7 +203,7 @@ const ProjectUpdates = new Input({
   fields: {
     // attachments: {type: new List(Attachment)},
     attendance: {type: Str},
-    date: {type: Str},
+    date: {type: ISODateTime},
     dateIsApprox: {type: Bool},
     description: {type: Str},
     duration: {type: Int},

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Button } from 'antd'
 
 import Form from 'components/Form'
 import Input from 'components/Input'
@@ -22,15 +23,7 @@ class ProjectView extends Component {
   constructor (props) {
     super(props)
     this.state = {loading: true}
-    this._projects = []
     Project.get(props.match.params.id)
-  }
-
-  componentWillReceiveProps (nextProps) {
-    if (this.props.match.params.id !== nextProps.match.params.id) {
-      // get new Project?
-      this.setState({loading: true})
-    }
   }
 
   render () {
@@ -66,7 +59,7 @@ class ProjectView extends Component {
           {storytellers.map(p => (
             <li key={p.userId}>
               <form onSubmit={e => { e.preventDefault(); this.removeStoryteller(p.userId, projectId) }}>
-                {p.firstname} {p.lastname} {isAdmin && <button>Remove</button>}
+                {p.firstname} {p.lastname} {isAdmin && <Button type='danger'>Remove</Button>}
               </form>
             </li>
           ))}
@@ -110,7 +103,7 @@ class AdminStorytellerForm extends Component {
             value={this.state.storytellerId}
             onChange={this.onChange}
           />
-          <button>Add</button>
+          <Button type='primary'>Add</Button>
         </form>
       </div>
     )

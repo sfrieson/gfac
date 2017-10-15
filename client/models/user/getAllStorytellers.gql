@@ -1,0 +1,9 @@
+query GetAllStorytellers {
+  getAllStorytellers {
+    userId
+    ...on UserInterface{
+      firstname
+      lastname
+    }
+  }
+}

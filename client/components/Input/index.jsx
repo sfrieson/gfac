@@ -1,32 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { fields } from 'client-config'
+import moment from 'moment'
+import {
+  Checkbox as AntCheckbox,
+  DatePicker,
+  Input as AntInput,
+  Radio as AntRadio,
+  Select as AntSelect
+} from 'antd'
 
 export default function Input (props) {
   const {
     onChange,
-    label,
     name,
     type = 'text',
     value
   } = props
 
   if (type === 'date') return <DateInput {...props} />
-  if (type === 'radio') return <Radio {...props} />
-  if (type === 'hidden') return <input {...props} />
+  if (type === 'radio') return <RadioGroup {...props} />
+  if (type === 'hidden') return <AntInput {...props} />
   if (type === 'causes') return <Checkboxes {...props} options={fields.causes.options} />
   if (type === 'select') return <Select {...props} />
-  if (type === 'textarea') return <TextArea {...props} />
+  if (type === 'textarea') return <AntInput.TextArea {...props} />
   if (type === 'checkbox') return <Checkbox {...props} />
   if (type === 'checkboxes') return <Checkboxes {...props} />
   if (type === 'availability') return <Availability {...props} />
 
-  return (
-    <div className='form-group'>
-      <label htmlFor={name}>{label}</label>
-      <input className='form-control' name={name} id={name} value={value} onChange={onChange} type={type} />
-    </div>
-  )
+  return <AntInput name={name} id={name} value={value} onChange={onChange} />
 }
 
 Input.propTypes = {
@@ -45,67 +47,39 @@ Input.defaultProps = {
 // Date Input
 // ----------
 
+const dateFormat = 'MM/DD/YYYY'
 function DateInput ({ label, name, value, ...props }) {
   return (
-    <div className='input-group'>
-      <label htmlFor={name}>{label}</label>
-      <input id={`${name}-input`}
-        className='form-control'
-        name={name} {...props}
-        type='datetime-local'
-        min={getDate()}
-        value={value || getDate()}
-      />
-    </div>
+    <DatePicker
+      id={`${name}-input`}
+      name={name}
+      min={getDate()}
+      value={value ? moment(value) : getDate()}
+      format={dateFormat}
+    />
   )
 
   function getDate () {
-    const d = new Date(Date.now())
-    const date = {
-      year: d.toLocaleString('en-US', {year: 'numeric'}),
-      month: d.toLocaleString('en-US', {month: '2-digit'}),
-      day: d.toLocaleString('en-US', {day: '2-digit'}),
-      hour: d.getHours(),
-      minute: d.getMinutes()
-    }
-    if (date.hour < 10) date.hour = '0' + date.hour
-    if (date.minute < 10) date.minute = '0' + date.minute
-
-    return `${date.year}-${date.month}-${date.day}T${date.hour}:${date.minute}`
+    return moment(Date.now())
   }
 }
 // -----------
 // Radio Input
 // -----------
 
-function Radio (props) {
+function RadioGroup (props) {
   const {
     options,
     onChange,
-    label,
     name,
     value
   } = props
 
-  const checked = value
-  // TODO check on hardcoded 'role' below
   return (
-    <div className='input-group'>
-      <label htmlFor='role'>{label}</label>
-      {renderButtons(options)}
-    </div>
+    <AntRadio.Group id={`radio-group-${name}`} name={name} onChange={onChange} value={value}>
+      {options.map(({ value, label }) => <AntRadio key={value} value={value}>{label}</AntRadio>)}
+    </AntRadio.Group>
   )
-
-  function renderButtons (buttons) {
-    return buttons.map(({ value, label }) => (
-      <div key={value} className='radio'>
-        <label>
-          <input type='radio' name={name} value={value} checked={value === checked} onChange={onChange} />
-          {label}
-        </label>
-      </div>
-    ))
-  }
 }
 
 // ------------
@@ -116,42 +90,27 @@ function Select (props) {
   const {
     options,
     onChange,
-    label,
     name,
     value
   } = props
 
   return (
-    <div className='input-group'>
-      <label htmlFor={name}>{label}</label>
-      <select name={name} id={name} className='form-control' value={value} onChange={onChange}>
-        <option disabled>Please select one...</option>
-        {renderOptions(options)}
-      </select>
-    </div>
+    <AntSelect
+      id={name}
+      name={name}
+      onChange={handleSelectChange}
+      placeholder='Please select one...'
+      value={value}
+    >
+      {options.map(({ label, value }) => <AntSelect.Option key={label} value={value}>{label}</AntSelect.Option>)}
+    </AntSelect>
   )
 
-  function renderOptions (opts) {
-    return opts.map(({ label, value }) => {
-      return (
-        <option key={value} value={value}>{label}</option>
-      )
-    })
+  function handleSelectChange (value) {
+    return onChange({target: {name, value}})
   }
 }
 
-// --------------
-// TextArea Input
-// --------------
-
-function TextArea ({ label, rows = 3, ...props }) {
-  return (
-    <div className='form-group'>
-      <label htmlFor='nonprofit_description'>{label}</label>
-      <textarea {...props} className='form-control' rows={rows} />
-    </div>
-  )
-}
 // --------------
 // Checkbox Input
 // --------------
@@ -161,13 +120,7 @@ function TextArea ({ label, rows = 3, ...props }) {
 function Checkbox ({ checked, label, onChange, value, ...props }) {
   let checkedValue = checked // Coming from Checkboxes
   if (checkedValue === undefined) checkedValue = value // Made directly with Checkbox
-  return (
-    <div className='checkbox'>
-      <label>
-        <input type='checkbox' {...props} onChange={normalizeChange} checked={checkedValue} />{label}
-      </label>
-    </div>
-  )
+  return <AntCheckbox {...props} onChange={normalizeChange} checked={!!checkedValue}>{label}</AntCheckbox>
 
   function normalizeChange ({ name, target }) {
     onChange({
@@ -203,7 +156,7 @@ function Checkbox ({ checked, label, onChange, value, ...props }) {
 *       {label: 'DSLR', name: 'cameraDSLR'},
 *       {label: 'Film', name: 'cameraFilm'},
 *     ]}
-*     />
+*   />
 * */
 function Checkboxes (props) {
   const {
@@ -217,7 +170,7 @@ function Checkboxes (props) {
   const sameName = name
   const values = value
   return (
-    <div className='checkbox'>
+    <div>
       <div style={{fontWeight: 'bold'}}>{label}</div>
       {renderChecks(options)}
     </div>
@@ -226,14 +179,14 @@ function Checkboxes (props) {
   function renderChecks (checks) {
     return checks.map(({label, name, value}) => {
       return (
-        <label key={`${name}_${value}`}>
-          <input name={name || sameName}
-            type='checkbox'
-            onChange={handleChange}
-            checked={values.indexOf(name || value) > -1}
-            value={value}
-          />{label}
-        </label>
+        <Checkbox
+          key={`${name}_${value}`}
+          checked={values.indexOf(name || value) > -1}
+          label={label}
+          name={name || sameName}
+          value={value}
+          onChange={handleChange}
+        />
       )
     })
   }
@@ -301,7 +254,7 @@ function Availability ({ value, onChange }) {
     <div>
       <div style={{fontWeight: 'bold'}}>Availability</div>
 
-      <table className='table table-striped table-cond ensed'>
+      <table className='table table-striped table-condensed'>
         <thead>
           <tr>
             <th>Time</th>
