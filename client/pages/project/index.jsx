@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Button } from 'antd'
+import { Button, Col, Row } from 'antd'
 import { Link } from 'react-router-dom'
 
 import Model from 'models/project'
@@ -24,16 +24,16 @@ export function ProjectPage ({loading, error, data}) {
     storytellers
   } = data
   return [
-    <div className='row' key='primary info'>
-      <div className='col-sm-12'>
+    <Row key='primary info' gutter={16}>
+      <Col xs={24}>
         <PrimaryInfo name={name} date={date} location={location} />
         <Link to={`/project/${id}/edit`}>
           <Button>Edit</Button>
         </Link>
-      </div>
-    </div>,
-    <div className='row' key='main info'>
-      <div className='col-sm-12 col-md-6'>
+      </Col>
+    </Row>,
+    <Row key='main info' gutter={16}>
+      <Col xs={24} md={12}>
         <Details description={description} />
         {/* {causes && causes.map(cause => <Tag>{cause.name}</Tag>)} */}
         <ul className='project__storytellers-list'>
@@ -46,12 +46,12 @@ export function ProjectPage ({loading, error, data}) {
         <Button type='primary'>
           Add Storyteller
         </Button>
-      </div>
-      <div className='col-sm-12 col-md-6'>
+      </Col>
+      <Col xs={24} md={12}>
         <NonprofitMini {...nonprofit} />
         {/* Event History */}
-      </div>
-    </div>
+      </Col>
+    </Row>
   ]
 }
 

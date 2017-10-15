@@ -40,8 +40,8 @@ class LoaderOrBody extends Component {
     ? <div>Loading...</div>
     : (
       <div>
-        <Header key='header' />
-        <div className='container-fluid'>
+        <Header />
+        <main className='main-container'>
           <Switch>
             {/* TODO Figure out how to properly authenticate routes */}
             <Route path='/account' component={Account} />
@@ -54,7 +54,7 @@ class LoaderOrBody extends Component {
             <Route path='/storyteller/:userId' component={Storyteller} />
             <Route path='/' component={Dashboard} />
           </Switch>
-        </div>
+        </main>
         <Footer />
       </div>
     )

@@ -5,3 +5,12 @@ body {
   font-size: $fs-0;
   line-height: 1.6em;
 }
+
+.main-container {
+  margin: 0 1em;
+  max-width: 960px;
+
+  @media (min-width: 992px) {
+    margin: 0 auto;
+  }
+}
